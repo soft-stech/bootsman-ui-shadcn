@@ -26,7 +26,8 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "bumpp": "bumpp package.json"
+    "bumpp": "bumpp package.json",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
