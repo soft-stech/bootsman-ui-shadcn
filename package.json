@@ -1,5 +1,5 @@
 {
-  "name": "bootsman-ui-shadcn",
+  "name": "@soft-stech/bootsman-ui-shadcn",
   "version": "0.0.1",
   "private": true,
   "type": "module",
