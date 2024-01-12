@@ -11,6 +11,8 @@ module.exports = {
     './src/**/*.{ts,tsx,vue}'
   ],
 
+  safelist: ['dark'],
+
   theme: {
     container: {
       center: true,
