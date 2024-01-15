@@ -11,11 +11,11 @@ const props = defineProps<AccordionContentProps & { class?: string }>()
     :class="
       cn(
         'overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
-        props.class,
+        props.class
       )
     "
   >
-    <div class="pb-4 pt-0">
+    <div class="px-8 py-4">
       <slot />
     </div>
   </AccordionContent>
