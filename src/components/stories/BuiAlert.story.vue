@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { AlertTriangle, CheckCircle, X } from 'lucide-vue-next'
+import { AlertTriangle, CheckCircle, Info, X } from 'lucide-vue-next'
 import BuiButtonVue from '@/components/ui/button/BuiButton.vue'
 </script>
 
@@ -34,7 +34,7 @@ import BuiButtonVue from '@/components/ui/button/BuiButton.vue'
         <AlertDescription> Your files has been uploaded. </AlertDescription>
 
         <template #icon>
-          <CheckCircle class="h-4 w-4" aria-hidden="true" />
+          <Info class="h-4 w-4" aria-hidden="true" />
         </template>
       </Alert>
     </Variant>

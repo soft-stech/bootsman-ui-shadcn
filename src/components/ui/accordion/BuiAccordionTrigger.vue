@@ -10,7 +10,7 @@ const props = defineProps<AccordionTriggerProps & { class?: string }>()
 
 <template>
   <AccordionHeader
-    class="flex flex-col border-border bg-muted p-2 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
+    class="flex flex-col border-border bg-primary/[0.16] p-2 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
     as="div"
   >
     <div class="flex justify-between gap-2">
@@ -31,7 +31,7 @@ const props = defineProps<AccordionTriggerProps & { class?: string }>()
       <slot name="actions" />
     </div>
 
-    <p class="mx-6 align-middle text-xs font-normal leading-4">
+    <p class="mx-6 mt-2 align-middle text-xs font-normal leading-4">
       <slot name="description" />
     </p>
   </AccordionHeader>
