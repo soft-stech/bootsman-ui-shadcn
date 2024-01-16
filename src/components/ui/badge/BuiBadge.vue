@@ -9,10 +9,10 @@ interface BadgeVariantProps extends VariantProps<typeof badgeVariants> {}
 
 interface Props {
   variant?: BadgeVariantProps['variant']
-  dissmisable?: boolean
+  dismissable?: boolean
 }
 withDefaults(defineProps<Props>(), {
-  dissmisable: false
+  dismissable: false
 })
 
 const emit = defineEmits<{ (e: 'close'): void }>()
@@ -25,7 +25,7 @@ const emit = defineEmits<{ (e: 'close'): void }>()
       variant="none"
       size="icon"
       class="focus-visible:ring-offset-0"
-      v-if="dissmisable"
+      v-if="dismissable"
       @click="emit('close')"
     >
       <XIcon class="h-3 w-3" />
