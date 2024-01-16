@@ -4,18 +4,18 @@ export { default as Alert } from './BuiAlert.vue'
 export { default as AlertTitle } from './BuiAlertTitle.vue'
 export { default as AlertDescription } from './BuiAlertDescription.vue'
 
-export const alertVariants = cva(
-  'relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground',
-  {
-    variants: {
-      variant: {
-        default: 'bg-background text-foreground',
-        destructive:
-          'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive'
-      }
-    },
-    defaultVariants: {
-      variant: 'default'
+export const alertVariants = cva('flex w-full rounded border-l-2 p-4 [&_svg]:text-foreground', {
+  variants: {
+    variant: {
+      default: 'bg-background text-foreground',
+      destructive:
+        'bg-destructive border-destructive-foreground text-destructive-foreground [&_svg]:text-destructive-foreground',
+      success:
+        'bg-success border-success-foreground text-success-foreground [&_svg]:text-success-foreground',
+      info: 'bg-primary/[0.16] border-border text-primary [&_svg]:text-primary'
     }
+  },
+  defaultVariants: {
+    variant: 'default'
   }
-)
+})

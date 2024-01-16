@@ -4,6 +4,14 @@
 
 @layer base {
   :root {
+    --Magenta: 328, 68%, 63%;
+    --Magenta-16: 328, 68%, 63%, 0.16;
+
+    --CodeGreen: 181, 34%, 39%;
+    --CodeGreen-16: 181, 34%, 39%, 0.16;
+
+    --Mediumslateblue: 241, 92%, 71%;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -16,10 +24,10 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --border: 241 92% 71%;
-    --input: 241 92% 71%;
+    --border: var(--Mediumslateblue);
+    --input: var(--Mediumslateblue);
 
-    --primary: 241 92% 71%;
+    --primary: var(--Mediumslateblue);
     --primary-hover: 241 76% 62%;
     --primary-active: 241 54% 54%;
     --primary-foreground: 0 0% 100%;
@@ -27,13 +35,16 @@
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 241 76% 62%;
 
-    --accent: 241 92% 71%;
+    --accent: var(--Mediumslateblue);
     --accent-foreground: 241 76% 62%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: var(--Magenta-16);
+    --destructive-foreground: var(--Magenta);
 
-    --ring: 241 92% 71%;
+    --success: var(--CodeGreen-16);
+    --success-foreground: var(--CodeGreen);
+
+    --ring: var(--Mediumslateblue);
 
     --radius: 0.5rem;
   }
@@ -51,10 +62,10 @@
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
 
-    --border: 241 92% 71%;
-    --input: 241 92% 71%;
+    --border: var(--Mediumslateblue);
+    --input: var(--Mediumslateblue);
 
-    --primary: 241 92% 71%;
+    --primary: var(--Mediumslateblue);
     --primary-hover: 241 76% 62%;
     --primary-active: 241 54% 54%;
     --primary-foreground: 0 0% 100%;
@@ -62,13 +73,16 @@
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
-    --accent: 241 92% 71%;
+    --accent: var(--Mediumslateblue);
     --accent-foreground: 240 100% 77%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: var(--Magenta-16);
+    --destructive-foreground: var(--Magenta);
 
-    --ring: 241 92% 71%;
+    --success: var(--CodeGreen-16);
+    --success-foreground: var(--CodeGreen);    
+
+    --ring: var(--Mediumslateblue);
   }
 }
 
