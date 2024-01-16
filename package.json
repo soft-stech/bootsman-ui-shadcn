@@ -9,6 +9,7 @@
   "module": "./dist/bootsman-ui-shadcn.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/bootsman-ui-shadcn.js",
       "require": "./dist/bootsman-ui-shadcn.umd.cjs"
     },
