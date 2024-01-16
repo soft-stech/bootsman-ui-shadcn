@@ -26,7 +26,7 @@ const sizes: {
     <div v-for="variant in variantOptions" :title="variant" :key="`${variant}`">
       <div v-for="size in sizes" :key="`${variant}-${size.value}`">
         <Variant :key="`variant-${variant}-{${size.value}`" :title="`${variant} ${size.value}`">
-          <BuiButton :variant="variant" :size="size.value"> Button text </BuiButton>
+          <BuiButton :variant="variant" :size="size.value" class="m-1"> Button text </BuiButton>
         </Variant>
       </div>
     </div>
