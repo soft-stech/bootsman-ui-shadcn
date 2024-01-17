@@ -42,7 +42,10 @@ import {
         </BuiTableBody>
         <BuiTableFooter>
           <BuiTableRow>
-            <BuiTableCell :colspan="4">Footer </BuiTableCell>
+            <BuiTableCell :colspan="4"
+              >ProTip: Paste one or more lines of key=value pairs into any key field for easy bulk
+              entry
+            </BuiTableCell>
           </BuiTableRow>
         </BuiTableFooter>
       </BuiTable>

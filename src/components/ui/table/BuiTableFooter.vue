@@ -6,7 +6,12 @@ const props = defineProps<{ class?: string }>()
 
 <template>
   <tfoot
-    :class="cn('border-t border-border/[0.16] bg-primary/[0.04] text-foreground', props.class)"
+    :class="
+      cn(
+        'border-t border-border/[0.16] bg-primary/[0.04] text-base font-semibold text-foreground/[0.32]',
+        props.class
+      )
+    "
   >
     <slot />
   </tfoot>

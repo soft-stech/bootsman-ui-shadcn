@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 <template>
   <BuiTableRow>
     <BuiTableCell
-      :class="cn('whitespace-nowrap p-4 align-middle text-sm text-foreground/[0.32]', props.class)"
+      :class="cn('whitespace-nowrap p-4 text-foreground/[0.32]', props.class)"
       :colspan="props.colspan"
     >
       <div class="flex items-center justify-center py-10">
