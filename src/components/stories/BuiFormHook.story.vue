@@ -26,12 +26,12 @@ const initialValues = {
   password: '12345678'
 }
 
-const form = useForm({
+const { handleSubmit, meta } = useForm({
   validationSchema: loginFormSchema,
   initialValues
 })
 
-const onSubmit = form.handleSubmit((values) => {
+const onSubmit = handleSubmit((values) => {
   console.debug('Form submitted!', values)
 })
 </script>
@@ -42,7 +42,7 @@ const onSubmit = form.handleSubmit((values) => {
       <div class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
           <div
-            class="bg-logo dark:bg-logo-dark mx-auto h-10 bg-contain bg-center bg-no-repeat"
+            class="mx-auto h-10 bg-logo bg-contain bg-center bg-no-repeat dark:bg-logo-dark"
             alt="Bootsman"
           />
           <h2
@@ -90,9 +90,7 @@ const onSubmit = form.handleSubmit((values) => {
               </BuiFormField>
 
               <div>
-                <BuiButton class="w-full" type="submit" :disabled="!form.meta.value.valid"
-                  >Sign in</BuiButton
-                >
+                <BuiButton class="w-full" type="submit" :disabled="!meta.valid">Sign in</BuiButton>
               </div>
             </form>
           </div>
