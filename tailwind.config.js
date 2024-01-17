@@ -95,6 +95,10 @@ module.exports = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'collapsible-down': 'collapsible-down 0.2s ease-in-out',
         'collapsible-up': 'collapsible-up 0.2s ease-in-out'
+      },
+      backgroundImage: {
+        logo: "url('/src/assets/logo-full.png')",
+        'logo-dark': "url('/src/assets/logo-full-dark.png')"
       }
     }
   },
