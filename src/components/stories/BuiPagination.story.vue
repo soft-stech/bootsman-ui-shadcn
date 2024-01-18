@@ -23,6 +23,7 @@ import { BuiButton } from '@/components/ui/button'
         show-edges
         :default-page="2"
         :itemsPerPage="10"
+        class="m-1"
       >
         <BuiPaginationList v-slot="{ items }" class="flex items-center gap-1">
           <BuiPaginationFirst />

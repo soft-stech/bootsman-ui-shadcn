@@ -2,57 +2,41 @@
 import type { ColumnDef } from '@tanstack/vue-table'
 import { BuiDataTable } from '@/components/ui/table'
 import { ref } from 'vue'
+import { z } from 'zod'
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-interface Payment {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
-}
+const taskSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  status: z.string(),
+  label: z.string(),
+  priority: z.string()
+})
 
-const columns: ColumnDef<Payment>[] = [
+type Task = z.infer<typeof taskSchema>
+
+//@ts-ignore json
+import tasks from './data/tasks.json'
+
+const columns: ColumnDef<Task>[] = [
+  {
+    accessorKey: 'id',
+    header: 'ID'
+  },
+  {
+    accessorKey: 'title',
+    header: 'Title'
+  },
   {
     accessorKey: 'status',
     header: 'Status'
   },
   {
-    accessorKey: 'email',
-    header: 'Email'
-  },
-  {
-    accessorKey: 'amount',
-    header: 'Amount'
+    accessorKey: 'priority',
+    header: 'Priority'
   }
 ]
 
-const data = ref<Payment[]>([
-  {
-    id: '1',
-    amount: 100,
-    status: 'pending',
-    email: 'm1@example.com'
-  },
-  {
-    id: '2',
-    amount: 200,
-    status: 'pending',
-    email: 'm2@example.com'
-  },
-  {
-    id: '3',
-    amount: 300,
-    status: 'processing',
-    email: 'm2@example.com'
-  },
-  {
-    id: '4',
-    amount: 150,
-    status: 'success',
-    email: 'm3@example.com'
-  }
-])
+const data = ref<Task[]>(tasks)
 </script>
 
 <template>
