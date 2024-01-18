@@ -72,6 +72,9 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
       },
+      boxShadow: {
+        'card-shadow': '0px 2px 19px 0px hsl(var(--card-shadow))'
+      },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },
