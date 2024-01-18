@@ -1,9 +1,9 @@
 import '../src/assets/main.css'
 
-export { default as BuiAccordion } from './components/ui/accordion/BuiAccordion.vue'
-export { default as BuiAlert } from './components/ui/alert/BuiAlert.vue'
-export { BuiInput } from '@/components/ui/input'
-export {
+import BuiAccordion from './components/ui/accordion/BuiAccordion.vue'
+import BuiAlert from './components/ui/alert/BuiAlert.vue'
+import BuiInput from '@/components/ui/input/BuiInput.vue'
+import {
   BuiForm,
   BuiFormField,
   BuiFormItem,
@@ -11,13 +11,12 @@ export {
   BuiFormControl,
   BuiFormMessage,
   BuiFormDescription
-} from '@/components/ui/form'
-export { default as BuiButton } from './components/ui/button/BuiButton.vue'
-export { default as BuiSwitch } from './components/ui/switch/BuiSwitch.vue'
-export { default as BuiLabel } from './components/ui/label/BuiLabel.vue'
-export { default as BuiBadge } from './components/ui/badge/BuiBadge.vue'
-
-export {
+} from '@/components/ui/form/index'
+import BuiButton from './components/ui/button/BuiButton.vue'
+import BuiSwitch from './components/ui/switch/BuiSwitch.vue'
+import BuiLabel from './components/ui/label/BuiLabel.vue'
+import BuiBadge from './components/ui/badge/BuiBadge.vue'
+import {
   BuiTable,
   BuiTableBody,
   BuiTableCaption,
@@ -27,4 +26,30 @@ export {
   BuiTableHeader,
   BuiTableRow,
   BuiTableFooter
-} from './components/ui/table'
+} from './components/ui/table/index'
+
+export {
+  BuiAccordion,
+  BuiAlert,
+  BuiInput,
+  BuiForm,
+  BuiFormField,
+  BuiFormItem,
+  BuiFormLabel,
+  BuiFormControl,
+  BuiFormMessage,
+  BuiFormDescription,
+  BuiButton,
+  BuiSwitch,
+  BuiLabel,
+  BuiBadge,
+  BuiTable,
+  BuiTableBody,
+  BuiTableCaption,
+  BuiTableCell,
+  BuiTableEmpty,
+  BuiTableHead,
+  BuiTableHeader,
+  BuiTableRow,
+  BuiTableFooter
+}
