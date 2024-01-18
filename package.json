@@ -1,6 +1,6 @@
 {
   "name": "@soft-stech/bootsman-ui-shadcn",
-  "version": "0.1.0-beta.5",
+  "version": "0.1.0-beta.7",
   "type": "module",
   "files": [
     "dist"
@@ -69,10 +69,10 @@
     "prettier": "^3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
-    "typescript": "~5.3.0",
+    "typescript": "~5.3.3",
     "vite": "^5.0.10",
     "vite-plugin-dts": "^3.7.0",
     "vitest": "^1.0.4",
-    "vue-tsc": "^1.8.25"
+    "vue-tsc": "^1.8.27"
   }
 }
