@@ -1,0 +1,6 @@
+export { default as BuiCard } from './BuiCard.vue'
+export { default as BuiCardHeader } from './BuiCardHeader.vue'
+export { default as BuiCardTitle } from './BuiCardTitle.vue'
+export { default as BuiCardDescription } from './BuiCardDescription.vue'
+export { default as BuiCardContent } from './BuiCardContent.vue'
+export { default as BuiCardFooter } from './BuiCardFooter.vue'
