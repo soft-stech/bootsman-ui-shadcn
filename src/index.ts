@@ -2,6 +2,7 @@ import '../src/assets/main.css'
 
 export * from './components/ui/accordion'
 export * from './components/ui/alert'
+export * from './components/ui/avatar'
 export * from './components/ui/input'
 export * from './components/ui/form'
 export * from './components/ui/button'
