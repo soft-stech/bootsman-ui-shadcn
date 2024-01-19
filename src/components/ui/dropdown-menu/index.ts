@@ -1,4 +1,4 @@
-export { DropdownMenuPortal } from 'radix-vue'
+export { DropdownMenuPortal as BuiDropdownMenuPortal } from 'radix-vue'
 
 export { default as BuiDropdownMenu } from './BuiDropdownMenu.vue'
 export { default as BuiDropdownMenuTrigger } from './BuiDropdownMenuTrigger.vue'

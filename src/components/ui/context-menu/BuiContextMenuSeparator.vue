@@ -8,6 +8,6 @@ const props = defineProps<ContextMenuSeparatorProps>()
 <template>
   <ContextMenuSeparator
     v-bind="props"
-    :class="cn('-mx-1 my-1 h-px bg-border', $attrs.class ?? '')"
+    :class="cn('-mx-1 my-1 h-px bg-muted', $attrs.class ?? '')"
   />
 </template>

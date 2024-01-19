@@ -11,7 +11,7 @@ const props = defineProps<DropdownMenuSubTriggerProps & { class?: string }>()
     v-bind="props"
     :class="[
       cn(
-        'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent',
+        'focus:bg-accent/[0.08] data-[state=open]:bg-accent/[0.08] flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
         props.class
       )
     ]"
