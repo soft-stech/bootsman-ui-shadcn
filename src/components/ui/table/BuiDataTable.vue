@@ -1,10 +1,11 @@
 <script setup lang="ts" generic="TData, TValue">
-import type { ColumnDef } from '@tanstack/vue-table'
+import type { ColumnDef, SortingState } from '@tanstack/vue-table'
 import {
   FlexRender,
   getCoreRowModel,
   useVueTable,
-  getPaginationRowModel
+  getPaginationRowModel,
+  getSortedRowModel
 } from '@tanstack/vue-table'
 
 import {
@@ -15,7 +16,8 @@ import {
   BuiTableFooter,
   BuiTableHead,
   BuiTableHeader,
-  BuiTableRow
+  BuiTableRow,
+  BuiTableCaption
 } from './'
 
 import {
@@ -29,6 +31,8 @@ import {
   BuiPaginationList
 } from '@/components/ui/pagination'
 import { BuiButton } from '@/components/ui/button'
+import { ref } from 'vue'
+import { valueUpdater } from '@/lib/utils'
 
 const props = withDefaults(
   defineProps<{
@@ -39,6 +43,9 @@ const props = withDefaults(
   { pageSize: 10 }
 )
 
+const sorting = ref<SortingState>([])
+const rowSelection = ref({})
+
 const table = useVueTable({
   initialState: { pagination: { pageSize: props.pageSize } },
   get data() {
@@ -48,12 +55,24 @@ const table = useVueTable({
     return props.columns
   },
   getCoreRowModel: getCoreRowModel(),
-  getPaginationRowModel: getPaginationRowModel()
+  getPaginationRowModel: getPaginationRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
+  onRowSelectionChange: (updaterOrValue) => valueUpdater(updaterOrValue, rowSelection),
+  state: {
+    get sorting() {
+      return sorting.value
+    },
+    get rowSelection() {
+      return rowSelection.value
+    }
+  }
 })
 </script>
 
 <template>
   <BuiTable>
+    <BuiTableCaption v-if="$slots.caption"><slot name="caption" :table="table" /></BuiTableCaption>
     <BuiTableHeader>
       <BuiTableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
         <BuiTableHead v-for="header in headerGroup.headers" :key="header.id">

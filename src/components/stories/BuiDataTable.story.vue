@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import type { ColumnDef } from '@tanstack/vue-table'
 import { BuiDataTable } from '@/components/ui/table'
-import { ref } from 'vue'
+import type { ColumnDef } from '@tanstack/vue-table'
+import { h, ref } from 'vue'
 import { z } from 'zod'
+import { BuiButton, BuiCheckbox } from '@/index'
+import { tableColumnSortCommon } from '@/lib/utils'
+
+import tasks from './data/tasks.json'
+import { ArrowDownUpIcon } from 'lucide-vue-next'
 
 const taskSchema = z.object({
   id: z.string(),
@@ -14,13 +19,35 @@ const taskSchema = z.object({
 
 type Task = z.infer<typeof taskSchema>
 
-//@ts-ignore json
-import tasks from './data/tasks.json'
-
 const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'id',
-    header: 'ID'
+    header: ({ table, column }) =>
+      h('div', { class: 'flex items-center gap-2' }, [
+        h(BuiCheckbox, {
+          checked: table.getIsAllPageRowsSelected(),
+          'onUpdate:checked': (value: boolean) => table.toggleAllPageRowsSelected(!!value),
+          ariaLabel: 'Select row'
+        }),
+        h(
+          BuiButton,
+          {
+            variant: 'none',
+            class: 'text-foreground px-0',
+            onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+          },
+          () => ['ID', h(ArrowDownUpIcon, { class: 'ml-2 h-4 w-4 text-muted-foreground' })]
+        )
+      ]),
+    cell: ({ row }) =>
+      h('div', { class: 'flex items-center gap-2' }, [
+        h(BuiCheckbox, {
+          checked: row.getIsSelected(),
+          'onUpdate:checked': (value: boolean) => row.toggleSelected(!!value),
+          ariaLabel: 'Select row'
+        }),
+        `${row.getValue('id')}`
+      ])
   },
   {
     accessorKey: 'title',
@@ -28,11 +55,11 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status'
+    header: ({ column }) => tableColumnSortCommon(column, 'Status')
   },
   {
     accessorKey: 'priority',
-    header: 'Priority'
+    header: ({ column }) => tableColumnSortCommon(column, 'Priorities')
   }
 ]
 
@@ -41,8 +68,18 @@ const data = ref<Task[]>(tasks)
 
 <template>
   <Story title="BuiDataTable" autoPropsDisabled :layout="{ type: 'grid', width: '95%' }">
-    <Variant :key="`variant`" title="Common">
-      <BuiDataTable :columns="columns" :data="data" />
+    <Variant :key="`variant`" title="Sorting, Pagination">
+      <BuiDataTable :columns="columns" :data="data" class="caption-top">
+        <template #caption="{ table }">
+          <div class="flex justify-between">
+            <BuiButton variant="outline">Download YAML</BuiButton>
+            <span
+              >{{ table.getFilteredSelectedRowModel().rows?.length }} of
+              {{ table.getFilteredRowModel().rows?.length }} row(s) selected</span
+            >
+          </div>
+        </template>
+      </BuiDataTable>
     </Variant>
   </Story>
 </template>
