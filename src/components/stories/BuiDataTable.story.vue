@@ -7,7 +7,6 @@ import { BuiButton, BuiCheckbox } from '@/index'
 import { tableColumnSortCommon } from '@/lib/utils'
 
 import tasks from './data/tasks.json'
-import { ArrowDownUpIcon } from 'lucide-vue-next'
 
 const taskSchema = z.object({
   id: z.string(),
@@ -22,23 +21,16 @@ type Task = z.infer<typeof taskSchema>
 const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'id',
-    header: ({ table, column }) =>
-      h('div', { class: 'flex items-center gap-2' }, [
+    header: ({ table, column }) => {
+      return h('div', { class: 'flex items-center gap-2' }, [
         h(BuiCheckbox, {
           checked: table.getIsAllPageRowsSelected(),
           'onUpdate:checked': (value: boolean) => table.toggleAllPageRowsSelected(!!value),
           ariaLabel: 'Select row'
         }),
-        h(
-          BuiButton,
-          {
-            variant: 'none',
-            class: 'text-foreground px-0',
-            onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
-          },
-          () => ['ID', h(ArrowDownUpIcon, { class: 'ml-2 h-4 w-4 text-muted-foreground' })]
-        )
-      ]),
+        tableColumnSortCommon(column, 'ID')
+      ])
+    },
     cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-2' }, [
         h(BuiCheckbox, {
