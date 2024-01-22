@@ -166,7 +166,7 @@ const vCalendarSlots = computed(() => {
   @apply rounded-md;
 }
 .calendar .vc-day-content {
-  @apply relative inline-flex h-9 w-9 select-none items-center justify-center p-0 text-center text-sm font-normal ring-offset-background focus-within:relative focus-within:z-20 hover:bg-accent hover:text-accent-foreground hover:transition-colors focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-ring focus-visible:ring-offset-2 aria-selected:opacity-100;
+  @apply relative inline-flex h-9 w-9 select-none items-center justify-center p-0 text-center text-sm font-normal ring-offset-background focus-within:relative focus-within:z-20 hover:bg-accent/[0.08] hover:text-accent-foreground hover:transition-colors focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-ring focus-visible:ring-offset-2 aria-selected:opacity-100;
 }
 .calendar .vc-day-content:not(.vc-highlight-content-light) {
   @apply rounded-md;
@@ -183,7 +183,7 @@ const vCalendarSlots = computed(() => {
   @apply bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground;
 }
 .calendar .vc-highlight-content-light {
-  @apply bg-accent text-accent-foreground;
+  @apply bg-accent/[0.08] text-accent-foreground;
 }
 .calendar .vc-pane-container.in-transition {
   @apply overflow-hidden;
@@ -294,13 +294,13 @@ const vCalendarSlots = computed(() => {
   @apply mt-1 flex items-center px-1 text-sm font-semibold uppercase leading-6;
 }
 .vc-time-select-group {
-  @apply inline-flex items-center rounded-md border border-solid border-secondary bg-primary-foreground px-1;
+  @apply inline-flex items-center rounded-md border border-solid border-secondary bg-background px-1 text-foreground;
 }
 .vc-time-select-group .vc-base-icon {
   @apply mr-1 stroke-primary text-primary;
 }
 .vc-time-select-group select {
-  @apply appearance-none bg-primary-foreground p-1 text-center outline-none;
+  @apply appearance-none bg-background p-1 text-center text-foreground outline-none;
 }
 .vc-time-weekday {
   @apply tracking-wide text-muted-foreground;
