@@ -8,7 +8,7 @@ const props = defineProps<{ class?: string }>()
   <thead
     :class="
       cn(
-        '[&_th:first-child_div]:pl-8 [&_th:last-child_div]:border-0 [&_th:last-child_div]:pr-8 [&_tr]:border-b [&_tr]:border-border/[0.16]',
+        '[&_th:first-child>div]:pl-8 [&_th:last-child>div]:border-0 [&_th:last-child>div]:pr-8 [&_tr]:border-b [&_tr]:border-border/[0.16]',
         props.class
       )
     "

@@ -33,6 +33,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@tanstack/vue-table": "^8.11.6",
     "@vee-validate/zod": "^4.12.4",
     "@vueuse/core": "^10.7.2",
     "class-variance-authority": "^0.7.0",
