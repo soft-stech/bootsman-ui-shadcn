@@ -32,3 +32,5 @@ export * from './components/ui/toast/index'
 export * from './components/ui/tooltip/index'
 export * from './components/ui/toggle/index'
 export * from './components/ui/slider/index'
+
+export * from './lib/utils'
