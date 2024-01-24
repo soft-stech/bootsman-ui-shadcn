@@ -3,7 +3,7 @@ import { ProgressIndicator, ProgressRoot, type ProgressRootProps } from 'radix-v
 import { cn } from '@/lib/utils'
 import type { HTMLAttributes } from 'vue'
 
-import { progressVariants } from '.'
+import { progressVariants, capVariants } from '.'
 
 const props = withDefaults(
   defineProps<
@@ -33,14 +33,15 @@ const props = withDefaults(
     <ProgressIndicator
       :class="
         cn(
-          'box-content flex-1 bg-primary bg-opacity-60 transition-all duration-300 after:absolute after:right-0 after:top-0 after:bg-primary',
+          'absolute box-content flex-1 bg-primary bg-opacity-60 transition-all duration-300 after:absolute after:right-0 after:top-0 after:bg-primary',
           progressVariants({ variant }),
+
           props.class
         )
       "
-      :style="`transform-box: content-box; transform: translateX(-${
-        100 - (props.modelValue ? props.modelValue : -100)
-      }%)`"
+      :style="`width: calc(calc(100% - ${capVariants[variant ?? 'default']}) * ${
+        (props.modelValue ?? 0) * 0.01
+      })`"
     />
   </ProgressRoot>
 </template>

@@ -14,3 +14,9 @@ export const progressVariants = cva('after:rounded-[50%/50%]', {
     variant: 'default'
   }
 })
+
+export const capVariants = {
+  sm: '8px',
+  default: '16px',
+  lg: '32px'
+} as const

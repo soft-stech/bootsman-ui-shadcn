@@ -35,10 +35,11 @@ import { ref } from 'vue'
         </div>
 
         <div class="m-4 flex flex-col gap-2">
-          <BuiProgress :model-value="0" variant="lg" />
-          <BuiProgress :model-value="1" variant="lg" />
-          <BuiProgress :model-value="99" variant="lg" />
-          <BuiProgress :model-value="100" variant="lg" />
+          <BuiProgress :model-value="0" variant="lg" class="max-w-[400px]" />
+          <BuiProgress :model-value="1" variant="lg" class="max-w-[400px]" />
+          <BuiProgress :model-value="50" variant="lg" class="max-w-[400px]" />
+          <BuiProgress :model-value="99" variant="lg" class="max-w-[400px]" />
+          <BuiProgress :model-value="100" variant="lg" class="max-w-[400px]" />
         </div>
       </div>
     </Variant>
