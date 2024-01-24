@@ -29,8 +29,8 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary) / var(--tw-bg-opacity))',
-          foreground: 'hsl(var(--primary-foreground))'
+          DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
+          foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
         },
         'primary-hover': {
           DEFAULT: 'hsl(var(--primary-hover))'
