@@ -34,3 +34,4 @@ export * from './components/ui/toggle/index'
 export * from './components/ui/slider/index'
 
 export * from './lib/utils'
+export { default as tailwind } from './tailwind-preset'
