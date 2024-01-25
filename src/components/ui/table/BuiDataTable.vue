@@ -3,38 +3,26 @@ import type { ColumnDef, SortingState } from '@tanstack/vue-table'
 import {
   FlexRender,
   getCoreRowModel,
-  useVueTable,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
+  useVueTable
 } from '@tanstack/vue-table'
 
 import {
   BuiTable,
   BuiTableBody,
+  BuiTableCaption,
   BuiTableCell,
   BuiTableEmpty,
   BuiTableFooter,
   BuiTableHead,
   BuiTableHeader,
-  BuiTableRow,
-  BuiTableCaption
+  BuiTableRow
 } from './'
 
-import {
-  BuiPaginationFirst,
-  BuiPagination,
-  BuiPaginationPrev,
-  BuiPaginationListItem,
-  BuiPaginationEllipsis,
-  BuiPaginationNext,
-  BuiPaginationLast,
-  BuiPaginationList,
-  BuiPaginationCommon,
-  type PageSize
-} from '@/components/ui/pagination'
-import { BuiButton } from '@/components/ui/button'
-import { ref } from 'vue'
+import { BuiPaginationCommon, type PageSize } from '@/components/ui/pagination'
 import { valueUpdater } from '@/lib/utils'
+import { ref } from 'vue'
 
 const props = withDefaults(
   defineProps<{

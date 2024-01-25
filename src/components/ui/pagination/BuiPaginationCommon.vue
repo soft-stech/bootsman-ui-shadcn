@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import {
-  BuiPaginationFirst,
   BuiPagination,
-  BuiPaginationPrev,
-  BuiPaginationListItem,
-  BuiPaginationEllipsis,
-  BuiPaginationNext,
+  BuiPaginationFirst,
   BuiPaginationLast,
-  BuiPaginationList
+  BuiPaginationList,
+  BuiPaginationNext,
+  BuiPaginationPrev
 } from '@/components/ui/pagination'
-import { BuiButton } from '@/components/ui/button'
-import { computed, ref } from 'vue'
 import {
   BuiInput,
   BuiSelect,
@@ -19,6 +15,7 @@ import {
   BuiSelectTrigger,
   BuiSelectValue
 } from '@/index'
+import { computed } from 'vue'
 
 const pageSizes = [10, 20, 30, 40, 50] as const
 export type PageSize = (typeof pageSizes)[number]
