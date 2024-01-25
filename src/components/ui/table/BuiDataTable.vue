@@ -28,7 +28,9 @@ import {
   BuiPaginationEllipsis,
   BuiPaginationNext,
   BuiPaginationLast,
-  BuiPaginationList
+  BuiPaginationList,
+  BuiPaginationCommon,
+  type PageSize
 } from '@/components/ui/pagination'
 import { BuiButton } from '@/components/ui/button'
 import { ref } from 'vue'
@@ -103,40 +105,20 @@ const table = useVueTable({
     <BuiTableFooter v-if="table.getPageCount()">
       <BuiTableRow>
         <BuiTableCell :colspan="columns.length">
-          <BuiPagination
-            v-slot="{ page }"
+          <BuiPaginationCommon
+            class="float-right"
             :total="table.getFilteredRowModel().rows.length"
-            :sibling-count="1"
-            show-edges
-            :itemsPerPage="table.getState().pagination.pageSize"
-            :page="table.getState().pagination.pageIndex + 1"
+            :pageIndex="table.getState().pagination.pageIndex"
+            :pageSize="table.getState().pagination.pageSize as PageSize"
+            :setPageIndex="(v) => table.setPageIndex(v)"
+            :setPageSize="
+              (v) => {
+                table.setPageSize(v)
+                table.setPageIndex(0)
+              }
+            "
           >
-            <BuiPaginationList v-slot="{ items }" class="flex items-center justify-center gap-1">
-              <BuiPaginationFirst @click="table.setPageIndex(0)" />
-              <BuiPaginationPrev @click="table.previousPage()" />
-
-              <template v-for="(item, index) in items">
-                <BuiPaginationListItem
-                  v-if="item.type === 'page'"
-                  :key="index"
-                  :value="item.value"
-                  as-child
-                >
-                  <BuiButton
-                    class="h-10 w-10 p-0"
-                    :variant="item.value === page ? 'default' : 'outline'"
-                    @click="table.setPageIndex(item.value - 1)"
-                  >
-                    {{ item.value }}
-                  </BuiButton>
-                </BuiPaginationListItem>
-                <BuiPaginationEllipsis v-else :key="item.type" :index="index" />
-              </template>
-
-              <BuiPaginationNext @click="table.nextPage()" />
-              <BuiPaginationLast @click="table.setPageIndex(table.getPageCount() - 1)" />
-            </BuiPaginationList>
-          </BuiPagination>
+          </BuiPaginationCommon>
         </BuiTableCell>
       </BuiTableRow>
     </BuiTableFooter>
