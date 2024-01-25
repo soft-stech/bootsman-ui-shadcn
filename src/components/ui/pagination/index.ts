@@ -1,3 +1,4 @@
+export { default as BuiPaginationCommon, type PageSize } from './BuiPaginationCommon.vue'
 export {
   PaginationRoot as BuiPagination,
   PaginationList as BuiPaginationList,
