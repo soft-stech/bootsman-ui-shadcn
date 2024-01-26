@@ -1,5 +1,10 @@
 <script setup lang="ts" generic="TData, TValue">
-import type { ColumnDef, SortingState } from '@tanstack/vue-table'
+import type {
+  ColumnDef,
+  SortingState,
+  PaginationState,
+  RowSelectionState
+} from '@tanstack/vue-table'
 import {
   FlexRender,
   getCoreRowModel,
@@ -7,7 +12,6 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-
 import {
   BuiTable,
   BuiTableBody,
@@ -19,7 +23,6 @@ import {
   BuiTableHeader,
   BuiTableRow
 } from './'
-
 import { BuiPaginationCommon, type PageSize } from '@/components/ui/pagination'
 import { valueUpdater } from '@/lib/utils'
 import { ref } from 'vue'
@@ -29,13 +32,22 @@ const props = withDefaults(
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     pageSize?: number
+    showPagination?: boolean
   }>(),
-  { pageSize: 10 }
+  { pageSize: 10, showPagination: true }
 )
+const emit = defineEmits<{
+  (e: 'update:sorting', value: SortingState): void
+  (e: 'update:pagination', value: PaginationState): void
+  (e: 'update:selection', value: RowSelectionState): void
+}>()
 
 const sorting = ref<SortingState>([])
-const rowSelection = ref({})
-
+const pagination = ref<PaginationState>({
+  pageIndex: 0,
+  pageSize: 10
+})
+const rowSelection = ref<RowSelectionState>({})
 const table = useVueTable({
   initialState: { pagination: { pageSize: props.pageSize } },
   get data() {
@@ -47,11 +59,26 @@ const table = useVueTable({
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
   getSortedRowModel: getSortedRowModel(),
-  onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
-  onRowSelectionChange: (updaterOrValue) => valueUpdater(updaterOrValue, rowSelection),
+  onSortingChange: (updaterOrValue) => {
+    valueUpdater(updaterOrValue, sorting)
+    emit('update:sorting', sorting.value)
+  },
+  onPaginationChange: (updaterOrValue) => {
+    valueUpdater(updaterOrValue, pagination)
+    emit('update:pagination', pagination.value)
+  },
+  onRowSelectionChange: (updaterOrValue) => {
+    valueUpdater(updaterOrValue, rowSelection)
+    emit('update:selection', rowSelection.value)
+  },
+  manualPagination: true,
+  manualSorting: true,
   state: {
     get sorting() {
       return sorting.value
+    },
+    get pagination() {
+      return pagination.value
     },
     get rowSelection() {
       return rowSelection.value
@@ -90,7 +117,7 @@ const table = useVueTable({
         <BuiTableEmpty :colspan="columns.length">No data</BuiTableEmpty>
       </template>
     </BuiTableBody>
-    <BuiTableFooter v-if="table.getPageCount() > 1">
+    <BuiTableFooter v-if="showPagination && table.getPageCount()">
       <BuiTableRow>
         <BuiTableCell :colspan="columns.length">
           <BuiPaginationCommon
@@ -98,9 +125,9 @@ const table = useVueTable({
             :total="table.getFilteredRowModel().rows.length"
             :pageIndex="table.getState().pagination.pageIndex"
             :pageSize="table.getState().pagination.pageSize as PageSize"
-            :setPageIndex="(v) => table.setPageIndex(v)"
+            :setPageIndex="(v: number) => table.setPageIndex(v)"
             :setPageSize="
-              (v) => {
+              (v: number) => {
                 table.setPageSize(v)
                 table.setPageIndex(0)
               }
