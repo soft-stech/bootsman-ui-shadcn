@@ -90,7 +90,7 @@ const table = useVueTable({
         <BuiTableEmpty :colspan="columns.length">No data</BuiTableEmpty>
       </template>
     </BuiTableBody>
-    <BuiTableFooter v-if="table.getPageCount()">
+    <BuiTableFooter v-if="table.getPageCount() > 1">
       <BuiTableRow>
         <BuiTableCell :colspan="columns.length">
           <BuiPaginationCommon
