@@ -1,4 +1,4 @@
-export { default as Accordion } from './BuiAccordion.vue'
-export { default as AccordionContent } from './BuiAccordionContent.vue'
-export { default as AccordionItem } from './BuiAccordionItem.vue'
-export { default as AccordionTrigger } from './BuiAccordionTrigger.vue'
+export { default as BuiAccordion } from './BuiAccordion.vue'
+export { default as BuiAccordionContent } from './BuiAccordionContent.vue'
+export { default as BuiAccordionItem } from './BuiAccordionItem.vue'
+export { default as BuiAccordionTrigger } from './BuiAccordionTrigger.vue'

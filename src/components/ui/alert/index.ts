@@ -1,8 +1,8 @@
 import { cva } from 'class-variance-authority'
 
-export { default as Alert } from './BuiAlert.vue'
-export { default as AlertTitle } from './BuiAlertTitle.vue'
-export { default as AlertDescription } from './BuiAlertDescription.vue'
+export { default as BuiAlert } from './BuiAlert.vue'
+export { default as BuiAlertTitle } from './BuiAlertTitle.vue'
+export { default as BuiAlertDescription } from './BuiAlertDescription.vue'
 
 export const alertVariants = cva('flex w-full rounded border-l-2 p-4 [&_svg]:text-foreground', {
   variants: {

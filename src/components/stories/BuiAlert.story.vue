@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { BuiAlert, BuiAlertDescription, BuiAlertTitle } from '@/components/ui/alert'
 import { AlertTriangle, CheckCircle, Info, X } from 'lucide-vue-next'
 import BuiButtonVue from '@/components/ui/button/BuiButton.vue'
 </script>
@@ -7,42 +7,42 @@ import BuiButtonVue from '@/components/ui/button/BuiButton.vue'
 <template>
   <Story title="BuiAlert" autoPropsDisabled>
     <Variant title="Destructive Alert">
-      <Alert variant="destructive">
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription> Your session has expired. Please log in again. </AlertDescription>
+      <BuiAlert variant="destructive">
+        <BuiAlertTitle>Error</BuiAlertTitle>
+        <BuiAlertDescription> Your session has expired. Please log in again. </BuiAlertDescription>
 
         <template #icon>
           <AlertTriangle class="h-4 w-4" aria-hidden="true" />
         </template>
-      </Alert>
+      </BuiAlert>
     </Variant>
 
     <Variant title="Success Alert">
-      <Alert variant="success">
-        <AlertTitle>Successfully uploaded</AlertTitle>
-        <AlertDescription> Your files has been uploaded. </AlertDescription>
+      <BuiAlert variant="success">
+        <BuiAlertTitle>Successfully uploaded</BuiAlertTitle>
+        <BuiAlertDescription> Your files has been uploaded. </BuiAlertDescription>
 
         <template #icon>
           <CheckCircle class="h-4 w-4" aria-hidden="true" />
         </template>
-      </Alert>
+      </BuiAlert>
     </Variant>
 
     <Variant title="Info Alert">
-      <Alert variant="info">
-        <AlertTitle>Successfully uploaded</AlertTitle>
-        <AlertDescription> Your files has been uploaded. </AlertDescription>
+      <BuiAlert variant="info">
+        <BuiAlertTitle>Successfully uploaded</BuiAlertTitle>
+        <BuiAlertDescription> Your files has been uploaded. </BuiAlertDescription>
 
         <template #icon>
           <Info class="h-4 w-4" aria-hidden="true" />
         </template>
-      </Alert>
+      </BuiAlert>
     </Variant>
 
     <Variant title="Destructive Alert with button">
-      <Alert variant="destructive">
-        <AlertTitle> Upload failed </AlertTitle>
-        <AlertDescription> Something went wrong </AlertDescription>
+      <BuiAlert variant="destructive">
+        <BuiAlertTitle> Upload failed </BuiAlertTitle>
+        <BuiAlertDescription> Something went wrong </BuiAlertDescription>
 
         <template #icon>
           <AlertTriangle class="h-4 w-4" aria-hidden="true" />
@@ -55,7 +55,7 @@ import BuiButtonVue from '@/components/ui/button/BuiButton.vue'
             <X class="h-5 w-5" aria-hidden="true" />
           </BuiButtonVue>
         </template>
-      </Alert>
+      </BuiAlert>
     </Variant>
   </Story>
 </template>
