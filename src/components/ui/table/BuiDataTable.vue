@@ -37,16 +37,11 @@ const props = withDefaults(
   { pageSize: 10, showPagination: true }
 )
 const emit = defineEmits<{
-  (e: 'update:sorting', value: SortingState): void
-  (e: 'update:pagination', value: PaginationState): void
   (e: 'update:selection', value: RowSelectionState): void
 }>()
 
-const sorting = ref<SortingState>([])
-const pagination = ref<PaginationState>({
-  pageIndex: 0,
-  pageSize: 10
-})
+const sorting = defineModel<SortingState>('sorting')
+const pagination = defineModel<PaginationState>('pagination')
 const rowSelection = ref<RowSelectionState>({})
 const table = useVueTable({
   initialState: { pagination: { pageSize: props.pageSize } },
@@ -61,17 +56,15 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
   onSortingChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, sorting)
-    emit('update:sorting', sorting.value)
   },
   onPaginationChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, pagination)
-    emit('update:pagination', pagination.value)
   },
   onRowSelectionChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, rowSelection)
     emit('update:selection', rowSelection.value)
   },
-  manualPagination: true,
+  manualPagination: false,
   manualSorting: true,
   state: {
     get sorting() {

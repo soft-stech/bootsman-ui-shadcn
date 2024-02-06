@@ -59,20 +59,11 @@ const columns: ColumnDef<Task>[] = [
 ]
 const data = ref<Task[]>(tasks)
 
-const sorting = ref<SortingState>([])
-function updateSorting(val: SortingState) {
-  logEvent('sorting was changed', val)
-  sorting.value = val
-}
-
+const sorting = ref<SortingState>([{ id: 'status', desc: false }])
 const pagination = ref<PaginationState>({
-  pageIndex: 0,
+  pageIndex: 1,
   pageSize: 10
 })
-function updatePagination(val: PaginationState) {
-  logEvent('pagination was changed', val)
-  pagination.value = val
-}
 
 const selection = ref<RowSelectionState>({})
 function updateSelection(val: RowSelectionState) {
@@ -87,8 +78,8 @@ function updateSelection(val: RowSelectionState) {
       <BuiDataTable
         :columns="columns"
         :data="data"
-        @update:sorting="updateSorting"
-        @update:pagination="updatePagination"
+        v-model:sorting="sorting"
+        v-model:pagination="pagination"
         @update:selection="updateSelection"
         class="caption-top"
       >
