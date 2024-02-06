@@ -64,7 +64,7 @@ const table = useVueTable({
     valueUpdater(updaterOrValue, rowSelection)
     emit('update:selection', rowSelection.value)
   },
-  manualPagination: false,
+  manualPagination: true,
   manualSorting: true,
   state: {
     get sorting() {
