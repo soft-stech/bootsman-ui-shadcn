@@ -6,10 +6,7 @@ import dts from 'vite-plugin-dts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    dts()
-  ],
+  plugins: [vue(), dts()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -17,17 +14,17 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
-      name: "BootsmanUiShadcn",
-      fileName: "bootsman-ui-shadcn",
+      entry: resolve(__dirname, 'src/index.ts'),
+      name: 'BootsmanUiShadcn',
+      fileName: 'bootsman-ui-shadcn'
     },
     rollupOptions: {
-      external: ["vue"],
+      external: ['vue'],
       output: {
         globals: {
-          vue: "Vue",
-        },
-      },
-    },
-  },
+          vue: 'Vue'
+        }
+      }
+    }
+  }
 })
