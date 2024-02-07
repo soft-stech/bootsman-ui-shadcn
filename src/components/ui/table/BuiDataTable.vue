@@ -25,7 +25,6 @@ import {
 } from './'
 import { BuiPaginationCommon, type PageSize } from '@/components/ui/pagination'
 import { valueUpdater } from '@/lib/utils'
-import { ref } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -36,13 +35,11 @@ const props = withDefaults(
   }>(),
   { pageSize: 10, showPagination: true }
 )
-const emit = defineEmits<{
-  (e: 'update:selection', value: RowSelectionState): void
-}>()
 
 const sorting = defineModel<SortingState>('sorting')
 const pagination = defineModel<PaginationState>('pagination')
-const rowSelection = ref<RowSelectionState>({})
+const rowSelection = defineModel<RowSelectionState>('selection')
+
 const table = useVueTable({
   initialState: { pagination: { pageSize: props.pageSize } },
   get data() {
@@ -62,7 +59,6 @@ const table = useVueTable({
   },
   onRowSelectionChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, rowSelection)
-    emit('update:selection', rowSelection.value)
   },
   manualPagination: true,
   manualSorting: true,
