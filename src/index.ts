@@ -32,6 +32,7 @@ export * from './components/ui/toast/index'
 export * from './components/ui/tooltip/index'
 export * from './components/ui/toggle/index'
 export * from './components/ui/slider/index'
+export * from './components/ui/skeleton/index'
 
 export * from './lib/utils'
 export { default as tailwind } from './tailwind-preset'
