@@ -29,7 +29,7 @@
     "bumpp": "bumpp package.json",
     "prepublishOnly": "npm run build",
     "story:dev": "histoire dev",
-    "story:build": "histoire build",
+    "story:build": "DOCS=true histoire build",
     "story:preview": "histoire preview",
     "coverage": "vitest run --coverage"
   },
