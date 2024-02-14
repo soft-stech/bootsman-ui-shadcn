@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/main.js",
+  "main": "dist/bootsman-ui-shadcn.js",
   "types": "dist/main.d.ts",
   "sideEffects": [
     "**/*.css"
