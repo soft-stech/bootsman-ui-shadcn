@@ -5,17 +5,11 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/bootsman-ui-shadcn.umd.cjs",
-  "module": "./dist/bootsman-ui-shadcn.js",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/bootsman-ui-shadcn.js",
-      "require": "./dist/bootsman-ui-shadcn.umd.cjs"
-    },
-    "./style.css": "./dist/style.css"
-  },
-  "types": "./dist/index.d.ts",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
