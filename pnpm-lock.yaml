@@ -94,6 +94,9 @@ devDependencies:
   eslint-plugin-vue:
     specifier: ^9.17.0
     version: 9.20.0(eslint@8.56.0)
+  glob:
+    specifier: ^10.3.10
+    version: 10.3.10
   histoire:
     specifier: ^0.17.9
     version: 0.17.9(@types/node@18.19.6)(vite@5.0.11)
