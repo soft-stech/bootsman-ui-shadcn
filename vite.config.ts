@@ -3,7 +3,7 @@ import { extname, relative, resolve } from 'node:path'
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
-import { glob } from 'glob'
+import { globSync } from 'glob'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -12,7 +12,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       vue(),
-      !env.DOCS && dts({ rollupTypes: true, include: ['src/components/ui', 'src/lib'] })
+      !env.DOCS &&
+        dts({ rollupTypes: true, include: ['src/components/ui', 'src/lib', 'src/index.ts'] })
     ],
     resolve: {
       alias: {
@@ -28,22 +29,10 @@ export default defineConfig(({ mode }) => {
         formats: ['es']
       },
       rollupOptions: {
-        input: Object.fromEntries(
-          glob
-            .sync([
-              'src/components/ui/**/*.{ts,vue}',
-              'src/lib/**/*.{ts}',
-              'src/tailwind-preset.ts'
-            ])
-            .map((file) => [
-              relative('src', file.slice(0, file.length - extname(file).length)),
-              fileURLToPath(new URL(file, import.meta.url))
-            ])
-        ),
         external: ['vue'],
         output: {
-          assetFileNames: 'assets/[name][extname]',
-          entryFileNames: '[name].js',
+          preserveModules: true,
+          exports: 'named',
           globals: {
             vue: 'Vue'
           }
