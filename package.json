@@ -3,9 +3,10 @@
   "version": "1.0.5-beta.4",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
-  "main": "dist/bootsman-ui-shadcn.js",
+  "main": "dist/index.js",
   "types": "dist/main.d.ts",
   "sideEffects": [
     "**/*.css"
