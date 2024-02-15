@@ -1,10 +1,9 @@
 import { fileURLToPath, URL } from 'node:url'
-import { extname, relative, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
-import { globSync } from 'glob'
-
+import { splitVendorChunkPlugin } from 'vite'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -13,7 +12,11 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       !env.DOCS &&
-        dts({ rollupTypes: true, include: ['src/components/ui', 'src/lib', 'src/index.ts'] })
+        dts({
+          rollupTypes: true,
+          include: ['src/components/ui', 'src/lib', 'src/index.ts']
+        }),
+      splitVendorChunkPlugin()
     ],
     resolve: {
       alias: {
@@ -23,6 +26,7 @@ export default defineConfig(({ mode }) => {
 
     build: {
       copyPublicDir: false,
+      cssCodeSplit: true,
       target: 'esnext',
       lib: {
         entry: resolve(__dirname, 'src/index.ts'),
