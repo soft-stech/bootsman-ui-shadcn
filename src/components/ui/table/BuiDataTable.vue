@@ -32,8 +32,9 @@ const props = withDefaults(
     data: TData[]
     pageSize?: number
     showPagination?: boolean
+    totalItems?: number
   }>(),
-  { pageSize: 10, showPagination: true }
+  { pageSize: 10, showPagination: true, totalItems: 0 }
 )
 
 const sorting = defineModel<SortingState>('sorting')
@@ -111,7 +112,7 @@ const table = useVueTable({
         <BuiTableCell :colspan="columns.length">
           <BuiPaginationCommon
             class="float-right"
-            :total="table.getFilteredRowModel().rows.length"
+            :total="totalItems"
             :pageIndex="table.getState().pagination.pageIndex"
             :pageSize="table.getState().pagination.pageSize as PageSize"
             :setPageIndex="(v: number) => table.setPageIndex(v)"

@@ -61,9 +61,10 @@ const data = ref<Task[]>(tasks)
 
 const sorting = ref<SortingState>([{ id: 'status', desc: false }])
 const pagination = ref<PaginationState>({
-  pageIndex: 1,
+  pageIndex: 0,
   pageSize: 10
 })
+const totalItems = tasks.length
 
 const selection = ref<RowSelectionState>({})
 function updateSelection(val: RowSelectionState) {
@@ -81,6 +82,7 @@ function updateSelection(val: RowSelectionState) {
         v-model:sorting="sorting"
         v-model:pagination="pagination"
         @update:selection="updateSelection"
+        :total-items="totalItems"
         class="caption-top"
       >
         <template #caption="{ table }">
