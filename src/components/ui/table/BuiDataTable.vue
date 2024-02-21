@@ -3,7 +3,8 @@ import type {
   ColumnDef,
   SortingState,
   PaginationState,
-  RowSelectionState
+  RowSelectionState,
+  Row
 } from '@tanstack/vue-table'
 import {
   FlexRender,
@@ -33,6 +34,7 @@ const props = withDefaults(
     pageSize?: number
     showPagination?: boolean
     totalItems?: number
+    getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
   }>(),
   { pageSize: 10, showPagination: true, totalItems: 0 }
 )
@@ -73,7 +75,8 @@ const table = useVueTable({
     get rowSelection() {
       return rowSelection.value
     }
-  }
+  },
+  getRowId: props.getRowId
 })
 </script>
 

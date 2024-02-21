@@ -84,6 +84,7 @@ function updateSelection(val: RowSelectionState) {
         @update:selection="updateSelection"
         :total-items="totalItems"
         class="caption-top"
+        :getRowId="(row) => row.id"
       >
         <template #caption="{ table }">
           <div class="flex justify-between">
