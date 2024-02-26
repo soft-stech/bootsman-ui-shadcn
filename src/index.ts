@@ -36,3 +36,4 @@ export * from './components/ui/skeleton/index'
 
 export * from './lib/utils'
 export { default as tailwind } from './tailwind-preset'
+export * from './assets/variables.css'
