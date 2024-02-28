@@ -1,4 +1,8 @@
-export { Form as BuiForm, Field as BuiFormField } from 'vee-validate'
+export {
+  Form as BuiForm,
+  Field as BuiFormField,
+  FieldArray as BuiFormFieldArray
+} from 'vee-validate'
 export { default as BuiFormItem } from './BuiFormItem.vue'
 export { default as BuiFormLabel } from './BuiFormLabel.vue'
 export { default as BuiFormControl } from './BuiFormControl.vue'
