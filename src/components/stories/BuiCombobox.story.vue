@@ -29,7 +29,7 @@ const value = ref<string>('')
 </script>
 
 <template>
-  <Story title="Combobox" autoPropsDisabled>
+  <Story title="BuiCombobox" autoPropsDisabled>
     <Variant :key="`variant-default`" :title="`BuiPopover + BuiCommand`">
       <div class="flex justify-center p-12">
         <BuiPopover v-model:open="open">
