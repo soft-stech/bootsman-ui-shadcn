@@ -26,7 +26,7 @@ const emit = defineEmits<{ (e: 'close'): void }>()
       size="icon"
       class="focus-visible:ring-offset-0"
       v-if="dismissable"
-      @click="emit('close')"
+      @click.stop="emit('close')"
     >
       <XIcon class="h-3 w-3" />
     </BuiButton>
