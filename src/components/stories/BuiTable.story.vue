@@ -66,5 +66,36 @@ import {
         </BuiTableBody>
       </BuiTable>
     </Variant>
+
+    <Variant :key="`horizontal_scroll`" title="Horizontal scroll">
+      <BuiTable>
+        <BuiTableHeader>
+          <BuiTableRow>
+            <BuiTableHead class="w-[400px]">Invoice</BuiTableHead>
+            <BuiTableHead class="w-[400px]">Status</BuiTableHead>
+            <BuiTableHead class="w-[400px]">Method</BuiTableHead>
+            <BuiTableHead class="w-[400px]">Amount</BuiTableHead>
+          </BuiTableRow>
+        </BuiTableHeader>
+        <BuiTableBody class="[&_td]:whitespace-nowrap">
+          <BuiTableRow>
+            <BuiTableCell class="font-medium"
+              >Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell
+            >
+            <BuiTableCell>Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell>
+            <BuiTableCell>Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell>
+            <BuiTableCell>Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell>
+          </BuiTableRow>
+          <BuiTableRow>
+            <BuiTableCell class="font-medium"
+              >Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell
+            >
+            <BuiTableCell>Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell>
+            <BuiTableCell>Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell>
+            <BuiTableCell>Lorem ipsum dolor sit amet, consectetur adipiscing elit</BuiTableCell>
+          </BuiTableRow>
+        </BuiTableBody>
+      </BuiTable>
+    </Variant>
   </Story>
 </template>
