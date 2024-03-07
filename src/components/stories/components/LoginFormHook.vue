@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import BuiButton from '@/components/ui/button/BuiButton.vue'
 import BuiInput from '@/components/ui/input/BuiInput.vue'
-import { useForm } from 'vee-validate'
 
 import {
   BuiFormControl,
   BuiFormField,
   BuiFormItem,
   BuiFormLabel,
-  BuiFormMessage
+  BuiFormMessage,
+  useBuiForm
 } from '@/components/ui/form'
 
 import { toTypedSchema } from '@vee-validate/zod'
@@ -26,7 +26,7 @@ const initialValues = {
   password: '12345678'
 }
 
-const { handleSubmit, meta } = useForm({
+const { handleSubmit, meta } = useBuiForm({
   validationSchema: loginFormSchema,
   initialValues
 })

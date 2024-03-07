@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LoginForm from './components/LoginForm.vue'
-import LoginFormHook from './components/LoginForm.vue'
+import LoginFormHook from './components/LoginFormHook.vue'
 </script>
 
 <template>

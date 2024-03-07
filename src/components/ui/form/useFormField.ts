@@ -19,7 +19,7 @@ export function useFormField() {
     error: useFieldError()
   }
 
-  if (!fieldContext) throw new Error('useFormField should be used within <FormField>')
+  if (!fieldContext) throw new Error('useFormField should be used within <BuiFormField>')
 
   const { name } = fieldContext
   const id = fieldItemContext
