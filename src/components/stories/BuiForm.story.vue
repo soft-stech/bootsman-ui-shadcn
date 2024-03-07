@@ -9,14 +9,14 @@ import LoginFormHook from './components/LoginFormHook.vue'
       <LoginForm />
     </Variant>
 
-    <Variant title="useForm hook">
+    <Variant title="useBuiForm hook">
       <LoginFormHook />
     </Variant>
   </Story>
 </template>
 
 <docs lang="md">
-Calling useForm creates a form context in the component and provides it for any child component that injects it. This means you should stick to calling useForm once in a component.
+Calling useBuiForm creates a form context in the component and provides it for any child component that injects it. This means you should stick to calling useForm once in a component.
 
 Creating a form context does a few things:
 
@@ -25,4 +25,6 @@ Creating a form context does a few things:
 - Aggregates the validity, touched, and dirty states of all the fields.
 
 See [vee-validate - Getting started](https://vee-validate.logaretm.com/v4/guide/composition-api/getting-started/)
+
+NOTE: do not use useForm directly as it creates different context
 </docs>
