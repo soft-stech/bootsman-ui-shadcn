@@ -34,9 +34,11 @@ const props = withDefaults(
     pageSize?: number
     showPagination?: boolean
     totalItems?: number
+    manualPagination?: boolean
+    manualSorting?: boolean
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
   }>(),
-  { pageSize: 10, showPagination: true, totalItems: 0 }
+  { pageSize: 10, showPagination: true, manualPagination: true, manualSorting: true, totalItems: 0 }
 )
 
 const sorting = defineModel<SortingState>('sorting')
@@ -63,8 +65,8 @@ const table = useVueTable({
   onRowSelectionChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, rowSelection)
   },
-  manualPagination: true,
-  manualSorting: true,
+  manualPagination: props.manualPagination, // set to false to enable client-side pagination
+  manualSorting: props.manualSorting,
   state: {
     get sorting() {
       return sorting.value
