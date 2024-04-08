@@ -26,6 +26,7 @@ import {
 } from './'
 import { BuiPaginationCommon, type PageSize } from '@/components/ui/pagination'
 import { valueUpdater } from '@/lib/utils'
+import { computed } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -44,7 +45,9 @@ const props = withDefaults(
 const sorting = defineModel<SortingState>('sorting')
 const pagination = defineModel<PaginationState>('pagination')
 const rowSelection = defineModel<RowSelectionState>('selection')
-
+const computedItems = computed(() =>
+  props.manualPagination ? props.totalItems : props.data.length
+)
 const table = useVueTable({
   initialState: { pagination: { pageSize: props.pageSize } },
   get data() {
@@ -79,6 +82,26 @@ const table = useVueTable({
     }
   },
   getRowId: props.getRowId
+})
+
+const tablePageSize = computed({
+  get() {
+    return String(table.getState().pagination.pageSize)
+  },
+  set(size) {
+    pagination.value.pageSize = parseInt(size)
+    table.setPageSize(parseInt(size))
+    table.setPageIndex(0)
+  }
+})
+const pageIndex = computed({
+  get() {
+    return table.getState().pagination.pageIndex + 1
+  },
+  set(index) {
+    pagination.value.pageIndex = index - 1
+    table.setPageIndex(index - 1)
+  }
 })
 </script>
 
@@ -117,16 +140,9 @@ const table = useVueTable({
         <BuiTableCell :colspan="columns.length">
           <BuiPaginationCommon
             class="float-right"
-            :total="totalItems"
-            :pageIndex="table.getState().pagination.pageIndex"
-            :pageSize="table.getState().pagination.pageSize as PageSize"
-            :setPageIndex="(v: number) => table.setPageIndex(v)"
-            :setPageSize="
-              (v: number) => {
-                table.setPageSize(v)
-                table.setPageIndex(0)
-              }
-            "
+            :total="computedItems"
+            v-model:pageIndex="pageIndex"
+            v-model:pageSize="tablePageSize"
           >
           </BuiPaginationCommon>
         </BuiTableCell>
