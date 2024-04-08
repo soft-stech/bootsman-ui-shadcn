@@ -3,7 +3,7 @@ import { BuiPaginationCommon, type PageSize } from '@/index'
 
 import { ref } from 'vue'
 
-const pageIndex = ref(0)
+const pageIndex = ref(1)
 const pageSize = ref(10)
 </script>
 
@@ -11,16 +11,10 @@ const pageSize = ref(10)
   <Story title="BuiPaginationCommon" autoPropsDisabled :layout="{ type: 'grid', width: '95%' }">
     <Variant :key="`variant`" title="Pagination">
       <BuiPaginationCommon
+        class="float-right"
         :total="100"
-        :pageIndex="pageIndex"
-        :pageSize="pageSize as PageSize"
-        :setPageIndex="(v) => (pageIndex = v)"
-        :setPageSize="
-          (v) => {
-            pageSize = v
-            pageIndex = 0
-          }
-        "
+        v-model:pageIndex="pageIndex"
+        v-model:pageSize="pageSize"
       >
       </BuiPaginationCommon>
     </Variant>

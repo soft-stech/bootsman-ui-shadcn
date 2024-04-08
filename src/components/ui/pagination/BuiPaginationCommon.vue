@@ -27,6 +27,15 @@ const props = defineProps<{
 const pageSize = defineModel<PageSize>('pageSize', { default: 10 })
 const pageIndex = defineModel<number>('pageIndex', { default: 1 })
 const totalPages = computed(() => Math.ceil(props.total / pageSize.value))
+
+const pageSizeString = computed({
+  get() {
+    return String(pageSize.value)
+  },
+  set(value) {
+    pageSize.value = parseInt(value)
+  }
+})
 </script>
 
 <template>
@@ -39,7 +48,7 @@ const totalPages = computed(() => Math.ceil(props.total / pageSize.value))
     >
       <BuiPaginationList class="flex items-center justify-center gap-2">
         <p class="text-sm text-muted-foreground">Items per page</p>
-        <BuiSelect v-model="pageSize">
+        <BuiSelect v-model="pageSizeString">
           <BuiSelectTrigger class="mr-2 w-[70px]">
             <BuiSelectValue :placeholder="pageSize.toString()" />
           </BuiSelectTrigger>

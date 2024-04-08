@@ -86,11 +86,11 @@ const table = useVueTable({
 
 const tablePageSize = computed({
   get() {
-    return String(table.getState().pagination.pageSize)
+    return table.getState().pagination.pageSize
   },
   set(size) {
-    pagination.value.pageSize = parseInt(size)
-    table.setPageSize(parseInt(size))
+    pagination.value.pageSize = size
+    table.setPageSize(size)
     table.setPageIndex(0)
   }
 })
