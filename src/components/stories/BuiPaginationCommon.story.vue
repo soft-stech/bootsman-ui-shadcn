@@ -4,7 +4,7 @@ import { BuiPaginationCommon, type PageSize } from '@/index'
 import { ref } from 'vue'
 
 const pageIndex = ref(1)
-const pageSize = ref(10)
+const pageSize = ref<PageSize>(10)
 </script>
 
 <template>

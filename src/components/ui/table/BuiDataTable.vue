@@ -84,11 +84,12 @@ const table = useVueTable({
   getRowId: props.getRowId
 })
 
-const tablePageSize = computed({
+const tablePageSize = computed<PageSize>({
   get() {
-    return table.getState().pagination.pageSize
+    return table.getState().pagination.pageSize as PageSize
   },
-  set(size) {
+  set(size: PageSize) {
+    if (!pagination.value) return
     pagination.value.pageSize = size
     table.setPageSize(size)
     table.setPageIndex(0)
@@ -99,6 +100,7 @@ const pageIndex = computed({
     return table.getState().pagination.pageIndex + 1
   },
   set(index) {
+    if (!pagination.value) return
     pagination.value.pageIndex = index - 1
     table.setPageIndex(index - 1)
   }
