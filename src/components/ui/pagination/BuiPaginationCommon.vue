@@ -46,7 +46,7 @@ const pageSizeString = computed({
       :itemsPerPage="pageSize"
       v-model:page="pageIndex"
     >
-      <BuiPaginationList class="flex items-center justify-center gap-2">
+      <BuiPaginationList class="relative flex items-center justify-center gap-2">
         <p class="text-sm text-muted-foreground">Items per page</p>
         <BuiSelect v-model.number="pageSizeString">
           <BuiSelectTrigger class="mr-2 w-[70px]">
