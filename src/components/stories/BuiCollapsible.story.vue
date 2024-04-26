@@ -8,7 +8,7 @@ const isOpen = ref(false)
 
 <template>
   <Story title="BuiCollapsible" autoPropsDisabled>
-    <Variant :key="`variant-default`" :title="`Tooltip`">
+    <Variant :key="`variant-default`" :title="`Default`">
       <div class="flex justify-center pt-12">
         <BuiCollapsible v-model:open="isOpen" class="w-[350px] space-y-2">
           <div class="flex items-center justify-between space-x-4 px-4">

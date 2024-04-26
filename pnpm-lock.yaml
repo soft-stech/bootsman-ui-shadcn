@@ -94,6 +94,9 @@ devDependencies:
   eslint-plugin-vue:
     specifier: 9.24.0
     version: 9.24.0(eslint@8.57.0)
+  fast-sort:
+    specifier: ^3.4.0
+    version: 3.4.0
   glob:
     specifier: 10.3.10
     version: 10.3.10
@@ -2507,6 +2510,10 @@ packages:
 
   /fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
+    dev: true
+
+  /fast-sort@3.4.0:
+    resolution: {integrity: sha512-c/cMBGA5mH3OYjaXedtLIM3hQjv+KuZuiD2QEH5GofNOZeQVDIYIN7Okc2AW1KPhk44g5PTZnXp8t2lOMl8qhQ==}
     dev: true
 
   /fastq@1.16.0:

@@ -1,10 +1,17 @@
 <script setup lang="ts" generic="TData, TValue">
+import {
+  BuiCollapsible,
+  BuiCollapsibleContent,
+  BuiCollapsibleTrigger
+} from '@/components/ui/collapsible'
+import { BuiPaginationCommon, type PageSize } from '@/components/ui/pagination'
+import { valueUpdater } from '@/lib/utils'
 import type {
   ColumnDef,
-  SortingState,
   PaginationState,
+  Row,
   RowSelectionState,
-  Row
+  SortingState
 } from '@tanstack/vue-table'
 import {
   FlexRender,
@@ -13,6 +20,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
+import { computed } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -24,9 +32,6 @@ import {
   BuiTableHeader,
   BuiTableRow
 } from './'
-import { BuiPaginationCommon, type PageSize } from '@/components/ui/pagination'
-import { valueUpdater } from '@/lib/utils'
-import { computed } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -37,6 +42,8 @@ const props = withDefaults(
     totalItems?: number
     manualPagination?: boolean
     manualSorting?: boolean
+    groupBy?: keyof TData
+    groupLabels?: { [key in keyof TData]?: string }
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
   }>(),
   { pageSize: 10, showPagination: true, manualPagination: true, manualSorting: true, totalItems: 0 }
@@ -105,6 +112,17 @@ const pageIndex = computed({
     table.setPageIndex(index - 1)
   }
 })
+
+const groupedRows = computed(() => {
+  if (!props.groupBy) return null
+
+  return table.getRowModel().rows.reduce((acc, row) => {
+    const col = row.getValue(props.groupBy! as string) as string
+    acc[col] = acc[col] || []
+    acc[col].push(row)
+    return acc
+  }, Object.create(null))
+})
 </script>
 
 <template>
@@ -123,21 +141,48 @@ const pageIndex = computed({
     </BuiTableHeader>
     <BuiTableBody>
       <template v-if="table.getRowModel().rows?.length">
-        <BuiTableRow
-          v-for="row in table.getRowModel().rows"
-          :key="row.id"
-          :data-state="row.getIsSelected() ? 'selected' : undefined"
-        >
-          <BuiTableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-            <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-          </BuiTableCell>
-        </BuiTableRow>
+        <template v-if="props.groupBy && groupedRows">
+          <BuiCollapsible asChild v-for="(value, key) in groupedRows" :key="key" :open="true">
+            <BuiCollapsibleTrigger asChild>
+              <BuiTableRow class="bg-foreground/[0.04]">
+                <BuiTableCell :colspan="columns.length" class="!pb-0">
+                  <div class="inline-block rounded-t bg-background px-4 py-3">
+                    {{ props.groupLabels && props.groupLabels[props.groupBy] }}: {{ key }}
+                  </div>
+                </BuiTableCell>
+              </BuiTableRow>
+            </BuiCollapsibleTrigger>
+            <BuiCollapsibleContent asChild>
+              <BuiTableRow
+                v-for="row in value"
+                :key="row.id"
+                :data-state="row.getIsSelected() ? 'selected' : undefined"
+              >
+                <BuiTableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+                  <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+                </BuiTableCell>
+              </BuiTableRow>
+            </BuiCollapsibleContent>
+          </BuiCollapsible>
+        </template>
+
+        <template v-else>
+          <BuiTableRow
+            v-for="row in table.getRowModel().rows"
+            :key="row.id"
+            :data-state="row.getIsSelected() ? 'selected' : undefined"
+          >
+            <BuiTableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+              <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+            </BuiTableCell>
+          </BuiTableRow>
+        </template>
       </template>
       <template v-else>
         <BuiTableEmpty :colspan="columns.length">No data</BuiTableEmpty>
       </template>
     </BuiTableBody>
-    <BuiTableFooter v-if="showPagination && table.getPageCount()">
+    <BuiTableFooter v-if="showPagination && table.getPageCount() > 1">
       <BuiTableRow>
         <BuiTableCell :colspan="columns.length">
           <BuiPaginationCommon

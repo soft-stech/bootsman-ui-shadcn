@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { BuiDataTable } from '@/components/ui/table'
-import type {
-  ColumnDef,
-  PaginationState,
-  RowSelectionState,
-  SortingState
-} from '@tanstack/vue-table'
-import { h, ref } from 'vue'
-import { z } from 'zod'
-import { BuiButton, BuiCheckbox } from '@/index'
+import { BuiButton, BuiCheckbox, BuiTabs, BuiTabsList, BuiTabsTrigger } from '@/index'
 import { tableColumnSortCommon } from '@/lib/utils'
+import type { ColumnDef, PaginationState, RowSelectionState } from '@tanstack/vue-table'
+import { sort, type ISortByObjectSorter } from 'fast-sort'
 import { logEvent } from 'histoire/client'
+import { AlignJustifyIcon, FolderIcon } from 'lucide-vue-next'
+import { computed, h, ref } from 'vue'
+import { z } from 'zod'
 import tasks from './data/tasks.json'
 
 const taskSchema = z.object({
@@ -59,7 +56,8 @@ const columns: ColumnDef<Task>[] = [
 ]
 const data = ref<Task[]>(tasks)
 
-const sorting = ref<SortingState>([{ id: 'status', desc: false }])
+type TaskSortingState = { id: keyof Task; desc: boolean }
+const sorting = ref<TaskSortingState[]>([{ id: 'status', desc: false }])
 const pagination = ref<PaginationState>({
   pageIndex: 0,
   pageSize: 10
@@ -71,14 +69,34 @@ function updateSelection(val: RowSelectionState) {
   logEvent('selection was changed', val)
   selection.value = val
 }
+
+type GroupBy = 'none' | 'status'
+const groupBy = ref<GroupBy>('none')
+const groupLabels = {
+  status: 'Status'
+}
+
+const sortedData = computed(() => {
+  const sortDirection = (sorting.value[0].desc ? 'desc' : 'asc') as 'asc'
+  const sortColumn = sorting.value[0].id
+  const groupByStr = groupBy.value
+
+  const sortBy: ISortByObjectSorter<Task> | ISortByObjectSorter<Task>[] = [
+    {
+      [sortDirection]: groupByStr === 'none' ? sortColumn : [(row) => row[groupByStr], sortColumn]
+    }
+  ]
+
+  return sort(data.value).by([...sortBy])
+})
 </script>
 
 <template>
   <Story title="BuiDataTable" autoPropsDisabled :layout="{ type: 'grid', width: '95%' }">
-    <Variant key="variant" title="Sorting, Pagination">
+    <Variant key="variant" title="Sorting, Pagination, Grouping">
       <BuiDataTable
         :columns="columns"
-        :data="data"
+        :data="sortedData"
         v-model:sorting="sorting"
         v-model:pagination="pagination"
         @update:selection="updateSelection"
@@ -86,14 +104,28 @@ function updateSelection(val: RowSelectionState) {
         class="caption-top"
         :manualPagination="false"
         :getRowId="(row) => row.id"
+        :groupBy="groupBy === 'none' ? undefined : groupBy"
+        :groupLabels="groupLabels"
       >
         <template #caption="{ table }">
           <div class="flex justify-between">
             <BuiButton variant="outline">Download YAML</BuiButton>
-            <span
-              >{{ table.getFilteredSelectedRowModel().rows?.length }} of
-              {{ table.getFilteredRowModel().rows?.length }} row(s) selected</span
-            >
+
+            <BuiTabs v-model="groupBy">
+              <BuiTabsList class="grid w-full grid-cols-2" :variant="'default'">
+                <BuiTabsTrigger value="none" :variant="'default'"
+                  ><AlignJustifyIcon
+                /></BuiTabsTrigger>
+                <BuiTabsTrigger value="status" :variant="'default'">
+                  <FolderIcon />
+                </BuiTabsTrigger>
+              </BuiTabsList>
+            </BuiTabs>
+
+            <span>
+              {{ table.getFilteredSelectedRowModel().rows?.length }} of
+              {{ table.getFilteredRowModel().rows?.length }} row(s) selected
+            </span>
           </div>
         </template>
       </BuiDataTable>

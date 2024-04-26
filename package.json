@@ -60,6 +60,7 @@
     "bumpp": "9.4.0",
     "eslint": "8.57.0",
     "eslint-plugin-vue": "9.24.0",
+    "fast-sort": "^3.4.0",
     "glob": "10.3.10",
     "histoire": "0.17.15",
     "jsdom": "23.2.0",
