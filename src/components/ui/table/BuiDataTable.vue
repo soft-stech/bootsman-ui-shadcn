@@ -5,6 +5,7 @@ import {
   BuiCollapsibleTrigger
 } from '@/components/ui/collapsible'
 import { BuiPaginationCommon, type PageSize } from '@/components/ui/pagination'
+import BuiTableRowSubrow from '@/components/ui/table/BuiTableRowSubrow.vue'
 import { valueUpdater } from '@/lib/utils'
 import type {
   ColumnDef,
@@ -45,6 +46,7 @@ const props = withDefaults(
     groupBy?: keyof TData
     groupLabels?: { [key in keyof TData]?: string }
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
+    renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
   }>(),
   { pageSize: 10, showPagination: true, manualPagination: true, manualSorting: true, totalItems: 0 }
 )
@@ -153,29 +155,25 @@ const groupedRows = computed(() => {
               </BuiTableRow>
             </BuiCollapsibleTrigger>
             <BuiCollapsibleContent asChild>
-              <BuiTableRow
-                v-for="row in value"
-                :key="row.id"
-                :data-state="row.getIsSelected() ? 'selected' : undefined"
-              >
-                <BuiTableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                  <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-                </BuiTableCell>
-              </BuiTableRow>
+              <template v-for="row in value" :key="row.id">
+                <BuiTableRowSubrow
+                  :columns="props.columns"
+                  :row="row"
+                  :renderSubComponent="props.renderSubComponent"
+                />
+              </template>
             </BuiCollapsibleContent>
           </BuiCollapsible>
         </template>
 
         <template v-else>
-          <BuiTableRow
-            v-for="row in table.getRowModel().rows"
-            :key="row.id"
-            :data-state="row.getIsSelected() ? 'selected' : undefined"
-          >
-            <BuiTableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-              <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-            </BuiTableCell>
-          </BuiTableRow>
+          <template v-for="row in table.getRowModel().rows" :key="row.id">
+            <BuiTableRowSubrow
+              :columns="props.columns"
+              :row="row"
+              :renderSubComponent="props.renderSubComponent"
+            />
+          </template>
         </template>
       </template>
       <template v-else>

@@ -2,7 +2,7 @@
 import { BuiDataTable } from '@/components/ui/table'
 import { BuiButton, BuiCheckbox, BuiTabs, BuiTabsList, BuiTabsTrigger } from '@/index'
 import { tableColumnSortCommon } from '@/lib/utils'
-import type { ColumnDef, PaginationState, RowSelectionState } from '@tanstack/vue-table'
+import type { ColumnDef, PaginationState, Row, RowSelectionState } from '@tanstack/vue-table'
 import { sort, type ISortByObjectSorter } from 'fast-sort'
 import { logEvent } from 'histoire/client'
 import { AlignJustifyIcon, FolderIcon } from 'lucide-vue-next'
@@ -15,7 +15,8 @@ const taskSchema = z.object({
   title: z.string(),
   status: z.string(),
   label: z.string(),
-  priority: z.string()
+  priority: z.string(),
+  errorMessage: z.string().optional()
 })
 type Task = z.infer<typeof taskSchema>
 const columns: ColumnDef<Task>[] = [
@@ -57,7 +58,7 @@ const columns: ColumnDef<Task>[] = [
 const data = ref<Task[]>(tasks)
 
 type TaskSortingState = { id: keyof Task; desc: boolean }
-const sorting = ref<TaskSortingState[]>([{ id: 'status', desc: false }])
+const sorting = ref<TaskSortingState[]>([{ id: 'id', desc: false }])
 const pagination = ref<PaginationState>({
   pageIndex: 0,
   pageSize: 10
@@ -89,11 +90,19 @@ const sortedData = computed(() => {
 
   return sort(data.value).by([...sortBy])
 })
+
+function renderSubComponent(row: Row<Task>) {
+  if (row.original.errorMessage) {
+    return () => h('span', { style: 'color: red' }, `Subrow: ${row.original.errorMessage}`)
+  } else {
+    return undefined
+  }
+}
 </script>
 
 <template>
   <Story title="BuiDataTable" autoPropsDisabled :layout="{ type: 'grid', width: '95%' }">
-    <Variant key="variant" title="Sorting, Pagination, Grouping">
+    <Variant key="variant" title="Sorting, Pagination, Grouping, Subrow">
       <BuiDataTable
         :columns="columns"
         :data="sortedData"
@@ -106,6 +115,7 @@ const sortedData = computed(() => {
         :getRowId="(row) => row.id"
         :groupBy="groupBy === 'none' ? undefined : groupBy"
         :groupLabels="groupLabels"
+        :renderSubComponent="renderSubComponent"
       >
         <template #caption="{ table }">
           <div class="flex justify-between">

@@ -417,7 +417,8 @@
     "title": "Backing up the driver won't do anything, we need to parse the redundant RAM pixel!",
     "status": "done",
     "label": "feature",
-    "priority": "medium"
+    "priority": "medium",
+    "errorMessage": "ERROR"
   },
   {
     "id": "TASK-1427",
