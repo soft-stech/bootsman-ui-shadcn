@@ -142,7 +142,6 @@
   {
     "id": "TASK-9285",
     "title": "The IP monitor is down, copy the haptic alarm so we can generate the HTTP transmitter!",
-    "status": "todo",
     "label": "bug",
     "priority": "high"
   },
@@ -219,7 +218,6 @@
   {
     "id": "TASK-9892",
     "title": "If we back up the application, we can get to the UDP application through the multi-byte THX capacitor!",
-    "status": "done",
     "label": "documentation",
     "priority": "high"
   },
@@ -408,7 +406,7 @@
   {
     "id": "TASK-9549",
     "title": "You can't bypass the bus without connecting the neural JBOD bus!",
-    "status": "todo",
+    "status": null,
     "label": "feature",
     "priority": "high"
   },

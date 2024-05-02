@@ -34,6 +34,8 @@ import {
   BuiTableRow
 } from './'
 
+const NO_GROUP_KEY = '#UNDEFINED#'
+
 const props = withDefaults(
   defineProps<{
     columns: ColumnDef<TData, TValue>[]
@@ -44,7 +46,7 @@ const props = withDefaults(
     manualPagination?: boolean
     manualSorting?: boolean
     groupBy?: keyof TData
-    groupLabels?: { [key in keyof TData]?: string }
+    groupLabels?: { [key in keyof TData]?: [label: string, emptyLabel: string] }
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
     renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
   }>(),
@@ -115,16 +117,22 @@ const pageIndex = computed({
   }
 })
 
-const groupedRows = computed(() => {
+const groupedRows = computed<{ [key: string]: Row<TData>[] }>(() => {
   if (!props.groupBy) return null
 
   return table.getRowModel().rows.reduce((acc, row) => {
-    const col = row.getValue(props.groupBy! as string) as string
+    const value = row.getValue(props.groupBy! as string)
+    const col = (value ?? NO_GROUP_KEY) as string
     acc[col] = acc[col] || []
     acc[col].push(row)
     return acc
   }, Object.create(null))
 })
+
+function getGroupLabel(index: number) {
+  const labels = props.groupBy && props.groupLabels ? props.groupLabels[props.groupBy] || [] : []
+  return labels[index]
+}
 </script>
 
 <template>
@@ -149,7 +157,10 @@ const groupedRows = computed(() => {
               <BuiTableRow class="bg-foreground/[0.04]">
                 <BuiTableCell :colspan="columns.length" class="!pb-0">
                   <div class="inline-block rounded-t bg-background px-4 py-3">
-                    {{ props.groupLabels && props.groupLabels[props.groupBy] }}: {{ key }}
+                    <template v-if="key === NO_GROUP_KEY">
+                      {{ getGroupLabel(1) }}
+                    </template>
+                    <template v-else> {{ getGroupLabel(0) }}: {{ key }} </template>
                   </div>
                 </BuiTableCell>
               </BuiTableRow>

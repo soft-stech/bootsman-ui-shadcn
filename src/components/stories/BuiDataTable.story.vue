@@ -74,7 +74,7 @@ function updateSelection(val: RowSelectionState) {
 type GroupBy = 'none' | 'status'
 const groupBy = ref<GroupBy>('none')
 const groupLabels = {
-  status: 'Status'
+  status: ['Status', 'Not in any status']
 }
 
 const sortedData = computed(() => {
