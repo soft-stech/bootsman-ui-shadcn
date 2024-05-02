@@ -37,6 +37,8 @@ jobs:
           version: 8
       - run: pnpm i
       - name: Build docs
+        env:
+          BASE_URL: /bootsman-ui-shadcn/
         run: npm run story:build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
