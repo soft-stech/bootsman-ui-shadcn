@@ -40,4 +40,6 @@ export * from './components/ui/collapsible/index'
 
 export * from './lib/utils'
 export { default as tailwind } from './tailwind-preset'
+
+// @ts-ignore
 export * from './assets/variables.css'

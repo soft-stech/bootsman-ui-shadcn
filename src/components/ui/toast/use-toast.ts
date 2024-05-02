@@ -1,6 +1,5 @@
-import { computed, ref } from 'vue'
-import type { Component, VNode } from 'vue'
-import type { ToastProps } from './BuiToast.vue'
+import { computed, ref, type Component, type VNode, type ComputedRef } from 'vue'
+import { type ToastProps } from './BuiToast.vue'
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
@@ -114,7 +113,11 @@ function dispatch(action: Action) {
   }
 }
 
-function useToast() {
+function useToast(): {
+  toasts: ComputedRef<ToasterToast[]>
+  toast: (props: Toast) => ToastResult
+  dismiss: (toastId?: string) => void
+} {
   return {
     toasts: computed(() => state.value.toasts),
     toast,
@@ -123,8 +126,12 @@ function useToast() {
 }
 
 type Toast = Omit<ToasterToast, 'id'>
-
-function toast(props: Toast) {
+type ToastResult = {
+  id: string
+  dismiss: (toastId?: string) => void
+  update: (toast: ToasterToast) => void
+}
+function toast(props: Toast): ToastResult {
   const id = genId()
 
   const update = (props: ToasterToast) =>

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import type { Calendar } from 'v-calendar'
-import { DatePicker } from 'v-calendar'
+import { DatePicker, type Calendar } from 'v-calendar'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { computed, nextTick, onMounted, ref, useSlots } from 'vue'
-import { isVCalendarSlot } from '.'
+import { isVCalendarSlot } from './index'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
