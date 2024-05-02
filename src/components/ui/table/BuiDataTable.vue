@@ -46,7 +46,7 @@ const props = withDefaults(
     manualPagination?: boolean
     manualSorting?: boolean
     groupBy?: keyof TData
-    groupLabels?: { [key in keyof TData]?: [label: string, emptyLabel: string] }
+    groupLabels?: { [key in keyof TData]?: string[] }
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
     renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
   }>(),

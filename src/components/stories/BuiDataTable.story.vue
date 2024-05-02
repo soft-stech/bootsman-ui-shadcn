@@ -13,7 +13,7 @@ import tasks from './data/tasks.json'
 const taskSchema = z.object({
   id: z.string(),
   title: z.string(),
-  status: z.string(),
+  status: z.string().nullable().optional(),
   label: z.string(),
   priority: z.string(),
   errorMessage: z.string().optional()
