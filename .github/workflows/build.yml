@@ -3,11 +3,20 @@
 
 name: Build Docs
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build-docs:
@@ -29,6 +38,10 @@ jobs:
       - run: pnpm i
       - name: Build docs
         run: npm run story:build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+         path: .histoire/dist
   build-pkg:
 
     runs-on: ubuntu-latest
@@ -69,3 +82,14 @@ jobs:
       - run: pnpm i
       - name: Unit tests
         run: npm run test:unit
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build-docs
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
