@@ -84,9 +84,23 @@ const sortedData = computed(() => {
 
   const sortBy: ISortByObjectSorter<Task> | ISortByObjectSorter<Task>[] = [
     {
-      [sortDirection]: groupByStr === 'none' ? sortColumn : [(row) => row[groupByStr], sortColumn]
+      [sortDirection]: sortColumn
     }
   ]
+
+  // sort by grouping column first, but not when manually sorting by it
+  if (groupByStr !== 'none' && sortColumn !== groupByStr) {
+    sortBy.unshift({
+      asc: groupByStr
+    })
+  }
+
+  // sort by ID when possible
+  if (sortColumn !== 'id') {
+    sortBy.push({
+      asc: 'id'
+    })
+  }
 
   return sort(data.value).by([...sortBy])
 })
