@@ -11,6 +11,7 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --card-shadow: 241.538, 100%, 92%, 0.83;
+    --tab-shadow: 228, 51%, 11%, 0.08;
 
     --border: 241 92% 71%;
     --input: 225 11% 84%;
@@ -47,9 +48,10 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 242 24% 21%;
     --card-foreground: 210 40% 98%;
     --card-shadow: 242.027, 94%, 69%, 0.4;
+    --tab-shadow: 228, 51%, 11%, 0.08;
 
     --border: 241 92% 71%;
     --input: 0, 0%, 100%, 0.32;
