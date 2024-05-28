@@ -9,7 +9,8 @@ export const tabsListVariants = cva('inline-flex items-center justify-center rou
   variants: {
     variant: {
       default: 'bg-muted text-muted-foreground p-0',
-      ghost: 'bg-background bg-text-foreground'
+      ghost: 'bg-background bg-text-foreground',
+      vertical: 'bg-muted text-muted-foreground p-0 flex flex-col justify-start rounded-none'
     }
   },
   defaultVariants: {
@@ -25,7 +26,9 @@ export const tabsTriggerVariants = cva(
         default:
           'rounded-sm data-[state=active]:bg-background data-[state=active]:border border-primary/[0.16] text-primary data-[state=active]:text-foreground data-[state=active]:shadow-tab-shadow',
         ghost:
-          'border-transparent text-muted-foreground border-b-2 data-[state=active]:border-primary '
+          'border-transparent text-muted-foreground border-b-2 data-[state=active]:border-primary',
+        vertical:
+          'border-transparent text-muted-foreground data-[state=active]:border-primary data-[state=active]:bg-background border-l-2 border-b-0 w-full justify-start pl-6'
       }
     },
     defaultVariants: {
