@@ -28,7 +28,7 @@ export const tabsTriggerVariants = cva(
         ghost:
           'border-transparent text-muted-foreground border-b-2 data-[state=active]:border-primary',
         vertical:
-          'border-transparent text-muted-foreground data-[state=active]:border-primary data-[state=active]:bg-background border-l-2 border-b-0 w-full justify-start pl-6'
+          'border-transparent text-primary data-[state=active]:border-primary data-[state=active]:bg-background border-l-2 border-b-0 w-full justify-start pl-6'
       }
     },
     defaultVariants: {
