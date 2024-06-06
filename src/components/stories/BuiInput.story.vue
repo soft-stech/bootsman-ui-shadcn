@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BuiInput from '@/components/ui/input/BuiInput.vue'
 import BuiLabel from '@/components/ui/label/BuiLabel.vue'
+import { BuiPasswordInput } from '@/components/ui/input'
 </script>
 
 <template>
@@ -49,6 +50,15 @@ import BuiLabel from '@/components/ui/label/BuiLabel.vue'
         <div class="grid w-full max-w-sm items-center gap-1.5">
           <BuiLabel for="email">Email</BuiLabel>
           <BuiInput id="email" type="email" placeholder="Email" aria-invalid="true" />
+        </div>
+      </div>
+    </Variant>
+
+    <Variant title="Password">
+      <div class="flex items-center space-x-2 p-1">
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <BuiLabel for="email">Password</BuiLabel>
+          <BuiPasswordInput placeholder="Password" />
         </div>
       </div>
     </Variant>
