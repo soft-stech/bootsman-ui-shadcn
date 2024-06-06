@@ -3,13 +3,6 @@ import { BuiInput, inputVariants } from '@/components/ui/input/index'
 import { type HTMLAttributes, ref } from 'vue'
 import { EyeIcon, EyeOffIcon } from 'lucide-vue-next'
 
-const props = defineProps<{
-  defaultValue?: string | number
-  variant?: NonNullable<Parameters<typeof inputVariants>[0]>['variant']
-  modelValue?: string | number
-  class?: HTMLAttributes['class']
-}>()
-
 const type = ref('password')
 function togglePasswordShow() {
   if (type.value === 'password') {
@@ -22,7 +15,7 @@ function togglePasswordShow() {
 
 <template>
   <div class="relative flex">
-    <BuiInput v-bind="props" :type="type" />
+    <BuiInput v-bind="$attrs" :type="type" />
     <span
       @click="togglePasswordShow"
       class="absolute right-3 top-0 flex h-full items-center justify-center"
