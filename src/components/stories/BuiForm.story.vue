@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UseBuiField from '@/components/stories/components/UseBuiField.vue'
 import LoginForm from './components/LoginForm.vue'
 import LoginFormHook from './components/LoginFormHook.vue'
 </script>
@@ -11,6 +12,10 @@ import LoginFormHook from './components/LoginFormHook.vue'
 
     <Variant title="useBuiForm hook">
       <LoginFormHook />
+    </Variant>
+
+    <Variant title="useBuiField">
+      <UseBuiField />
     </Variant>
   </Story>
 </template>
