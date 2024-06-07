@@ -31,7 +31,7 @@ const props = defineProps<AccordionTriggerProps & { class?: string }>()
       <slot name="actions" />
     </div>
 
-    <p class="mx-6 mt-2 align-middle text-xs font-normal leading-4">
+    <p v-if="$slots.description" class="mx-6 mt-2 align-middle text-xs font-normal leading-4">
       <slot name="description" />
     </p>
   </AccordionHeader>
