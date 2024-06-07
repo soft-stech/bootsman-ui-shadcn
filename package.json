@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@tanstack/vue-table": "8.16.0",
-    "@vee-validate/zod": "4.12.6",
+    "@vee-validate/zod": "4.13.1",
     "@vueuse/core": "10.9.0",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
@@ -39,7 +39,7 @@
     "tailwind-merge": "2.3.0",
     "tailwindcss-animate": "1.0.7",
     "v-calendar": "3.1.2",
-    "vee-validate": "4.12.6",
+    "vee-validate": "4.13.1",
     "vue": "3.4.26",
     "zod": "3.23.5"
   },
