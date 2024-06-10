@@ -39,6 +39,17 @@ import BuiButtonVue from '@/components/ui/button/BuiButton.vue'
       </BuiAlert>
     </Variant>
 
+    <Variant title="Warning Alert">
+      <BuiAlert variant="warning">
+        <BuiAlertTitle>Warning!</BuiAlertTitle>
+        <BuiAlertDescription> Files must be less than 10Mb. </BuiAlertDescription>
+
+        <template #icon>
+          <AlertTriangle class="h-4 w-4" aria-hidden="true" />
+        </template>
+      </BuiAlert>
+    </Variant>
+
     <Variant title="Destructive Alert with button">
       <BuiAlert variant="destructive">
         <BuiAlertTitle> Upload failed </BuiAlertTitle>
