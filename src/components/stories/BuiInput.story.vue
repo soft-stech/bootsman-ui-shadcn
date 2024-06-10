@@ -2,6 +2,7 @@
 import BuiInput from '@/components/ui/input/BuiInput.vue'
 import BuiLabel from '@/components/ui/label/BuiLabel.vue'
 import { BuiPasswordInput } from '@/components/ui/input'
+import { BuiBadgedInput } from '@/components/ui/input'
 </script>
 
 <template>
@@ -59,6 +60,15 @@ import { BuiPasswordInput } from '@/components/ui/input'
         <div class="grid w-full max-w-sm items-center gap-1.5">
           <BuiLabel for="email">Password</BuiLabel>
           <BuiPasswordInput placeholder="Password" />
+        </div>
+      </div>
+    </Variant>
+
+    <Variant title="With units (pay attention to padding class)">
+      <div class="flex items-center space-x-2 p-1">
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <BuiLabel for="email">CPU limit</BuiLabel>
+          <BuiBadgedInput badge="mCPUs" class="pr-24" />
         </div>
       </div>
     </Variant>
