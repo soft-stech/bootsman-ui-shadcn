@@ -3,7 +3,8 @@ export {
   Field as BuiFormField,
   FieldArray as BuiFormFieldArray,
   useForm as useBuiForm,
-  useField as useBuiField
+  useField as useBuiField,
+  useFieldArray as useBuiFieldArray
 } from 'vee-validate'
 export { default as BuiFormItem } from './BuiFormItem.vue'
 export { default as BuiFormLabel } from './BuiFormLabel.vue'
