@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { z } from 'zod'
 
 import { cn } from '@/lib/utils'
 import { BuiButton } from '@/components/ui/button'
@@ -12,7 +13,16 @@ import {
   BuiCommandList
 } from '@/components/ui/command'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/ui/popover'
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-vue-next'
+import { CheckIcon, ChevronsUpDownIcon, ChevronDown } from 'lucide-vue-next'
+import {
+  BuiForm,
+  BuiFormField,
+  BuiFormMessage,
+  BuiFormItem,
+  BuiFormControl
+} from '@/components/ui/form'
+import { BuiLabel } from '@/components/ui/label'
+import { toTypedSchema } from '@vee-validate/zod'
 
 const frameworks = [
   { value: 'next.js', label: 'Next.js' },
@@ -24,6 +34,14 @@ const frameworks = [
 
 const open = ref(false)
 const value = ref<string>('')
+
+const formSchema = toTypedSchema(
+  z.object({
+    namespace: z.string().min(2)
+  })
+)
+const isNamespacesPopoverOpen = ref(false)
+const namespaces = ['default', 'local', 'my-namespace']
 
 // const filterFunction = (list: typeof frameworks, search: string) => list.filter(i => i.value.toLowerCase().includes(search.toLowerCase()))
 </script>
@@ -82,6 +100,80 @@ const value = ref<string>('')
             </BuiCommand>
           </BuiPopoverContent>
         </BuiPopover>
+      </div>
+    </Variant>
+    <Variant key="select-style" title="Select style + form fields">
+      <div class="p-4">
+        <BuiForm :validation-schema="formSchema" :initial-values="{ namespace: '' }">
+          <BuiFormField name="namespace" v-slot="{ componentField, meta, validate }">
+            <BuiFormItem class="w-full">
+              <BuiLabel :for="`namespace`" class="flex gap-2">
+                <div class="flex">Namespace</div>
+              </BuiLabel>
+
+              <BuiPopover
+                v-model:open="isNamespacesPopoverOpen"
+                @update:open="
+                  (isOpen) => {
+                    if (!isOpen) {
+                      validate()
+                    }
+                  }
+                "
+              >
+                <BuiPopoverTrigger as-child :id="`namespace`">
+                  <BuiButton
+                    variant="outline"
+                    size="lg"
+                    role="combobox"
+                    :aria-expanded="isNamespacesPopoverOpen"
+                    class="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-inherit ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:bg-transparent active:outline-none active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
+                    :class="!meta.valid && meta.validated ? '!border-destructive-foreground' : ''"
+                  >
+                    {{ componentField.modelValue ? componentField.modelValue : 'Select' }}
+                    <ChevronDown class="h-4 w-4 opacity-50" />
+                  </BuiButton>
+                </BuiPopoverTrigger>
+
+                <BuiPopoverContent class="w-full min-w-full p-0">
+                  <BuiCommand class="w-full min-w-full p-0">
+                    <BuiCommandInput class="h-9" placeholder="Search" />
+                    <BuiCommandEmpty> No results </BuiCommandEmpty>
+                    <BuiFormControl>
+                      <BuiCommandList>
+                        <BuiCommandGroup>
+                          <BuiCommandItem
+                            v-for="element in namespaces"
+                            :value="element"
+                            :key="element"
+                            @select="
+                              () => {
+                                if (componentField['onUpdate:modelValue']) {
+                                  componentField['onUpdate:modelValue'](element)
+                                  isNamespacesPopoverOpen = false
+                                }
+                              }
+                            "
+                          >
+                            <CheckIcon
+                              class="mr-2 h-4 w-4"
+                              :class="
+                                element === componentField.modelValue ? 'opacity-100' : 'opacity-0'
+                              "
+                            />
+                            {{ element }}
+                          </BuiCommandItem>
+                        </BuiCommandGroup>
+                      </BuiCommandList>
+                    </BuiFormControl>
+                  </BuiCommand>
+                </BuiPopoverContent>
+
+                <BuiFormMessage />
+              </BuiPopover>
+            </BuiFormItem>
+          </BuiFormField>
+        </BuiForm>
       </div>
     </Variant>
   </Story>
