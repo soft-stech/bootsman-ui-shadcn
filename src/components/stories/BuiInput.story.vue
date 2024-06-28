@@ -64,11 +64,11 @@ import { BuiBadgedInput } from '@/components/ui/input'
       </div>
     </Variant>
 
-    <Variant title="With units (pay attention to padding class)">
+    <Variant title="With units">
       <div class="flex items-center space-x-2 p-1">
         <div class="grid w-full max-w-sm items-center gap-1.5">
           <BuiLabel for="email">CPU limit</BuiLabel>
-          <BuiBadgedInput badge="mCPUs" class="pr-24" />
+          <BuiBadgedInput badge="mCPUs" type="number" placeholder="CPU limit" />
         </div>
       </div>
     </Variant>
