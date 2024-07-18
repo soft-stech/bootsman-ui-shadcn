@@ -22,6 +22,7 @@ const MAGIC_NUMBER = 16 // 12 (right-3) + 4 (just some offset)
     <BuiInput v-bind="$attrs" :style="{ paddingRight: width + MAGIC_NUMBER + 'px' }" />
     <BuiBadge
       ref="badgeEl"
+      v-if="props.badge"
       class="absolute right-3 top-1.5 flex items-center justify-center rounded-sm hover:bg-primary/[0.08] dark:hover:bg-primary/30"
     >
       {{ props.badge }}
