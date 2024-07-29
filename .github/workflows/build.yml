@@ -26,15 +26,16 @@ jobs:
         node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v2
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 9
       - run: pnpm i
       - name: Build docs
         env:
@@ -44,25 +45,24 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
          path: .histoire/dist
+
   build-pkg:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v2
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 9
       - run: pnpm i
       - run: npm run build
   unit-tests:
@@ -72,15 +72,16 @@ jobs:
         node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v2
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 9
       - run: pnpm i
       - name: Unit tests
         run: npm run test:unit
