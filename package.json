@@ -11,6 +11,9 @@
   "sideEffects": [
     "**/*.css"
   ],
+  "repository": {
+    "url": "https://github.com/soft-stech/bootsman-ui-shadcn"
+  },
   "scripts": {
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
