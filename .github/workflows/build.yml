@@ -27,16 +27,17 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - run: pnpm i
+      - name: Install dependencies
+        run: pnpm install
       - name: Build docs
         env:
           BASE_URL: /bootsman-ui-shadcn/
@@ -54,17 +55,19 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - run: pnpm i
-      - run: npm run build
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build
+        run: npm run build
   unit-tests:
     runs-on: ubuntu-latest
     strategy:
@@ -73,16 +76,17 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - run: pnpm i
+      - name: Install dependencies
+        run: pnpm install
       - name: Unit tests
         run: npm run test:unit
   deploy:
