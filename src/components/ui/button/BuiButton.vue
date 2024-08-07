@@ -7,10 +7,12 @@ interface Props extends PrimitiveProps {
   variant?: NonNullable<Parameters<typeof buttonVariants>[0]>['variant']
   size?: NonNullable<Parameters<typeof buttonVariants>[0]>['size']
   as?: string
+  type?: string
 }
 
 withDefaults(defineProps<Props>(), {
   as: 'button',
+  type: 'button'
 })
 </script>
 
@@ -19,6 +21,7 @@ withDefaults(defineProps<Props>(), {
     :as="as"
     :as-child="asChild"
     :class="cn(buttonVariants({ variant, size }), $attrs.class ?? '')"
+    :type="type"
   >
     <slot />
   </Primitive>
