@@ -32,6 +32,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@internationalized/date": "^3.5.5",
     "@tanstack/vue-table": "8.16.0",
     "@vee-validate/zod": "4.13.1",
     "@vueuse/core": "10.9.0",
@@ -67,6 +68,7 @@
     "glob": "10.3.12",
     "histoire": "0.17.17",
     "jsdom": "23.2.0",
+    "mlly": "1.4.2",
     "npm-run-all2": "6.1.2",
     "postcss": "8.4.38",
     "prettier": "3.2.5",
@@ -76,7 +78,6 @@
     "vite": "5.2.11",
     "vite-plugin-dts": "3.9.0",
     "vitest": "1.5.3",
-    "vue-tsc": "2.0.16",
-    "mlly": "1.4.2"
+    "vue-tsc": "2.0.16"
   }
 }

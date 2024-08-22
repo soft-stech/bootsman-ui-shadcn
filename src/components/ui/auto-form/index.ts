@@ -1,0 +1,15 @@
+export { getObjectFormSchema, getBaseSchema, getBaseType } from './utils'
+export type { Config, ConfigItem, FieldProps } from './interface'
+
+export { default as BuiAutoForm } from './BuiAutoForm.vue'
+export { default as BuiAutoFormField } from './BuiAutoFormField.vue'
+export { default as BuiAutoFormLabel } from './BuiAutoFormLabel.vue'
+
+export { default as BuiAutoFormFieldArray } from './BuiAutoFormFieldArray.vue'
+export { default as BuiAutoFormFieldBoolean } from './BuiAutoFormFieldBoolean.vue'
+export { default as BuiAutoFormFieldDate } from './BuiAutoFormFieldDate.vue'
+export { default as BuiAutoFormFieldEnum } from './BuiAutoFormFieldEnum.vue'
+export { default as BuiAutoFormFieldFile } from './BuiAutoFormFieldFile.vue'
+export { default as BuiAutoFormFieldInput } from './BuiAutoFormFieldInput.vue'
+export { default as BuiAutoFormFieldNumber } from './BuiAutoFormFieldNumber.vue'
+export { default as BuiAutoFormFieldObject } from './BuiAutoFormFieldObject.vue'
