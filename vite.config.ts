@@ -9,7 +9,14 @@ import { glob } from 'glob'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const rollupOptions = {
-    external: ['vue'],
+    external: [
+      'vue',
+      'zod',
+      'vee-validate',
+      '@tanstack/vue-table',
+      '@vee-validate/zod',
+      '@vueuse/core'
+    ],
     output: {
       assetFileNames: '[name][extname]',
       entryFileNames: '[name].js',
