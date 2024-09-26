@@ -21,7 +21,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -79,6 +79,7 @@ const table = useVueTable({
   onRowSelectionChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, rowSelection)
   },
+  autoResetPageIndex: false,
   manualPagination: props.manualPagination, // set to false to enable client-side pagination
   manualSorting: props.manualSorting,
   state: {
@@ -114,6 +115,13 @@ const pageIndex = computed({
     if (!pagination.value) return
     pagination.value.pageIndex = index - 1
     table.setPageIndex(index - 1)
+  }
+})
+
+watchEffect(() => {
+  const totalPages = table.getPageCount()
+  if (totalPages && totalPages < pageIndex.value) {
+    pageIndex.value = totalPages
   }
 })
 
@@ -188,7 +196,9 @@ function getGroupLabel(index: number) {
         </template>
       </template>
       <template v-else>
-        <BuiTableEmpty :colspan="columns.length">No data</BuiTableEmpty>
+        <BuiTableEmpty :colspan="columns.length">
+          <slot name="nodata">No data</slot>
+        </BuiTableEmpty>
       </template>
     </BuiTableBody>
     <BuiTableFooter v-if="showPagination && table.getPageCount() > 1">

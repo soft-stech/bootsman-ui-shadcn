@@ -112,6 +112,13 @@ function renderSubComponent(row: Row<Task>) {
     return undefined
   }
 }
+
+function deleteRow() {
+  data.value = data.value.map((a) => a)
+}
+function updateRows() {
+  data.value.shift()
+}
 </script>
 
 <template>
@@ -134,6 +141,8 @@ function renderSubComponent(row: Row<Task>) {
         <template #caption="{ table }">
           <div class="flex justify-between">
             <BuiButton variant="outline">Download YAML</BuiButton>
+            <BuiButton variant="outline" @click="updateRows"> Delete row </BuiButton>
+            <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
 
             <BuiTabs v-model="groupBy">
               <BuiTabsList class="grid w-full grid-cols-2" :variant="'default'">
@@ -152,6 +161,7 @@ function renderSubComponent(row: Row<Task>) {
             </span>
           </div>
         </template>
+        <template #nodata>Нет данных</template>
       </BuiDataTable>
     </Variant>
   </Story>
