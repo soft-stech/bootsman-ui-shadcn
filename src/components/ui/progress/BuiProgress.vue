@@ -3,18 +3,21 @@ import { ProgressIndicator, ProgressRoot, type ProgressRootProps } from 'radix-v
 import { cn } from '@/lib/utils'
 import type { HTMLAttributes } from 'vue'
 
-import { progressVariants, capVariants } from '.'
+import { progressVariants, capVariants, indicatorVariants } from '.'
 
 const props = withDefaults(
   defineProps<
     ProgressRootProps & {
       class?: HTMLAttributes['class']
       variant?: NonNullable<Parameters<typeof progressVariants>[0]>['variant']
+      color?: NonNullable<Parameters<typeof indicatorVariants>[0]>['color']
     }
   >(),
   {
     class: '',
-    modelValue: 0
+    modelValue: 0,
+    color: 'primary',
+    variant: 'default'
   }
 )
 </script>
@@ -23,7 +26,7 @@ const props = withDefaults(
   <ProgressRoot
     :class="
       cn(
-        `relative w-full overflow-hidden bg-primary bg-opacity-20 after:absolute after:right-0 after:top-0 after:bg-primary after:bg-opacity-10`,
+        'relative w-full overflow-hidden bg-primary bg-opacity-[0.16]',
         progressVariants({ variant }),
         props.class
       )
@@ -31,14 +34,7 @@ const props = withDefaults(
     v-bind="props"
   >
     <ProgressIndicator
-      :class="
-        cn(
-          'absolute box-content flex-1 bg-primary bg-opacity-60 transition-all duration-300 after:absolute after:right-0 after:top-0 after:bg-primary',
-          progressVariants({ variant }),
-
-          props.class
-        )
-      "
+      :class="cn(indicatorVariants({ color, variant }), props.class)"
       :style="`width: calc(calc(100% - ${capVariants[variant ?? 'default']}) * ${
         (props.modelValue ?? 0) * 0.01
       })`"

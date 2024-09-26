@@ -48,9 +48,9 @@ import { ref } from 'vue'
 
     <Variant title="Colors">
       <div class="m-4 flex flex-col gap-2">
-        <BuiProgress :model-value="50" class="max-w-[300px] bg-emerald-500 after:bg-emerald-500" />
-        <BuiProgress :model-value="50" class="max-w-[300px] bg-purple-500 after:bg-purple-500" />
-        <BuiProgress :model-value="50" class="max-w-[300px] bg-orange-500 after:bg-orange-500" />
+        <BuiProgress :model-value="50" class="max-w-[300px]" color="primary" />
+        <BuiProgress :model-value="50" class="max-w-[300px]" color="red" />
+        <BuiProgress :model-value="50" class="max-w-[300px]" color="orange" />
       </div>
     </Variant>
   </Story>
