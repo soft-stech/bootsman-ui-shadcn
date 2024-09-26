@@ -77,7 +77,7 @@ export default {
         sm: 'calc(var(--radius) - 4px)'
       },
       boxShadow: {
-        'card-shadow': '0px 2px 19px 0px hsl(var(--card-shadow))',
+        'card-shadow': '0px 4px 8px 0px hsl(var(--card-shadow))',
         'tab-shadow':
           '0px 2px 4px 0px hsl(var(--tab-shadow)), 0px 4px 4px 0px hsl(var(--tab-shadow))'
       },
