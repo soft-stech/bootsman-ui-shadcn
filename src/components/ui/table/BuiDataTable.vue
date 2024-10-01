@@ -201,7 +201,7 @@ function getGroupLabel(index: number) {
         </BuiTableEmpty>
       </template>
     </BuiTableBody>
-    <BuiTableFooter v-if="showPagination && table.getPageCount() > 1">
+    <BuiTableFooter v-if="showPagination && computedItems > 0">
       <BuiTableRow>
         <BuiTableCell :colspan="columns.length">
           <BuiPaginationCommon
