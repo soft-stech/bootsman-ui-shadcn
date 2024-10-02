@@ -62,12 +62,14 @@ const pageSizeString = computed({
             </BuiSelectItem>
           </BuiSelectContent>
         </BuiSelect>
-        <p class="text-sm text-muted-foreground">Page {{ page }} of {{ totalPages }}</p>
-        <BuiPaginationFirst />
-        <BuiPaginationPrev />
-        <BuiInput v-model="pageIndex" class="w-28" placeholder="Page number" />
-        <BuiPaginationNext />
-        <BuiPaginationLast />
+        <template v-if="totalPages > 1">
+          <p class="text-sm text-muted-foreground">Page {{ page }} of {{ totalPages }}</p>
+          <BuiPaginationFirst />
+          <BuiPaginationPrev />
+          <BuiInput v-model="pageIndex" class="w-28" placeholder="Page number" />
+          <BuiPaginationNext />
+          <BuiPaginationLast />
+        </template>
       </BuiPaginationList>
     </BuiPagination>
   </div>
