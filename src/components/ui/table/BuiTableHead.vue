@@ -13,7 +13,7 @@ const props = defineProps<{ class?: string }>()
       )
     "
   >
-    <div class="flex h-10 items-center border-r border-border/[0.16] p-4">
+    <div class="flex h-10 items-center whitespace-nowrap border-r border-border/[0.16] p-4">
       <slot />
     </div>
   </th>
