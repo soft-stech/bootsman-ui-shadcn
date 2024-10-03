@@ -25,7 +25,6 @@ import { computed, watchEffect } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
-  BuiTableCaption,
   BuiTableCell,
   BuiTableEmpty,
   BuiTableFooter,
@@ -144,8 +143,10 @@ function getGroupLabel(index: number) {
 </script>
 
 <template>
+  <div v-if="$slots.caption" class="w-full py-4">
+    <slot name="caption" :table="table" />
+  </div>
   <BuiTable>
-    <BuiTableCaption v-if="$slots.caption"><slot name="caption" :table="table" /></BuiTableCaption>
     <BuiTableHeader>
       <BuiTableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
         <BuiTableHead v-for="header in headerGroup.headers" :key="header.id">
