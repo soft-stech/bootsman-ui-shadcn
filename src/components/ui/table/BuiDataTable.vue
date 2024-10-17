@@ -12,7 +12,8 @@ import type {
   PaginationState,
   Row,
   RowSelectionState,
-  SortingState
+  SortingState,
+  VisibilityState
 } from '@tanstack/vue-table'
 import {
   FlexRender,
@@ -55,6 +56,7 @@ const props = withDefaults(
 const sorting = defineModel<SortingState>('sorting')
 const pagination = defineModel<PaginationState>('pagination')
 const rowSelection = defineModel<RowSelectionState>('selection')
+const columnVisibility = defineModel<VisibilityState>('columnVisibility')
 const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
 )
@@ -90,6 +92,9 @@ const table = useVueTable({
     },
     get rowSelection() {
       return rowSelection.value
+    },
+    get columnVisibility() {
+      return columnVisibility.value
     }
   },
   getRowId: props.getRowId

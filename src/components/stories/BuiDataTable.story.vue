@@ -53,7 +53,8 @@ const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'priority',
     header: ({ column }) => tableColumnSortCommon(column, 'Priorities')
-  }
+  },
+  { id: 'hiddenColumn', header: 'Hidden Column', cell: 'secret info' }
 ]
 const data = ref<Task[]>(tasks)
 
@@ -137,6 +138,7 @@ function updateRows() {
         :groupBy="groupBy === 'none' ? undefined : groupBy"
         :groupLabels="groupLabels"
         :renderSubComponent="renderSubComponent"
+        :columnVisibility="{ hiddenColumn: false }"
       >
         <template #caption="{ table }">
           <div class="flex justify-between">
