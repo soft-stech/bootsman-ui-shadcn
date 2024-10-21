@@ -164,6 +164,7 @@ function updateRows() {
           </div>
         </template>
         <template #nodata>Нет данных</template>
+        <template #groupByRow="{ group }"> Optional slot for: `{{ group }}` </template>
       </BuiDataTable>
     </Variant>
   </Story>

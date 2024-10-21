@@ -170,11 +170,16 @@ function getGroupLabel(index: number) {
             <BuiCollapsibleTrigger asChild>
               <BuiTableRow class="bg-foreground/[0.04]">
                 <BuiTableCell :colspan="columns.length" class="!pb-0">
-                  <div class="inline-block rounded-t bg-background px-4 py-3">
-                    <template v-if="key === NO_GROUP_KEY">
-                      {{ getGroupLabel(1) }}
-                    </template>
-                    <template v-else> {{ getGroupLabel(0) }}: {{ key }} </template>
+                  <div class="flex w-full items-center justify-between">
+                    <div class="inline-block rounded-t bg-background px-4 py-3">
+                      <template v-if="key === NO_GROUP_KEY">
+                        {{ getGroupLabel(1) }}
+                      </template>
+                      <template v-else> {{ getGroupLabel(0) }}: {{ key }} </template>
+                    </div>
+                    <div v-if="$slots.groupByRow" class="">
+                      <slot name="groupByRow" :group="key" />
+                    </div>
                   </div>
                 </BuiTableCell>
               </BuiTableRow>
