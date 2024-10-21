@@ -177,9 +177,7 @@ function getGroupLabel(index: number) {
                       </template>
                       <template v-else> {{ getGroupLabel(0) }}: {{ key }} </template>
                     </div>
-                    <div v-if="$slots.groupByRow" class="">
-                      <slot name="groupByRow" :group="key" />
-                    </div>
+                    <slot v-if="$slots.groupByRow" name="groupByRow" :group="key" />
                   </div>
                 </BuiTableCell>
               </BuiTableRow>
