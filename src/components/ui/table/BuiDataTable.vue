@@ -175,7 +175,13 @@ function getGroupLabel(index: number) {
                       <template v-if="key === NO_GROUP_KEY">
                         {{ getGroupLabel(1) }}
                       </template>
-                      <template v-else> {{ getGroupLabel(0) }}: {{ key }} </template>
+                      <template v-else>
+                        {{ getGroupLabel(0) }}:
+                        <slot v-if="$slots.groupName" name="groupName" :group="key" />
+                        <template v-else>
+                          {{ key }}
+                        </template>
+                      </template>
                     </div>
                     <slot v-if="$slots.groupByRow" name="groupByRow" :group="key" />
                   </div>

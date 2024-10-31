@@ -5,7 +5,14 @@ import { tableColumnSortCommon } from '@/lib/utils'
 import type { ColumnDef, PaginationState, Row, RowSelectionState } from '@tanstack/vue-table'
 import { sort, type ISortByObjectSorter } from 'fast-sort'
 import { logEvent } from 'histoire/client'
-import { AlignJustifyIcon, FolderIcon } from 'lucide-vue-next'
+import {
+  AlignJustifyIcon,
+  ArrowUpNarrowWideIcon,
+  FolderIcon,
+  SignalHighIcon,
+  SignalMediumIcon,
+  SignalLowIcon
+} from 'lucide-vue-next'
 import { computed, h, ref } from 'vue'
 import { z } from 'zod'
 import tasks from './data/tasks.json'
@@ -72,10 +79,11 @@ function updateSelection(val: RowSelectionState) {
   selection.value = val
 }
 
-type GroupBy = 'none' | 'status'
+type GroupBy = 'none' | 'status' | 'priority'
 const groupBy = ref<GroupBy>('none')
 const groupLabels = {
-  status: ['Status', 'Not in any status']
+  status: ['Status', 'Not in any status'],
+  priority: ['Priority', 'Not in any priorities']
 }
 
 const sortedData = computed(() => {
@@ -120,6 +128,26 @@ function deleteRow() {
 function updateRows() {
   data.value.shift()
 }
+
+function groupName(group: string | number) {
+  if (groupBy.value === 'priority') {
+    if (group === 'high') {
+      return () => h(SignalHighIcon, { class: 'size-4 inline-block' })
+    }
+
+    if (group === 'medium') {
+      return () => h(SignalMediumIcon, { class: 'size-4 inline-block' })
+    }
+
+    if (group === 'low') {
+      return () => h(SignalLowIcon, { class: 'size-4 inline-block' })
+    }
+
+    return () => group
+  }
+
+  return () => group
+}
 </script>
 
 <template>
@@ -147,12 +175,15 @@ function updateRows() {
             <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
 
             <BuiTabs v-model="groupBy">
-              <BuiTabsList class="grid w-full grid-cols-2" :variant="'default'">
+              <BuiTabsList class="grid w-full grid-cols-3" :variant="'default'">
                 <BuiTabsTrigger value="none" :variant="'default'"
                   ><AlignJustifyIcon
                 /></BuiTabsTrigger>
                 <BuiTabsTrigger value="status" :variant="'default'">
                   <FolderIcon />
+                </BuiTabsTrigger>
+                <BuiTabsTrigger value="priority" :variant="'default'">
+                  <ArrowUpNarrowWideIcon />
                 </BuiTabsTrigger>
               </BuiTabsList>
             </BuiTabs>
@@ -165,6 +196,9 @@ function updateRows() {
         </template>
         <template #nodata>Нет данных</template>
         <template #groupByRow="{ group }"> Optional slot for: `{{ group }}` </template>
+        <template #groupName="{ group }">
+          <component :is="groupName(group)"></component>
+        </template>
       </BuiDataTable>
     </Variant>
   </Story>
