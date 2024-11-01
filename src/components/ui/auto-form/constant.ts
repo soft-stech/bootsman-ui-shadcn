@@ -6,6 +6,7 @@ import BuiAutoFormFieldFile from './BuiAutoFormFieldFile.vue'
 import BuiAutoFormFieldInput from './BuiAutoFormFieldInput.vue'
 import BuiAutoFormFieldNumber from './BuiAutoFormFieldNumber.vue'
 import BuiAutoFormFieldObject from './BuiAutoFormFieldObject.vue'
+import BuiAutoFormFieldObjectCard from '@/components/ui/auto-form/BuiAutoFormFieldObjectCard.vue'
 
 export const INPUT_COMPONENTS = {
   date: BuiAutoFormFieldDate,
@@ -18,7 +19,7 @@ export const INPUT_COMPONENTS = {
   string: BuiAutoFormFieldInput,
   file: BuiAutoFormFieldFile,
   array: BuiAutoFormFieldArray,
-  object: BuiAutoFormFieldObject
+  object: BuiAutoFormFieldObjectCard
 }
 
 /**

@@ -86,7 +86,7 @@ const formComponentProps = computed(() => {
 </script>
 
 <template>
-  <component :is="formComponent" v-bind="formComponentProps">
+  <component :is="formComponent" v-bind="formComponentProps" class="flex flex-col gap-5">
     <slot name="customAutoForm" :fields="fields">
       <template v-for="(shape, key) of shapes" :key="key">
         <slot
