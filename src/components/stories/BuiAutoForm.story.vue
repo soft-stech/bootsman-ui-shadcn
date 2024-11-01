@@ -23,6 +23,16 @@ const schema = z.object({
       })
       .describe('Addon')
   ),
+  level1: z
+    .object({
+      level2: z.object({
+        level3: z.object({
+          test: z.string().min(1),
+          something: z.boolean()
+        })
+      })
+    })
+    .describe('Level 1'),
   username: z
     .string({
       required_error: 'Username is required.'
