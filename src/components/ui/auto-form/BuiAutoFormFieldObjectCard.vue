@@ -53,7 +53,10 @@ provide(FieldContextKey, fieldContext)
         <FormItem>
           <BuiCardHeader class="border-b-[1px] border-b-border/[0.16] py-1">
             <BuiCardTitle class="py-0 text-base">
-              {{ schema?.description || fieldName.split('.')[fieldName.split('.').length - 1] }}
+              {{
+                schema?.description ||
+                beautifyObjectName(fieldName.split('.')[fieldName.split('.').length - 1])
+              }}
             </BuiCardTitle>
           </BuiCardHeader>
           <BuiCardContent class="flex flex-col gap-5 pb-0 pr-0">

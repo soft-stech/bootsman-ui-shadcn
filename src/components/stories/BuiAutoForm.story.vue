@@ -28,7 +28,13 @@ const schema = z.object({
       level2: z.object({
         level3: z.object({
           test: z.string().min(1),
-          something: z.boolean()
+          something: z.boolean(),
+          array: z
+            .object({
+              field1: z.string().min(1),
+              field2: z.string().min(1)
+            })
+            .array()
         })
       })
     })
