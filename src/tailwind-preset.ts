@@ -79,7 +79,8 @@ export default {
       boxShadow: {
         'card-shadow': '0px 4px 8px 0px hsl(var(--card-shadow))',
         'tab-shadow':
-          '0px 2px 4px 0px hsl(var(--tab-shadow)), 0px 4px 4px 0px hsl(var(--tab-shadow))'
+          '0px 2px 4px 0px hsl(var(--tab-shadow)), 0px 4px 4px 0px hsl(var(--tab-shadow))',
+        'top-shadow': '0px -2px 4px 0px hsl(var(--tab-shadow))'
       },
       keyframes: {
         'accordion-down': {

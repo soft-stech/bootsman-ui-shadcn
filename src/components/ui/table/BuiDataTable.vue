@@ -28,10 +28,10 @@ import {
   BuiTableBody,
   BuiTableCell,
   BuiTableEmpty,
-  BuiTableFooter,
   BuiTableHead,
   BuiTableHeader,
-  BuiTableRow
+  BuiTableRow,
+  getPinningStyle
 } from './'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
@@ -61,7 +61,11 @@ const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
 )
 const table = useVueTable({
-  initialState: { pagination: { pageSize: props.pageSize } },
+  initialState: {
+    // TODO: column freeze
+    //columnPinning: { left: ['id'] },
+    pagination: { pageSize: props.pageSize }
+  },
   get data() {
     return props.data
   },
@@ -154,7 +158,11 @@ function getGroupLabel(index: number) {
   <BuiTable>
     <BuiTableHeader>
       <BuiTableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-        <BuiTableHead v-for="header in headerGroup.headers" :key="header.id">
+        <BuiTableHead
+          v-for="header in headerGroup.headers"
+          :key="header.id"
+          :style="{ ...getPinningStyle(header.column) }"
+        >
           <FlexRender
             v-if="!header.isPlaceholder"
             :render="header.column.columnDef.header"
@@ -171,7 +179,22 @@ function getGroupLabel(index: number) {
               <BuiTableRow class="bg-foreground/[0.04]">
                 <BuiTableCell :colspan="columns.length" class="!pb-0">
                   <div class="flex w-full items-center justify-between">
-                    <div class="inline-block rounded-t bg-background px-4 py-3">
+                    <div
+                      class="shadow-top-shadow relative -mb-[1px] inline-block rounded-t-lg bg-background px-4 py-3 text-base font-semibold"
+                    >
+                      <div class="absolute -left-2 bottom-0 h-2 w-2 bg-background"></div>
+                      <div class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-background"></div>
+                      <div
+                        class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-foreground/[0.04]"
+                      ></div>
+                      <div class="absolute -right-2 bottom-0 h-2 w-2 bg-background"></div>
+                      <div
+                        class="absolute -right-4 bottom-0 h-4 w-4 rounded-lg bg-background"
+                      ></div>
+                      <div
+                        class="absolute -right-4 bottom-0 h-4 w-4 rounded-lg bg-foreground/[0.04]"
+                      ></div>
+                      <div></div>
                       <template v-if="key === NO_GROUP_KEY">
                         {{ getGroupLabel(1) }}
                       </template>
@@ -216,18 +239,16 @@ function getGroupLabel(index: number) {
         </BuiTableEmpty>
       </template>
     </BuiTableBody>
-    <BuiTableFooter v-if="showPagination && computedItems > 0">
-      <BuiTableRow>
-        <BuiTableCell :colspan="columns.length">
-          <BuiPaginationCommon
-            class="float-right"
-            :total="computedItems"
-            v-model:pageIndex="pageIndex"
-            v-model:pageSize="tablePageSize"
-          >
-          </BuiPaginationCommon>
-        </BuiTableCell>
-      </BuiTableRow>
-    </BuiTableFooter>
   </BuiTable>
+  <div
+    v-if="showPagination && computedItems > 0"
+    class="flex w-full justify-end border-x border-b border-border/[0.16] bg-primary/[0.04] p-4 text-base text-muted-foreground"
+  >
+    <BuiPaginationCommon
+      :total="computedItems"
+      v-model:pageIndex="pageIndex"
+      v-model:pageSize="tablePageSize"
+    >
+    </BuiPaginationCommon>
+  </div>
 </template>

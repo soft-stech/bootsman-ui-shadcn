@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ProgressIndicator, ProgressRoot, type ProgressRootProps } from 'radix-vue'
 import { cn } from '@/lib/utils'
-import type { HTMLAttributes } from 'vue'
+import { type HTMLAttributes, computed } from 'vue'
 
 import { progressVariants, capVariants, indicatorVariants } from '.'
 
@@ -20,6 +20,9 @@ const props = withDefaults(
     variant: 'default'
   }
 )
+const indicatorClass = computed(() =>
+  !props.modelValue || props.modelValue < 100 ? 'rounded-r-none border-r-2' : ''
+)
 </script>
 
 <template>
@@ -34,7 +37,7 @@ const props = withDefaults(
     v-bind="props"
   >
     <ProgressIndicator
-      :class="cn(indicatorVariants({ color, variant }), props.class)"
+      :class="cn(indicatorVariants({ color, variant }), indicatorClass, props.class)"
       :style="`width: calc(calc(100% - ${capVariants[variant ?? 'default']}) * ${
         (props.modelValue ?? 0) * 0.01
       })`"

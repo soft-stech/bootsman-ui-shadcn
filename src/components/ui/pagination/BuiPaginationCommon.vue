@@ -39,38 +39,32 @@ const pageSizeString = computed({
 </script>
 
 <template>
-  <div class="m-2">
-    <BuiPagination
-      v-slot="{ page }"
-      :total="props.total"
-      :itemsPerPage="pageSize"
-      v-model:page="pageIndex"
-    >
-      <BuiPaginationList class="relative flex items-center justify-center gap-2">
-        <p class="text-sm text-muted-foreground">Items per page</p>
-        <BuiSelect v-model.number="pageSizeString">
-          <BuiSelectTrigger class="mr-2 w-[70px]">
-            <BuiSelectValue :placeholder="pageSize.toString()" />
-          </BuiSelectTrigger>
-          <BuiSelectContent side="top">
-            <BuiSelectItem
-              v-for="pageSize in pageSizes"
-              :key="pageSize"
-              :value="pageSize.toString()"
-            >
-              {{ pageSize }}
-            </BuiSelectItem>
-          </BuiSelectContent>
-        </BuiSelect>
-        <template v-if="totalPages > 1">
-          <p class="text-sm text-muted-foreground">Page {{ page }} of {{ totalPages }}</p>
-          <BuiPaginationFirst />
-          <BuiPaginationPrev />
-          <BuiInput v-model="pageIndex" class="w-28" placeholder="Page number" />
-          <BuiPaginationNext />
-          <BuiPaginationLast />
-        </template>
-      </BuiPaginationList>
-    </BuiPagination>
-  </div>
+  <BuiPagination
+    v-slot="{ page }"
+    :total="props.total"
+    :itemsPerPage="pageSize"
+    v-model:page="pageIndex"
+  >
+    <BuiPaginationList class="relative flex items-center justify-center gap-2">
+      <p class="text-sm text-muted-foreground">Items per page</p>
+      <BuiSelect v-model.number="pageSizeString">
+        <BuiSelectTrigger class="mr-2 w-[70px]">
+          <BuiSelectValue :placeholder="pageSize.toString()" />
+        </BuiSelectTrigger>
+        <BuiSelectContent side="top">
+          <BuiSelectItem v-for="pageSize in pageSizes" :key="pageSize" :value="pageSize.toString()">
+            {{ pageSize }}
+          </BuiSelectItem>
+        </BuiSelectContent>
+      </BuiSelect>
+      <template v-if="totalPages > 1">
+        <p class="text-sm text-muted-foreground">Page {{ page }} of {{ totalPages }}</p>
+        <BuiPaginationFirst />
+        <BuiPaginationPrev />
+        <BuiInput v-model="pageIndex" class="w-28" placeholder="Page number" />
+        <BuiPaginationNext />
+        <BuiPaginationLast />
+      </template>
+    </BuiPaginationList>
+  </BuiPagination>
 </template>
