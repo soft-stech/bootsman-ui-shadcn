@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="TData, TValue">
 import { BuiTableCell, BuiTableRow } from '@/components/ui/table'
 import { FlexRender, type ColumnDef, type Row } from '@tanstack/vue-table'
+import { getPinningStyle } from './'
 
 const props = defineProps<{
   row: Row<TData>
@@ -14,7 +15,11 @@ const props = defineProps<{
     :data-state="row.getIsSelected() ? 'selected' : undefined"
     :class="props.renderSubComponent?.(row) ? 'border-b-0' : ''"
   >
-    <BuiTableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+    <BuiTableCell
+      v-for="cell in row.getVisibleCells()"
+      :key="cell.id"
+      :style="{ ...getPinningStyle(cell.column) }"
+    >
       <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
     </BuiTableCell>
   </BuiTableRow>

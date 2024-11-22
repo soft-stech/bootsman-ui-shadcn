@@ -28,6 +28,7 @@ const taskSchema = z.object({
 type Task = z.infer<typeof taskSchema>
 const columns: ColumnDef<Task>[] = [
   {
+    id: 'id',
     accessorKey: 'id',
     header: ({ table, column }) => {
       return h('div', { class: 'flex items-center gap-2' }, [
@@ -175,14 +176,12 @@ function groupName(group: string | number) {
             <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
 
             <BuiTabs v-model="groupBy">
-              <BuiTabsList class="grid w-full grid-cols-3" :variant="'default'">
-                <BuiTabsTrigger value="none" :variant="'default'"
-                  ><AlignJustifyIcon
-                /></BuiTabsTrigger>
-                <BuiTabsTrigger value="status" :variant="'default'">
+              <BuiTabsList class="grid w-full grid-cols-3" variant="default">
+                <BuiTabsTrigger value="none" variant="default"><AlignJustifyIcon /></BuiTabsTrigger>
+                <BuiTabsTrigger value="status" variant="default">
                   <FolderIcon />
                 </BuiTabsTrigger>
-                <BuiTabsTrigger value="priority" :variant="'default'">
+                <BuiTabsTrigger value="priority" variant="default">
                   <ArrowUpNarrowWideIcon />
                 </BuiTabsTrigger>
               </BuiTabsList>

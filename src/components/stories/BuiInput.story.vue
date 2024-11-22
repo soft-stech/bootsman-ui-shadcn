@@ -64,6 +64,15 @@ import { BuiBadgedInput } from '@/components/ui/input'
       </div>
     </Variant>
 
+    <Variant title="Password with default value">
+      <div class="flex items-center space-x-2 p-1">
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <BuiLabel for="email">Password</BuiLabel>
+          <BuiPasswordInput default-value="text" placeholder="Password" />
+        </div>
+      </div>
+    </Variant>
+
     <Variant title="With units">
       <div class="flex items-center space-x-2 p-1">
         <div class="grid w-full max-w-sm items-center gap-1.5">
