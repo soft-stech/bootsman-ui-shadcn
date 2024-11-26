@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BuiDataTable } from '@/components/ui/table'
+import RowActionsMenuContent from './components/ActionsMenuContent.vue'
 import { BuiButton, BuiCheckbox, BuiTabs, BuiTabsList, BuiTabsTrigger } from '@/index'
 import { tableColumnSortCommon } from '@/lib/utils'
 import type { ColumnDef, PaginationState, Row, RowSelectionState } from '@tanstack/vue-table'
@@ -26,6 +27,7 @@ const taskSchema = z.object({
   errorMessage: z.string().optional()
 })
 type Task = z.infer<typeof taskSchema>
+
 const columns: ColumnDef<Task>[] = [
   {
     id: 'id',
@@ -33,8 +35,13 @@ const columns: ColumnDef<Task>[] = [
     header: ({ table, column }) => {
       return h('div', { class: 'flex items-center gap-2' }, [
         h(BuiCheckbox, {
-          checked: table.getIsAllPageRowsSelected(),
-          'onUpdate:checked': (value: boolean) => table.toggleAllPageRowsSelected(value),
+          checked: table.getIsSomePageRowsSelected()
+            ? 'indeterminate'
+            : table.getIsAllPageRowsSelected(),
+          'onUpdate:checked': (value: boolean) =>
+            table.getIsSomePageRowsSelected()
+              ? table.toggleAllPageRowsSelected(false)
+              : table.toggleAllPageRowsSelected(value),
           ariaLabel: 'Select row'
         }),
         tableColumnSortCommon(column, 'ID')
@@ -65,6 +72,15 @@ const columns: ColumnDef<Task>[] = [
   { id: 'hiddenColumn', header: 'Hidden Column', cell: 'secret info' }
 ]
 const data = ref<Task[]>(tasks)
+
+function onRowAction(row: Task, action: string) {
+  const str = `${action}: ${row.id}`
+  alert(str)
+}
+function onGroupAction(group: string | number, action: string) {
+  const str = `${action}: ${group}`
+  alert(str)
+}
 
 type TaskSortingState = { id: keyof Task; desc: boolean }
 const sorting = ref<TaskSortingState[]>([{ id: 'id', desc: false }])
@@ -193,10 +209,22 @@ function groupName(group: string | number) {
             </span>
           </div>
         </template>
-        <template #nodata>Нет данных</template>
+        <template #nodata>No data</template>
         <template #groupByRow="{ group }"> Optional slot for: `{{ group }}` </template>
         <template #groupName="{ group }">
           <component :is="groupName(group)"></component>
+        </template>
+        <template #groupActions="{ group }">
+          <RowActionsMenuContent
+            :actions="['Group action']"
+            @select="(action) => onGroupAction(group, action)"
+          />
+        </template>
+        <template #rowActions="{ row }">
+          <RowActionsMenuContent
+            :actions="['action 1', 'action 2']"
+            @select="(action) => onRowAction(row, action)"
+          />
         </template>
       </BuiDataTable>
     </Variant>

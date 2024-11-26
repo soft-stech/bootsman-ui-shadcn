@@ -12,7 +12,7 @@ const props = defineProps<{
 
 <template>
   <BuiTableRow
-    :data-state="row.getIsSelected() ? 'selected' : undefined"
+    :data-row-state="row.getIsSelected() ? 'selected' : undefined"
     :class="props.renderSubComponent?.(row) ? 'border-b-0' : ''"
   >
     <BuiTableCell
@@ -22,14 +22,20 @@ const props = defineProps<{
     >
       <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
     </BuiTableCell>
+    <template #actions>
+      <slot name="actions" />
+    </template>
   </BuiTableRow>
 
   <BuiTableRow
     v-if="props.renderSubComponent?.(row)"
-    :data-state="row.getIsSelected() ? 'selected' : undefined"
+    :data-row-state="row.getIsSelected() ? 'selected' : undefined"
   >
     <BuiTableCell :colspan="columns.length" class="pt-0">
       <component :is="props.renderSubComponent?.(row)?.()"></component>
     </BuiTableCell>
+    <template #actions>
+      <slot name="actions" />
+    </template>
   </BuiTableRow>
 </template>
