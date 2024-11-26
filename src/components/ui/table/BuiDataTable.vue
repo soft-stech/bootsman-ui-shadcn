@@ -180,7 +180,7 @@ function getGroupLabel(index: number) {
                 <BuiTableCell :colspan="columns.length" class="!pb-0">
                   <div class="flex w-full items-center justify-between">
                     <div
-                      class="shadow-top-shadow relative -mb-[1px] inline-block rounded-t-lg bg-background px-4 py-3 text-base font-semibold"
+                      class="relative -mb-[1px] inline-block rounded-t-lg bg-background px-4 py-3 text-base font-semibold shadow-top-shadow"
                     >
                       <div class="absolute -left-2 bottom-0 h-2 w-2 bg-background"></div>
                       <div class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-background"></div>
@@ -209,6 +209,9 @@ function getGroupLabel(index: number) {
                     <slot v-if="$slots.groupByRow" name="groupByRow" :group="key" />
                   </div>
                 </BuiTableCell>
+                <template #actions>
+                  <slot name="groupActions" :group="key" />
+                </template>
               </BuiTableRow>
             </BuiCollapsibleTrigger>
             <BuiCollapsibleContent asChild>
@@ -217,7 +220,11 @@ function getGroupLabel(index: number) {
                   :columns="props.columns"
                   :row="row"
                   :renderSubComponent="props.renderSubComponent"
-                />
+                >
+                  <template #actions>
+                    <slot name="rowActions" :row="row.original" />
+                  </template>
+                </BuiTableRowSubrow>
               </template>
             </BuiCollapsibleContent>
           </BuiCollapsible>
@@ -229,7 +236,11 @@ function getGroupLabel(index: number) {
               :columns="props.columns"
               :row="row"
               :renderSubComponent="props.renderSubComponent"
-            />
+            >
+              <template #actions>
+                <slot name="rowActions" :row="row.original" />
+              </template>
+            </BuiTableRowSubrow>
           </template>
         </template>
       </template>
