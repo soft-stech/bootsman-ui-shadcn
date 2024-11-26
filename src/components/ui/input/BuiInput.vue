@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
+import { ref, type HTMLAttributes } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { cn } from '@/lib/utils'
 import { inputVariants } from '.'
@@ -19,8 +19,31 @@ const modelValue = useVModel(props, 'modelValue', emits, {
   passive: true,
   defaultValue: props.defaultValue
 })
+
+const isFocused = ref<Boolean>(false)
+
+const handleFocus = () => {
+  isFocused.value = true
+}
+const handleBlur = () => {
+  isFocused.value = false
+}
+
+const handleKeyDown = (e: KeyboardEvent) => {
+  if(e.key === 'Home' || e.key === 'End') {
+    if(isFocused.value) {
+      e.stopPropagation();
+    }
+  }
+}
 </script>
 
 <template>
-  <input v-model="modelValue" :class="cn(inputVariants({ variant }), props.class ?? '')" />
+  <input
+    v-model="modelValue"
+    :class="cn(inputVariants({ variant }), props.class ?? '')"
+    @focus="handleFocus"
+    @blur="handleBlur"
+    @keydown="handleKeyDown"
+  />
 </template>
