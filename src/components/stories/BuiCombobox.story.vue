@@ -135,8 +135,8 @@ const namespaces = ['default', 'local', 'my-namespace']
                   </BuiButton>
                 </BuiPopoverTrigger>
 
-                <BuiPopoverContent class="w-full min-w-full p-0">
-                  <BuiCommand class="w-full min-w-full p-0">
+                <BuiPopoverContent class="w-[var(--radix-popper-anchor-width)] p-0">
+                  <BuiCommand class="p-0">
                     <BuiCommandInput class="h-9" placeholder="Search" />
                     <BuiCommandEmpty> No results </BuiCommandEmpty>
                     <BuiFormControl>
