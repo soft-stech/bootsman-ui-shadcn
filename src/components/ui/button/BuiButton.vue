@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { Primitive, type PrimitiveProps } from 'radix-vue'
-import { buttonVariants } from '.'
+import { FORM_READONLY_INJECTION_KEY } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
-import { type HTMLAttributes } from 'vue'
+import { Primitive, type PrimitiveProps } from 'radix-vue'
+import { inject, toRef, type HTMLAttributes } from 'vue'
+import { buttonVariants } from '.'
 
 interface Props extends PrimitiveProps {
   class?: HTMLAttributes['class']
@@ -10,6 +11,7 @@ interface Props extends PrimitiveProps {
   size?: NonNullable<Parameters<typeof buttonVariants>[0]>['size']
   as?: string
   type?: string
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -17,6 +19,9 @@ const props = withDefaults(defineProps<Props>(), {
   as: 'button',
   type: 'button'
 })
+
+// Inject readonly state from context
+const readonlyContext = inject(FORM_READONLY_INJECTION_KEY, toRef(false))
 </script>
 
 <template>
@@ -25,6 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
     :as-child="asChild"
     :class="cn(buttonVariants({ variant, size }), props.class)"
     :type="type"
+    :disabled="readonlyContext || props.disabled"
   >
     <slot />
   </Primitive>

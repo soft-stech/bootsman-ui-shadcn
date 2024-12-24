@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { FORM_READONLY_INJECTION_KEY } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
 import {
   SwitchRoot,
@@ -7,11 +8,15 @@ import {
   type SwitchRootEmits,
   type SwitchRootProps
 } from 'radix-vue'
+import { inject, toRef } from 'vue'
 
 const props = defineProps<SwitchRootProps & { class?: string }>()
 const emits = defineEmits<SwitchRootEmits>()
 
 const forwarded = useForwardPropsEmits(props, emits)
+
+// Inject readonly state from context
+const readonlyContext = inject(FORM_READONLY_INJECTION_KEY, toRef(false))
 </script>
 
 <template>
@@ -28,6 +33,7 @@ const forwarded = useForwardPropsEmits(props, emits)
         props.class
       )
     "
+    :disabled="readonlyContext || props.disabled"
   >
     <SwitchThumb
       :class="

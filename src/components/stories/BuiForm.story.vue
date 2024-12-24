@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import LoginForm from '@/components/stories/components/LoginForm.vue'
+import LoginFormHook from '@/components/stories/components/LoginFormHook.vue'
 import UseBuiField from '@/components/stories/components/UseBuiField.vue'
-import LoginForm from './components/LoginForm.vue'
-import LoginFormHook from './components/LoginFormHook.vue'
 </script>
 
 <template>

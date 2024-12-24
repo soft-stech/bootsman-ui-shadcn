@@ -1,32 +1,29 @@
 <script setup lang="ts">
-import { BuiSlider } from '@/index'
-import { cn } from '@/lib/utils'
-import { ref } from 'vue'
-import BuiStepperSeparator from '../ui/stepper/BuiStepperSeparator.vue';
-import BuiStepper from '../ui/stepper/BuiStepper.vue';
-import BuiStepperItem from '../ui/stepper/BuiStepperItem.vue';
-import BuiStepperTrigger from '../ui/stepper/BuiStepperTrigger.vue';
-import { Check, Circle, Dot } from 'lucide-vue-next';
-import BuiStepperTitle from '../ui/stepper/BuiStepperTitle.vue';
-import BuiStepperDescription from '../ui/stepper/BuiStepperDescription.vue';
-import BuiButton from '../ui/button/BuiButton.vue';
+import BuiButton from '@/components/ui/button/BuiButton.vue'
+import BuiStepper from '@/components/ui/stepper/BuiStepper.vue'
+import BuiStepperDescription from '@/components/ui/stepper/BuiStepperDescription.vue'
+import BuiStepperItem from '@/components/ui/stepper/BuiStepperItem.vue'
+import BuiStepperSeparator from '@/components/ui/stepper/BuiStepperSeparator.vue'
+import BuiStepperTitle from '@/components/ui/stepper/BuiStepperTitle.vue'
+import BuiStepperTrigger from '@/components/ui/stepper/BuiStepperTrigger.vue'
+import { Check, Circle, Dot } from 'lucide-vue-next'
 
 const steps = [
   {
     step: 1,
     title: 'Your details',
-    description: 'Provide your name and email',
+    description: 'Provide your name and email'
   },
   {
     step: 2,
     title: 'Company details',
-    description: 'A few details about your company',
+    description: 'A few details about your company'
   },
   {
     step: 3,
     title: 'Invite your team',
-    description: 'Start collaborating with your team',
-  },
+    description: 'Start collaborating with your team'
+  }
 ]
 </script>
 
@@ -48,9 +45,11 @@ const steps = [
 
           <BuiStepperTrigger as-child>
             <BuiButton
-              :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"  
-              class="z-10 rounded-full shrink-0 size-10"
-              :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
+              :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
+              class="z-10 size-10 shrink-0 rounded-full"
+              :class="[
+                state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background'
+              ]"
             >
               <Check v-if="state === 'completed'" class="size-5" />
               <Circle v-if="state === 'active'" />
@@ -77,7 +76,10 @@ const steps = [
     </Variant>
 
     <Variant title="Vertical">
-      <BuiStepper orientation="vertical" class="mx-auto flex w-full max-w-md flex-col justify-start gap-10 p-10">
+      <BuiStepper
+        orientation="vertical"
+        class="mx-auto flex w-full max-w-md flex-col justify-start gap-10 p-10"
+      >
         <BuiStepperItem
           v-for="step in steps"
           :key="step.step"
@@ -93,8 +95,10 @@ const steps = [
           <BuiStepperTrigger as-child>
             <BuiButton
               :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
-              class="z-10 rounded-full shrink-0 size-10"
-              :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
+              class="z-10 size-10 shrink-0 rounded-full"
+              :class="[
+                state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background'
+              ]"
             >
               <Check v-if="state === 'completed'" class="size-5" />
               <Circle v-if="state === 'active'" />
