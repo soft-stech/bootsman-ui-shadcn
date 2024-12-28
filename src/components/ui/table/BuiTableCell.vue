@@ -6,7 +6,12 @@ const props = defineProps<{ class?: string }>()
 
 <template>
   <td
-    :class="cn('p-4 align-middle first:pl-8 last:pr-8 [&:has([role=checkbox])]:pr-0', props.class)"
+    :class="
+      cn(
+        'break-words p-4 align-middle first:pl-8 last:pr-8 [&:has([role=checkbox])]:pr-0',
+        props.class
+      )
+    "
   >
     <slot />
   </td>

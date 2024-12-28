@@ -11,7 +11,7 @@ const forwarded = useForwardProps(props)
 
 <template>
   <PaginationFirst v-bind="forwarded">
-    <BuiButton class="h-10 w-10 p-0" variant="outline">
+    <BuiButton class="h-8 w-8 p-0" variant="outline">
       <slot>
         <ChevronFirst class="h-4 w-4" />
       </slot>

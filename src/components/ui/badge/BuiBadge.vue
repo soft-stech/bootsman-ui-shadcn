@@ -19,7 +19,7 @@ const emit = defineEmits<{ (e: 'close'): void }>()
 </script>
 
 <template>
-  <div :class="cn(badgeVariants({ variant }), $attrs.class ?? '')">
+  <div :class="cn(badgeVariants({ variant }))">
     <slot />
     <BuiButton
       variant="none"
