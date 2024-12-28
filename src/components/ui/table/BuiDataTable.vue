@@ -253,7 +253,7 @@ function getGroupLabel(index: number) {
   </BuiTable>
   <div
     v-if="showPagination && computedItems > 0"
-    class="flex w-full justify-end border-x border-b border-border/[0.16] bg-primary/[0.04] p-4 text-base text-muted-foreground"
+    class="flex w-full justify-end border-x border-b border-border/[0.16] bg-primary/[0.04] px-4 py-1 text-base text-muted-foreground"
   >
     <BuiPaginationCommon
       :total="computedItems"
