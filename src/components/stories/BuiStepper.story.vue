@@ -59,13 +59,13 @@ const steps = [
 
           <div class="mt-5 flex flex-col items-center text-center">
             <BuiStepperTitle
-              :class="[state === 'active' && 'text-primary']"
+              :class="[state !== 'active' && 'text-primary']"
               class="text-sm font-semibold transition lg:text-base"
             >
               {{ step.title }}
             </BuiStepperTitle>
             <BuiStepperDescription
-              :class="[state === 'active' && 'text-primary']"
+              :class="[state !== 'active' && 'text-primary']"
               class="sr-only text-xs text-muted-foreground transition md:not-sr-only lg:text-sm"
             >
               {{ step.description }}
@@ -108,13 +108,13 @@ const steps = [
 
           <div class="flex flex-col gap-1">
             <BuiStepperTitle
-              :class="[state === 'active' && 'text-primary']"
+              :class="[state !== 'active' && 'text-primary']"
               class="text-sm font-semibold transition lg:text-base"
             >
               {{ step.title }}
             </BuiStepperTitle>
             <BuiStepperDescription
-              :class="[state === 'active' && 'text-primary']"
+              :class="[state !== 'active' && 'text-primary']"
               class="sr-only text-xs text-muted-foreground transition md:not-sr-only lg:text-sm"
             >
               {{ step.description }}
