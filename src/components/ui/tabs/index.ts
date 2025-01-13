@@ -24,7 +24,7 @@ export const tabsTriggerVariants = cva(
     variants: {
       variant: {
         default:
-          'rounded-sm data-[state=active]:bg-background data-[state=active]:border border-primary/[0.16] text-foreground opacity-[0.56] hover:opacity-100 data-[state=active]:opacity-100 data-[state=active]:shadow-tab-shadow',
+          'rounded-sm text-foreground opacity-[0.56] hover:opacity-100 data-[state=active]:opacity-100 data-[state=active]:bg-background my-1 [&:first-child]:ml-1 [&:last-child]:mr-1 data-[state=active]:shadow-tab-shadow',
         ghost:
           'border-transparent text-muted-foreground pb-0 [&_div]:pb-1.5 [&_div]:data-[state=active]:border-b-2 [&_div]:data-[state=active]:border-primary',
         vertical:
