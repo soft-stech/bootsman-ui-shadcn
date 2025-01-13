@@ -16,7 +16,7 @@ const forwarded = useForwardPropsEmits(props, emits)
     :model-value="''"
     :class="
       cn(
-        'flex h-full w-full flex-col overflow-hidden rounded-md border border-muted bg-popover text-popover-foreground shadow-md',
+        'shadow-level1 flex h-full w-full flex-col overflow-hidden rounded-md border border-muted bg-popover text-popover-foreground',
         $attrs.class ?? ''
       )
     "
