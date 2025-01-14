@@ -80,7 +80,13 @@ export default {
         'card-shadow': '0px 4px 8px 0px hsl(var(--card-shadow))',
         'tab-shadow':
           '0px 2px 4px 0px hsl(var(--tab-shadow)), 0px 4px 4px 0px hsl(var(--tab-shadow))',
-        'top-shadow': '0px -2px 4px 0px hsl(var(--tab-shadow))'
+        'top-shadow': '0px -2px 4px 0px hsl(var(--tab-shadow))',
+        level1:
+          '0px 16px 16px 0px hsl(var(--tab-shadow)), 0px 8px 16px 0px hsl(var(--tab-shadow)), 0px 8px 8px 0px hsl(var(--tab-shadow))',
+        level2:
+          '0px 32px 16px 0px hsl(var(--tab-shadow)), 0px 16px 16px 0px hsl(var(--tab-shadow)), 0px 16px 16px 0px hsl(var(--tab-shadow))',
+        level3:
+          '0px 56px 24px 0px hsl(var(--tab-shadow)), 0px 32px 24px 0px hsl(var(--tab-shadow)), 0px 32px 24px 0px hsl(var(--tab-shadow))'
       },
       keyframes: {
         'accordion-down': {
