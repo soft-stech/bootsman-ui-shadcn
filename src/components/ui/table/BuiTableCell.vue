@@ -8,7 +8,7 @@ const props = defineProps<{ class?: string }>()
   <td
     :class="
       cn(
-        'break-words p-4 align-middle first:pl-8 last:pr-8 [&:has([role=checkbox])]:pr-0',
+        'h-12 break-words px-3 py-1 align-middle text-xs first:pl-6 last:pr-6 [&:has([role=checkbox])]:pr-0',
         props.class
       )
     "

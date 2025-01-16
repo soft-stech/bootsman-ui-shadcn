@@ -14,7 +14,7 @@ defineOptions({
 
 const badgeEl = ref<HTMLDivElement | null>(null)
 const { width } = useElementBounding(badgeEl)
-const MAGIC_NUMBER = 16 // 12 (right-3) + 4 (just some offset)
+const MAGIC_NUMBER = 12 // 8 (right-2) + 4 (just some offset)
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const MAGIC_NUMBER = 16 // 12 (right-3) + 4 (just some offset)
     <BuiBadge
       ref="badgeEl"
       v-if="props.badge"
-      class="absolute right-3 top-1 flex items-center justify-center rounded-sm hover:bg-primary/[0.08] dark:hover:bg-primary/30"
+      class="absolute right-2 top-1 flex items-center justify-center rounded-sm hover:bg-primary/[0.08] dark:hover:bg-primary/30"
     >
       {{ props.badge }}
     </BuiBadge>

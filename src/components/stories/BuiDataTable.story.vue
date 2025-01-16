@@ -193,12 +193,14 @@ function groupName(group: string | number) {
 
             <BuiTabs v-model="groupBy">
               <BuiTabsList class="grid w-full grid-cols-3" variant="default">
-                <BuiTabsTrigger value="none" variant="default"><AlignJustifyIcon /></BuiTabsTrigger>
-                <BuiTabsTrigger value="status" variant="default">
-                  <FolderIcon />
+                <BuiTabsTrigger value="none" variant="default" class="px-2 py-[5px]">
+                  <AlignJustifyIcon :size="14" />
                 </BuiTabsTrigger>
-                <BuiTabsTrigger value="priority" variant="default">
-                  <ArrowUpNarrowWideIcon />
+                <BuiTabsTrigger value="status" variant="default" class="px-2 py-[5px]">
+                  <FolderIcon :size="14" />
+                </BuiTabsTrigger>
+                <BuiTabsTrigger value="priority" variant="default" class="px-2 py-[5px]">
+                  <ArrowUpNarrowWideIcon :size="14" />
                 </BuiTabsTrigger>
               </BuiTabsList>
             </BuiTabs>
