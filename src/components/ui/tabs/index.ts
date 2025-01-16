@@ -19,16 +19,16 @@ export const tabsListVariants = cva('inline-flex items-center justify-center rou
 })
 
 export const tabsTriggerVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground',
+  'inline-flex items-center justify-center whitespace-nowrap px-3 py-1 text-sm font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground',
   {
     variants: {
       variant: {
         default:
           'rounded-sm text-foreground opacity-[0.56] hover:opacity-100 data-[state=active]:opacity-100 data-[state=active]:bg-background my-1 [&:first-child]:ml-1 [&:last-child]:mr-1 data-[state=active]:shadow-tab-shadow',
         ghost:
-          'border-transparent text-muted-foreground pb-0 [&_div]:pb-1.5 [&_div]:data-[state=active]:border-b-2 [&_div]:data-[state=active]:border-primary',
+          'border-transparent text-muted-foreground pb-0 [&_div]:pb-0.5 [&_div]:data-[state=active]:border-b-2 [&_div]:data-[state=active]:border-primary',
         vertical:
-          'border-transparent text-primary data-[state=active]:border-primary data-[state=active]:bg-background border-l-2 border-b-0 w-full justify-start pl-6'
+          'border-transparent text-primary data-[state=active]:border-primary data-[state=active]:bg-background border-l-2 border-b-0 w-full h-8 justify-start pl-6'
       }
     },
     defaultVariants: {

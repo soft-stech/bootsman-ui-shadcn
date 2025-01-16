@@ -178,9 +178,9 @@ function getGroupLabel(index: number) {
             <BuiCollapsibleTrigger asChild>
               <BuiTableRow class="bg-foreground/[0.04]">
                 <BuiTableCell :colspan="columns.length" class="!pb-0">
-                  <div class="flex w-full items-center justify-between">
+                  <div class="mt-1 flex w-full items-center justify-between">
                     <div
-                      class="relative -mb-[1px] inline-block rounded-t-lg bg-background px-4 py-3 text-base font-semibold shadow-top-shadow"
+                      class="relative -mb-[5px] inline-block rounded-t-lg bg-background px-4 py-2 text-sm font-semibold shadow-top-shadow"
                     >
                       <div class="absolute -left-2 bottom-0 h-2 w-2 bg-background"></div>
                       <div class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-background"></div>

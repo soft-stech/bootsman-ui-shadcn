@@ -27,8 +27,8 @@ export const buttonVariants = cva(
         none: 'border-none bg-transparent'
       },
       size: {
-        default: 'h-8 px-4 py-1',
-        sm: 'h-7 px-4 py-0.5',
+        default: 'h-8 px-3 py-1',
+        sm: 'h-7 px-3 py-0.5',
         lg: 'h-10 px-5 py-2',
         icon: 'h-4 w-4'
       }
