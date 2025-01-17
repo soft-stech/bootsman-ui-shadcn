@@ -30,7 +30,7 @@ export const tableColumnSortCommon = (column: Column<any>, name: string) => {
     BuiButton,
     {
       variant: 'none',
-      class: 'text-foreground px-0 text-base',
+      class: 'text-foreground px-0 text-sm font-semibold',
       onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
     },
     () => [name, h(icon, { class: 'ml-2 h-4 w-4 text-muted-foreground' })]
