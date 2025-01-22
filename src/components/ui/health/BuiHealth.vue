@@ -50,7 +50,7 @@ const indicators = computed(() => {
   <div
     :class="
       cn(
-        `relative w-full overflow-hidden bg-primary bg-opacity-20 after:absolute after:right-0 after:top-0 after:bg-primary after:bg-opacity-10`,
+        `relative w-full overflow-hidden bg-slate-400 bg-opacity-20 after:absolute after:right-0 after:top-0 after:bg-slate-400 after:bg-opacity-10`,
         healthVariants({ variant }),
         props.class
       )
@@ -61,7 +61,7 @@ const indicators = computed(() => {
       <div
         :class="
           cn(
-            'absolute box-content flex-1 bg-primary transition-all duration-300 after:absolute after:right-0 after:top-0 after:bg-primary',
+            'absolute box-content flex-1 bg-slate-400 transition-all duration-300 after:absolute after:right-0 after:top-0 after:bg-slate-400',
             healthVariants({ variant }),
             indicator.class
           )
