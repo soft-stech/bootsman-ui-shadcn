@@ -14,7 +14,7 @@ export const alertVariants = cva('flex w-full rounded border-l-2 p-4 [&_svg]:tex
         'bg-success border-success-foreground text-success-foreground [&_svg]:text-success-foreground',
       warning:
         'bg-warning border-warning-foreground text-warning-foreground [&_svg]:text-warning-foreground',
-      info: 'bg-primary/[0.16] border-border text-primary [&_svg]:text-primary'
+      info: 'bg-info border-info-foreground text-info-foreground [&_svg]:text-info-foreground'
     }
   },
   defaultVariants: {

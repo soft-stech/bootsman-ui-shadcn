@@ -29,7 +29,7 @@ const indicatorClass = computed(() =>
   <ProgressRoot
     :class="
       cn(
-        'relative w-full overflow-hidden bg-primary bg-opacity-[0.16]',
+        'relative w-full overflow-hidden bg-slate-400 bg-opacity-[0.16]',
         progressVariants({ variant }),
         props.class
       )

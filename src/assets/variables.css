@@ -10,7 +10,7 @@
 
   --card: 0 0% 100%;
   --card-foreground: 222.2 84% 4.9%;
-  --card-shadow: 240.88, 91.89%, 70.98%, 0.16;
+  --card-shadow: 241 92% 71%, 0.16;
   --tab-shadow: 228, 51%, 11%, 0.08;
 
   --border: 241 92% 71%;
@@ -36,6 +36,9 @@
   --warning: 48, 79%, 45%, 0.16;
   --warning-foreground: 48, 79%, 45%;
 
+  --info: 198, 85%, 45%, 0.16;
+  --info-foreground: 198 85% 45%;
+
   --ring: 241 92% 71%;
 
   --radius: 0.5rem;
@@ -55,7 +58,7 @@
 
   --card: 242 24% 21%;
   --card-foreground: 210 40% 98%;
-  --card-shadow: 242.03, 93.67%, 69.02%, 0.4;
+  --card-shadow: 241 92% 71%, 0.4;
   --tab-shadow: 228, 51%, 11%, 0.08;
 
   --border: 241 92% 71%;
@@ -77,8 +80,6 @@
 
   --success: 181, 34%, 39%, 0.16;
   --success-foreground: 152 80% 38%;
-
-  --ring: 241 92% 71%;
 }
 
 * {

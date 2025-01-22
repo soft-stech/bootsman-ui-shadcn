@@ -25,8 +25,7 @@ export const indicatorVariants = cva(
         lg: 'rounded-[16px]'
       },
       color: {
-        primary:
-          'from-[rgba(115,113,249,0.80)] to-[rgba(115,113,249,0.24)] border-[rgb(115,113,249)]',
+        primary: 'from-[rgba(30,215,132,0.80)] to-[rgba(30,215,132,0.24)] border-[rgb(30,215,132)]',
         red: 'from-[rgba(224,95,163,0.8)] to-[rgba(224,95,163,0.24)] border-[rgb(224,95,163)]',
         orange: 'from-[rgba(255,167,139,0.8)] to-[rgba(255,167,139,0.24)] border-[rgb(255,167,139)]'
       }
