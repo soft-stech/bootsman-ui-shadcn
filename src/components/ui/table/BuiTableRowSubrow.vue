@@ -11,8 +11,10 @@ const props = defineProps<{
 }>()
 
 // иногда мы используем фейковые строки с пустыми значениями, лучше их скрыть
+const FAKE_ROW = '[!fake-empty!]'
 const isEmptyRow = computed(() => {
-  return props.row.getVisibleCells().every((cell) => !cell.getContext().getValue())
+  // @ts-expect-error name с таким значением это наше внутреннее соглашение. См. Боцман Дашборд, таблицу Projects/Namespaces
+  return props.row.original.name.includes(FAKE_ROW)
 })
 </script>
 
