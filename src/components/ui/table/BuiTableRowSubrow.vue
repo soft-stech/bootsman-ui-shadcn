@@ -2,16 +2,23 @@
 import { BuiTableCell, BuiTableRow } from '@/components/ui/table'
 import { FlexRender, type ColumnDef, type Row } from '@tanstack/vue-table'
 import { getPinningStyle } from './'
+import { computed } from 'vue'
 
 const props = defineProps<{
   row: Row<TData>
   renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
   columns: ColumnDef<TData, TValue>[]
 }>()
+
+// иногда мы используем фейковые строки с пустыми значениями, лучше их скрыть
+const isEmptyRow = computed(() => {
+  return props.row.getVisibleCells().every((cell) => !cell.getContext().getValue())
+})
 </script>
 
 <template>
   <BuiTableRow
+    v-if="!isEmptyRow"
     :data-row-state="row.getIsSelected() ? 'selected' : undefined"
     :class="props.renderSubComponent?.(row) ? 'border-b-0' : ''"
   >
