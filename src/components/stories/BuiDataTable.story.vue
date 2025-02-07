@@ -230,5 +230,69 @@ function groupName(group: string | number) {
         </template>
       </BuiDataTable>
     </Variant>
+    <Variant key="variant_sticky" title="Same but sticky header">
+      <div class="flex h-[50vh] flex-col">
+        <BuiDataTable
+          :columns="columns"
+          :data="sortedData"
+          v-model:sorting="sorting"
+          v-model:pagination="pagination"
+          @update:selection="updateSelection"
+          :total-items="totalItems"
+          class="caption-top"
+          :manualPagination="false"
+          :getRowId="(row) => row.id"
+          :groupBy="groupBy === 'none' ? undefined : groupBy"
+          :groupLabels="groupLabels"
+          :renderSubComponent="renderSubComponent"
+          :columnVisibility="{ hiddenColumn: false }"
+          :freeze-header="true"
+        >
+          <template #caption="{ table }">
+            <div class="flex justify-between">
+              <BuiButton variant="outline">Download YAML</BuiButton>
+              <BuiButton variant="outline" @click="updateRows"> Delete row </BuiButton>
+              <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
+
+              <BuiTabs v-model="groupBy">
+                <BuiTabsList class="grid w-full grid-cols-3" variant="default">
+                  <BuiTabsTrigger value="none" variant="default" class="px-2 py-[5px]">
+                    <AlignJustifyIcon :size="14" />
+                  </BuiTabsTrigger>
+                  <BuiTabsTrigger value="status" variant="default" class="px-2 py-[5px]">
+                    <FolderIcon :size="14" />
+                  </BuiTabsTrigger>
+                  <BuiTabsTrigger value="priority" variant="default" class="px-2 py-[5px]">
+                    <ArrowUpNarrowWideIcon :size="14" />
+                  </BuiTabsTrigger>
+                </BuiTabsList>
+              </BuiTabs>
+
+              <span>
+                {{ table.getFilteredSelectedRowModel().rows?.length }} of
+                {{ table.getFilteredRowModel().rows?.length }} row(s) selected
+              </span>
+            </div>
+          </template>
+          <template #nodata>No data</template>
+          <template #groupByRow="{ group }"> Optional slot for: `{{ group }}` </template>
+          <template #groupName="{ group }">
+            <component :is="groupName(group)"></component>
+          </template>
+          <template #groupActions="{ group }">
+            <RowActionsMenuContent
+              :actions="['Group action']"
+              @select="(action) => onGroupAction(group, action)"
+            />
+          </template>
+          <template #rowActions="{ row }">
+            <RowActionsMenuContent
+              :actions="['action 1', 'action 2']"
+              @select="(action) => onRowAction(row, action)"
+            />
+          </template>
+        </BuiDataTable>
+      </div>
+    </Variant>
   </Story>
 </template>

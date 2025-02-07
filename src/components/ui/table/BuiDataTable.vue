@@ -49,6 +49,7 @@ const props = withDefaults(
     groupLabels?: { [key in keyof TData]?: string[] }
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
     renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
+    freezeHeader?: boolean
   }>(),
   { pageSize: 10, showPagination: true, manualPagination: true, manualSorting: true, totalItems: 0 }
 )
@@ -156,12 +157,13 @@ function getGroupLabel(index: number) {
     <slot name="caption" :table="table" />
   </div>
   <BuiTable>
-    <BuiTableHeader>
+    <BuiTableHeader :freeze-header="props.freezeHeader">
       <BuiTableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
         <BuiTableHead
           v-for="header in headerGroup.headers"
           :key="header.id"
           :style="{ ...getPinningStyle(header.column) }"
+          :freeze-header="props.freezeHeader"
         >
           <FlexRender
             v-if="!header.isPlaceholder"
