@@ -49,6 +49,7 @@ const props = withDefaults(
     groupLabels?: { [key in keyof TData]?: string[] }
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
     renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
+    isFullHeight?: boolean
   }>(),
   { pageSize: 10, showPagination: true, manualPagination: true, manualSorting: true, totalItems: 0 }
 )
@@ -155,7 +156,7 @@ function getGroupLabel(index: number) {
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <BuiTable>
+  <BuiTable :isFullHeight="props.isFullHeight">
     <BuiTableHeader>
       <BuiTableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
         <BuiTableHead
