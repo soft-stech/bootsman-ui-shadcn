@@ -182,7 +182,7 @@ function getGroupLabel(index: number) {
                 <BuiTableCell :colspan="columns.length" class="!pb-0">
                   <div class="mt-1 flex w-full items-center justify-between">
                     <div
-                      class="relative -mb-[5px] inline-block rounded-t-lg bg-background px-4 py-2 text-sm font-medium shadow-top-shadow"
+                      class="relative -mb-[6px] inline-block rounded-t-lg bg-background px-4 py-2 text-sm font-medium shadow-top-shadow"
                     >
                       <div class="absolute -left-2 bottom-0 h-2 w-2 bg-background"></div>
                       <div class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-background"></div>
