@@ -12,5 +12,11 @@ import { logEvent } from 'histoire/client'
     <Variant :key="`variant-dismissable`" :title="`Dismissable`">
       <BuiBadge dismissable @close="logEvent('close', $event)">Name tag</BuiBadge>
     </Variant>
+
+    <Variant :key="`variant-dismissable-truncate`" :title="`Dismissable truncated`">
+      <BuiBadge class="w-[100px]" dismissable @close="logEvent('close', $event)">
+        Very long tag name example
+      </BuiBadge>
+    </Variant>
   </Story>
 </template>

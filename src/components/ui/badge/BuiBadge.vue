@@ -20,7 +20,9 @@ const emit = defineEmits<{ (e: 'close'): void }>()
 
 <template>
   <div :class="cn(badgeVariants({ variant }))">
-    <slot />
+    <div class="grow truncate">
+      <slot />
+    </div>
     <BuiButton
       variant="none"
       size="icon"
