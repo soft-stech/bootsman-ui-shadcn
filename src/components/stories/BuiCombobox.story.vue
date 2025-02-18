@@ -130,8 +130,10 @@ const namespaces = ['default', 'local', 'my-namespace']
                     class="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-inherit ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:bg-transparent active:outline-none active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
                     :class="!meta.valid && meta.validated ? '!border-destructive-foreground' : ''"
                   >
-                    {{ componentField.modelValue ? componentField.modelValue : 'Select' }}
-                    <ChevronDown class="h-4 w-4 opacity-50" />
+                    <span>
+                      {{ componentField.modelValue ? componentField.modelValue : 'Select' }}
+                    </span>
+                    <ChevronDown class="h-4 w-4 flex-shrink-0 opacity-50" />
                   </BuiButton>
                 </BuiPopoverTrigger>
 
