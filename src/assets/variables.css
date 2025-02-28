@@ -10,7 +10,7 @@
 
   --card: 0 0% 100%;
   --card-foreground: 222.2 84% 4.9%;
-  --card-shadow: 241 92% 71%, 0.16;
+  --card-shadow: 241, 92%, 71%, 0.16;
   --tab-shadow: 228, 51%, 11%, 0.08;
 
   --border: 241 92% 71%;
@@ -28,13 +28,13 @@
   --accent-foreground: 241 76% 62%;
 
   --destructive: 328, 68%, 63%, 0.16;
-  --destructive-foreground: 328, 68%, 63%;
+  --destructive-foreground: 328 68% 63%;
 
   --success: 181, 34%, 39%, 0.16;
-  --success-foreground: 181, 34%, 39%;
+  --success-foreground: 181 34% 39%;
 
   --warning: 48, 79%, 45%, 0.16;
-  --warning-foreground: 48, 79%, 45%;
+  --warning-foreground: 48 79% 45%;
 
   --info: 198, 85%, 45%, 0.16;
   --info-foreground: 198 85% 45%;
@@ -44,6 +44,7 @@
   --radius: 0.5rem;
 
   --tooltip: 225 5% 47%;
+  --tooltip-link: 241 100% 88%;
 }
 
 .dark {
@@ -58,7 +59,7 @@
 
   --card: 242 24% 21%;
   --card-foreground: 210 40% 98%;
-  --card-shadow: 241 92% 71%, 0.4;
+  --card-shadow: 241, 92%, 71%, 0.4;
   --tab-shadow: 228, 51%, 11%, 0.08;
 
   --border: 241 92% 71%;
@@ -76,10 +77,10 @@
   --accent-foreground: 240 100% 77%;
 
   --destructive: 328, 68%, 63%, 0.16;
-  --destructive-foreground: 328, 68%, 63%;
+  --destructive-foreground: 328 68% 63%;
 
-  --success: 181, 34%, 39%, 0.16;
-  --success-foreground: 152 80% 38%;
+  --success: 154, 84%, 45%, 0.16;
+  --success-foreground: 181 35% 49%;
 }
 
 * {
