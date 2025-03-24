@@ -3,7 +3,15 @@ import { BuiDataTable } from '@/components/ui/table'
 import RowActionsMenuContent from './components/ActionsMenuContent.vue'
 import { BuiButton, BuiCheckbox, BuiTabs, BuiTabsList, BuiTabsTrigger } from '@/index'
 import { tableColumnSortCommon } from '@/lib/utils'
-import type { ColumnDef, PaginationState, Row, RowSelectionState } from '@tanstack/vue-table'
+import type {
+  ColumnDef,
+  PaginationState,
+  Row,
+  RowSelectionState,
+  ColumnSizingState,
+  VisibilityState,
+  ColumnOrderState
+} from '@tanstack/vue-table'
 import { sort, type ISortByObjectSorter } from 'fast-sort'
 import { logEvent } from 'histoire/client'
 import {
@@ -55,7 +63,8 @@ const columns: ColumnDef<Task>[] = [
           ariaLabel: 'Select row'
         }),
         `${row.getValue('id')}`
-      ])
+      ]),
+    enableHiding: false
   },
   {
     accessorKey: 'title',
@@ -63,7 +72,8 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => tableColumnSortCommon(column, 'Status')
+    header: ({ column }) => tableColumnSortCommon(column, 'Status'),
+    meta: { title: 'Статус таска' }
   },
   {
     accessorKey: 'priority',
@@ -95,6 +105,10 @@ function updateSelection(val: RowSelectionState) {
   logEvent('selection was changed', val)
   selection.value = val
 }
+
+const columnVisibility = ref<VisibilityState>({ hiddenColumn: false })
+const columnSizing = ref<ColumnSizingState>({ title: 300 })
+const columnOrder = ref<ColumnOrderState>()
 
 type GroupBy = 'none' | 'status' | 'priority'
 const groupBy = ref<GroupBy>('none')
@@ -175,6 +189,9 @@ function groupName(group: string | number) {
         :data="sortedData"
         v-model:sorting="sorting"
         v-model:pagination="pagination"
+        v-model:column-sizing="columnSizing"
+        v-model:column-visibility="columnVisibility"
+        v-model:column-order="columnOrder"
         @update:selection="updateSelection"
         :total-items="totalItems"
         class="caption-top"
@@ -183,7 +200,6 @@ function groupName(group: string | number) {
         :groupBy="groupBy === 'none' ? undefined : groupBy"
         :groupLabels="groupLabels"
         :renderSubComponent="renderSubComponent"
-        :columnVisibility="{ hiddenColumn: false }"
       >
         <template #caption="{ table }">
           <div class="flex justify-between">

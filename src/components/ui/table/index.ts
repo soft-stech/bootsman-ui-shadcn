@@ -12,6 +12,7 @@ export { default as BuiTableCaption } from './BuiTableCaption.vue'
 export { default as BuiTableEmpty } from './BuiTableEmpty.vue'
 export { default as BuiTableFooter } from './BuiTableFooter.vue'
 export { default as BuiDataTable } from './BuiDataTable.vue'
+export { default as BuiDataTableColumnList } from './BuiDataTableColumnList.vue'
 
 export function getPinningStyle<TData>(column: Column<TData, unknown>): CSSProperties {
   const isPinned = column.getIsPinned()
