@@ -15,10 +15,12 @@ export { default as BuiDataTable } from './BuiDataTable.vue'
 export { default as BuiDataTableColumnList } from './BuiDataTableColumnList.vue'
 
 export function getPinningStyle<TData>(column: Column<TData, unknown>): CSSProperties {
-  const isPinned = column.getIsPinned()
-  return {
-    left: isPinned === 'left' ? '0' : undefined,
-    position: isPinned ? 'sticky' : 'relative',
-    zIndex: isPinned ? '1' : '0'
-  }
+  // FYI sticky columns not possible with transparent background colors
+  // const isPinned = column.getIsPinned()
+  // return {
+  //   left: isPinned === 'left' ? '0' : undefined,
+  //   position: isPinned ? 'sticky' : 'relative',
+  //   zIndex: isPinned ? '1' : '0'
+  // }
+  return { position: 'relative' }
 }

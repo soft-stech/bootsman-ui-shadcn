@@ -64,7 +64,8 @@ const columns: ColumnDef<Task>[] = [
         }),
         `${row.getValue('id')}`
       ]),
-    enableHiding: false
+    enableHiding: false,
+    meta: { title: 'ID', pinLeft: true }
   },
   {
     accessorKey: 'title',
@@ -200,6 +201,7 @@ function groupName(group: string | number) {
         :groupBy="groupBy === 'none' ? undefined : groupBy"
         :groupLabels="groupLabels"
         :renderSubComponent="renderSubComponent"
+        enable-column-list-control
       >
         <template #caption="{ table }">
           <div class="flex justify-between">

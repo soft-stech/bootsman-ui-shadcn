@@ -25,7 +25,9 @@ useSortable(columnsListRef, columnsList, { handle: '.dragHandler' })
     >
       <BuiCheckbox :checked="col.getIsVisible()" />
       <div class="dragHandler grow">
-        {{ col.columnDef.meta?.title || col.id.replace(/([A-Z])/g, ' $1') }}
+        {{
+          col.columnDef.meta?.title || col.id.replace(/^values\./, '').replace(/([A-Z])/g, ' $1')
+        }}
       </div>
     </BuiCommandItem>
   </div>

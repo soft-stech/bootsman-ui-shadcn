@@ -64,6 +64,7 @@ const props = withDefaults(
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
     renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
     freezeHeader?: boolean
+    enableColumnListControl?: boolean
     columnSearchPlaceholder?: string
     columnSearchNotFound?: string
   }>(),
@@ -230,7 +231,7 @@ watch(columnsListIds, () => {
     <slot name="caption" :table="table" />
   </div>
   <BuiTable>
-    <template #columnVisibility>
+    <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>
           <div class="absolute right-0 top-0 z-10 h-10 bg-background">
