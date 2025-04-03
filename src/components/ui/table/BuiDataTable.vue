@@ -41,7 +41,8 @@ import {
   BuiCommand,
   BuiCommandEmpty,
   BuiCommandInput,
-  BuiCommandList
+  BuiCommandList,
+  BuiCommandItem
 } from '@/components/ui/command'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/ui/popover'
 import { BuiScrollArea } from '@/components/ui/scroll-area'
@@ -67,6 +68,7 @@ const props = withDefaults(
     enableColumnListControl?: boolean
     columnSearchPlaceholder?: string
     columnSearchNotFound?: string
+    columnResetVisibility?: string
   }>(),
   {
     pageSize: 10,
@@ -75,7 +77,8 @@ const props = withDefaults(
     manualSorting: true,
     totalItems: 0,
     columnSearchPlaceholder: 'Column name',
-    columnSearchNotFound: 'Not found'
+    columnSearchNotFound: 'Not found',
+    columnResetVisibility: 'Reset column visibility'
   }
 )
 
@@ -214,6 +217,11 @@ const columnsList = ref<Column<TData, unknown>[]>(
     })
 )
 const columnsListIds = computed(() => columnsList.value.map((col) => col.id))
+const allVisibleColumns = computed(() =>
+  columnsListIds.value.reduce<VisibilityState>((acc, id) => {
+    return { ...acc, [id]: true }
+  }, {})
+)
 const open = ref(false)
 const searchColumn = ref('')
 
@@ -260,6 +268,13 @@ watch(columnsListIds, () => {
                 <BuiDataTableColumnList
                   v-model:columns-list="columnsList as Column<TData, unknown>[]"
                 />
+                <BuiCommandItem
+                  value="reset_columns_visibility"
+                  class="px-2 py-1.5 font-medium text-muted-foreground"
+                  @select="table.setColumnVisibility({ ...columnVisibility, ...allVisibleColumns })"
+                >
+                  {{ columnResetVisibility }}
+                </BuiCommandItem>
               </BuiScrollArea>
             </BuiCommandList>
           </BuiCommand>
