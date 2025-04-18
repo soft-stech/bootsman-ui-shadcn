@@ -58,7 +58,6 @@ const props = withDefaults(
     pageSize?: number
     showPagination?: boolean
     totalItems?: number
-    showNumberOfItems?: boolean
     manualPagination?: boolean
     manualSorting?: boolean
     groupBy?: keyof TData
@@ -77,7 +76,6 @@ const props = withDefaults(
     manualPagination: true,
     manualSorting: true,
     totalItems: 0,
-    showNumberOfItems: true,
     columnSearchPlaceholder: 'Column name',
     columnSearchNotFound: 'Not found',
     columnResetVisibility: 'Reset column visibility'
@@ -388,15 +386,15 @@ watch(columnsListIds, () => {
     </BuiTableBody>
   </BuiTable>
   <div
-    v-if="(showPagination || showNumberOfItems) && computedItems > 0"
+    v-if="(showPagination || $slots.numberOfItems) && computedItems > 0"
     class="flex w-full border-x border-b border-border/[0.16] bg-primary/[0.04] px-4 py-1 text-sm text-muted-foreground"
     :class="{
-      'justify-between': showPagination && showNumberOfItems,
-      'justify-start': showNumberOfItems && !showPagination,
-      'justify-end': showPagination && !showNumberOfItems
+      'justify-between': showPagination && $slots.numberOfItems,
+      'justify-start': $slots.numberOfItems && !showPagination,
+      'justify-end': showPagination && !$slots.numberOfItems
     }"
   >
-    <div v-if="showNumberOfItems" class="flex min-h-8 items-center">
+    <div v-if="$slots.numberOfItems" class="flex min-h-8 items-center">
       <slot name="numberOfItems"></slot>
     </div>
     <BuiPaginationCommon
