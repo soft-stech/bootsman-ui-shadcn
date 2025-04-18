@@ -246,6 +246,7 @@ function groupName(group: string | number) {
             @select="(action) => onRowAction(row, action)"
           />
         </template>
+        <template #numberOfItems>{{ data.length }} tasks</template>
       </BuiDataTable>
     </Variant>
   </Story>
