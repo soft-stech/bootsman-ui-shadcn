@@ -11,6 +11,7 @@ const props = withDefaults(
       class?: HTMLAttributes['class']
       variant?: NonNullable<Parameters<typeof progressVariants>[0]>['variant']
       color?: NonNullable<Parameters<typeof indicatorVariants>[0]>['color']
+      separators?: NonNullable<Array<number>>
     }
   >(),
   {
@@ -42,5 +43,12 @@ const indicatorClass = computed(() =>
         (props.modelValue ?? 0) * 0.01
       })`"
     />
+    <template v-if="separators && separators.length > 0">
+      <div
+        v-for="separator in separators"
+        class="absolute bottom-0 top-0 w-px bg-background !p-0"
+        :style="`left:${separator}%`"
+      ></div>
+    </template>
   </ProgressRoot>
 </template>

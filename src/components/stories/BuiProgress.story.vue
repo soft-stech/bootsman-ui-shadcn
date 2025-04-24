@@ -31,7 +31,7 @@ import { ref } from 'vue'
         <div class="m-4 flex flex-col gap-2">
           <BuiProgress :model-value="0" />
           <BuiProgress :model-value="1" />
-          <BuiProgress :model-value="50" />
+          <BuiProgress :model-value="50" :separators="[10, 35]" />
           <BuiProgress :model-value="99" />
           <BuiProgress :model-value="100" />
         </div>
