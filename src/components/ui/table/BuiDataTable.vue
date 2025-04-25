@@ -244,7 +244,7 @@ watch(columnsListIds, () => {
         <BuiPopoverTrigger as-child>
           <div class="absolute right-0 top-0 z-10 h-10 bg-background">
             <div
-              class="flex h-full items-center border-l border-border/[0.16] bg-foreground/[0.04] px-1"
+              class="flex h-full items-center border-b border-l border-border/[0.16] bg-foreground/[0.04] px-1"
             >
               <BuiButton
                 variant="ghost"
