@@ -3,7 +3,7 @@ import { ProgressIndicator, ProgressRoot, type ProgressRootProps } from 'radix-v
 import { cn } from '@/lib/utils'
 import { type HTMLAttributes, computed } from 'vue'
 
-import { progressVariants, capVariants, indicatorVariants } from '.'
+import { progressVariants, indicatorVariants } from '.'
 
 const props = withDefaults(
   defineProps<
@@ -21,9 +21,13 @@ const props = withDefaults(
     variant: 'default'
   }
 )
-const indicatorClass = computed(() =>
-  !props.modelValue || props.modelValue < 100 ? 'rounded-r-none border-r-2' : ''
-)
+const indicatorClass = computed(() => {
+  if (!props.modelValue || props.modelValue >= 100) {
+    return ''
+  }
+
+  return 'rounded-r-none border-r-2'
+})
 </script>
 
 <template>
@@ -41,10 +45,10 @@ const indicatorClass = computed(() =>
       :class="cn(indicatorVariants({ color, variant }), indicatorClass, props.class)"
       :style="`width: ${props.modelValue ?? 0}%;`"
     />
-    <template v-if="separators && separators.length > 0">
-      <template v-for="separator in separators">
+    <template v-if="props.modelValue && props.separators && props.separators.length > 0">
+      <template v-for="separator in props.separators">
         <div
-          v-if="separator > 0 && separator < 100"
+          v-if="separator > 0 && separator < 100 && separator < props.modelValue"
           class="absolute bottom-0 top-0 w-px bg-background !p-0"
           :style="`left:${separator}%`"
         ></div>
