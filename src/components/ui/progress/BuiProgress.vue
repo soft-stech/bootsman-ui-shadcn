@@ -39,16 +39,16 @@ const indicatorClass = computed(() =>
   >
     <ProgressIndicator
       :class="cn(indicatorVariants({ color, variant }), indicatorClass, props.class)"
-      :style="`width: calc(calc(100% - ${capVariants[variant ?? 'default']}) * ${
-        (props.modelValue ?? 0) * 0.01
-      })`"
+      :style="`width: ${props.modelValue ?? 0}%;`"
     />
     <template v-if="separators && separators.length > 0">
-      <div
-        v-for="separator in separators"
-        class="absolute bottom-0 top-0 w-px bg-background !p-0"
-        :style="`left:${separator}%`"
-      ></div>
+      <template v-for="separator in separators">
+        <div
+          v-if="separator > 0 && separator < 100"
+          class="absolute bottom-0 top-0 w-px bg-background !p-0"
+          :style="`left:${separator}%`"
+        ></div>
+      </template>
     </template>
   </ProgressRoot>
 </template>

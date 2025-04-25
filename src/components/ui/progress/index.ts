@@ -5,9 +5,9 @@ import { cva } from 'class-variance-authority'
 export const progressVariants = cva('', {
   variants: {
     variant: {
-      sm: 'h-3 [&>*]:pl-2 rounded-[8px]',
-      default: 'h-5 [&>*]:pl-4 rounded-[8px]',
-      lg: 'h-10 [&>*]:pl-8 rounded-[16px]'
+      sm: 'h-3 rounded-[8px]',
+      default: 'h-5 rounded-[8px]',
+      lg: 'h-10 rounded-[16px]'
     }
   },
   defaultVariants: {
