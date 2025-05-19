@@ -22,6 +22,11 @@ export type PageSize = (typeof pageSizes)[number]
 
 const props = defineProps<{
   total: number
+  translations?: {
+    itemsPerPage: string
+    page: string
+    of: string
+  }
 }>()
 
 const pageSize = defineModel<PageSize>('pageSize', { default: 10, required: true })
@@ -46,7 +51,9 @@ const pageSizeString = computed({
     v-model:page="pageIndex"
   >
     <BuiPaginationList class="relative flex items-center justify-center gap-2">
-      <p class="text-sm text-muted-foreground">Items per page</p>
+      <p class="text-sm text-muted-foreground">
+        {{ translations?.itemsPerPage || 'Items per page' }}
+      </p>
       <BuiSelect v-model.number="pageSizeString">
         <BuiSelectTrigger class="mr-2 w-[70px]">
           <BuiSelectValue :placeholder="pageSize.toString()" />
@@ -58,7 +65,10 @@ const pageSizeString = computed({
         </BuiSelectContent>
       </BuiSelect>
       <template v-if="totalPages > 1">
-        <p class="text-sm text-muted-foreground">Page {{ page }} of {{ totalPages }}</p>
+        <p class="text-sm text-muted-foreground">
+          {{ translations?.page || 'Page' }} {{ page }} {{ translations?.of || 'of' }}
+          {{ totalPages }}
+        </p>
         <BuiPaginationFirst />
         <BuiPaginationPrev />
         <BuiInput v-model="pageIndex" class="w-28" placeholder="Page number" />

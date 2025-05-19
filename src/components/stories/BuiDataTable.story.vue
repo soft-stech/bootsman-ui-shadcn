@@ -202,6 +202,11 @@ function groupName(group: string | number) {
         :groupLabels="groupLabels"
         :renderSubComponent="renderSubComponent"
         enable-column-list-control
+        :pagination-translations="{
+          itemsPerPage: 'Tasks per page',
+          page: 'Page',
+          of: 'of'
+        }"
       >
         <template #caption="{ table }">
           <div class="flex justify-between">
