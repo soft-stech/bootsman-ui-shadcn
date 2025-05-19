@@ -69,6 +69,11 @@ const props = withDefaults(
     columnSearchPlaceholder?: string
     columnSearchNotFound?: string
     columnResetVisibility?: string
+    paginationTranslations?: {
+      itemsPerPage: string
+      page: string
+      of: string
+    }
   }>(),
   {
     pageSize: 10,
@@ -402,6 +407,7 @@ watch(columnsListIds, () => {
       :total="computedItems"
       v-model:pageIndex="pageIndex"
       v-model:pageSize="tablePageSize"
+      :translations="paginationTranslations"
     >
     </BuiPaginationCommon>
   </div>
