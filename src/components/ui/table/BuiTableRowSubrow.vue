@@ -27,7 +27,10 @@ const isEmptyRow = computed(() => {
     <BuiTableCell
       v-for="cell in row.getVisibleCells()"
       :key="cell.id"
-      :style="{ ...getPinningStyle(cell.column) }"
+      :style="{
+        ...getPinningStyle(cell.column),
+        width: `calc(var(--col-${cell.column.id}-size) * 1px)`
+      }"
     >
       <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
     </BuiTableCell>

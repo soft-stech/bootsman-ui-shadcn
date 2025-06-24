@@ -241,13 +241,33 @@ watch(columnsListIds, () => {
 
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
+
+const tableColumnSizes = computed(() => {
+  const headers = table.getFlatHeaders()
+
+  console.log('headers')
+  console.log(headers)
+
+  console.log('headers')
+  console.log(table.getTotalSize())
+
+  const colSizes: { [key: string]: number } = {}
+  for (let i = 0; i < headers.length; i++) {
+    const header = headers[i]!
+    colSizes[`--header-${header.id}-size`] = header.getSize()
+    colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
+  }
+
+  return colSizes
+})
 </script>
 
 <template>
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <BuiTable>
+  <div>{{ tableColumnSizes }}</div>
+  <BuiTable :style="{ ...tableColumnSizes }">
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>
@@ -297,7 +317,10 @@ const { height } = useElementSize(tableHeaderRef)
       <BuiTableHead
         v-for="header in tableHeaders"
         :key="header.id"
-        :style="{ ...getPinningStyle(header.column), width: header.getSize() + 'px' }"
+        :style="{
+          ...getPinningStyle(header.column),
+          width: `calc(var(--header-${header.id}-size) * 1px)`
+        }"
         :freeze-header="props.freezeHeader"
       >
         <FlexRender
