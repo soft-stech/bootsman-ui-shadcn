@@ -25,7 +25,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch } from 'vue'
+import { computed, watchEffect, ref, watch, onMounted } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -242,14 +242,37 @@ watch(columnsListIds, () => {
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
 
+onMounted(() => {
+  tableColumnNativeSizes.value = calcTableColumnNativeSizes()
+
+  if (tableColumnNativeSizes.value) {
+    table.setColumnSizing(
+      (old: ColumnSizingState) => tableColumnNativeSizes.value as ColumnSizingState
+    )
+  }
+})
+
+const calcTableColumnNativeSizes = () => {
+  if (tableHeaderRef.value && tableHeaderRef.value.headRef) {
+    const headerCells = [...tableHeaderRef.value.headRef.querySelectorAll('th')]
+    const headerCellsWidths: { [key: string]: number } = headerCells.reduce((acc, cell) => {
+      const cellId = cell.id.split('_')[0]
+      return {
+        ...acc,
+        [cellId]: cell.offsetWidth
+      }
+    }, {})
+
+    return headerCellsWidths
+  }
+
+  return undefined
+}
+
+const tableColumnNativeSizes = ref<ColumnSizingState | undefined>(undefined)
+
 const tableColumnSizes = computed(() => {
   const headers = table.getFlatHeaders()
-
-  console.log('headers')
-  console.log(headers)
-
-  console.log('headers')
-  console.log(table.getTotalSize())
 
   const colSizes: { [key: string]: number } = {}
   for (let i = 0; i < headers.length; i++) {
@@ -267,7 +290,8 @@ const tableColumnSizes = computed(() => {
     <slot name="caption" :table="table" />
   </div>
   <div>{{ tableColumnSizes }}</div>
-  <BuiTable :style="{ ...tableColumnSizes }">
+  <div>{{ tableColumnNativeSizes }}</div>
+  <BuiTable :style="{ ...tableColumnSizes }" v-memo="[tableColumnSizes]">
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>
@@ -317,6 +341,7 @@ const tableColumnSizes = computed(() => {
       <BuiTableHead
         v-for="header in tableHeaders"
         :key="header.id"
+        :id="`${header.id}_cell`"
         :style="{
           ...getPinningStyle(header.column),
           width: `calc(var(--header-${header.id}-size) * 1px)`
