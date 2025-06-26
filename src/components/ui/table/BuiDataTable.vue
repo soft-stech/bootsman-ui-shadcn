@@ -25,7 +25,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch, onMounted } from 'vue'
+import { computed, watchEffect, ref, watch, onMounted, nextTick } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -242,6 +242,7 @@ const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 
 onMounted(() => {
   tableColumnNativeSizes.value = calcTableColumnNativeSizes()
+  tableColumnNativeSizesCalculated.value = calcTableColumnNativeSizes()
 
   if (tableColumnNativeSizes.value) {
     table.setColumnSizing(
@@ -268,8 +269,9 @@ const calcTableColumnNativeSizes = () => {
 }
 
 const tableColumnNativeSizes = ref<ColumnSizingState | undefined>(undefined)
+const tableColumnNativeSizesCalculated = ref<ColumnSizingState | undefined>(undefined)
 
-const tableColumnSizes = computed(() => {
+const tableColumnSizesVars = computed(() => {
   const headers = table.getFlatHeaders()
 
   const colSizes: { [key: string]: number } = {}
@@ -281,15 +283,66 @@ const tableColumnSizes = computed(() => {
 
   return colSizes
 })
+
+const tableColumnSizes = computed(() => {
+  const headers = table.getFlatHeaders()
+  const colSizes: ColumnSizingState = {}
+
+  for (let i = 0; i < headers.length; i++) {
+    const header = headers[i]!
+    if (
+      header.column.getCanResize() &&
+      tableColumnNativeSizes.value &&
+      tableColumnNativeSizes.value[header.id]
+    ) {
+      colSizes[header.id] = header.getSize()
+    }
+  }
+
+  return colSizes
+})
+
+watch(
+  tableColumnSizes,
+  () => {
+    tableColumnNativeSizesCalculated.value = calcTableColumnNativeSizes()
+  },
+  { deep: true, immediate: true }
+)
+
+const handleMouseUp = async (e: MouseEvent) => {
+  await nextTick()
+
+  console.log('mouse up?')
+  tableColumnNativeSizesCalculated.value = calcTableColumnNativeSizes()
+  table.setColumnSizing((old: ColumnSizingState) => {
+    return { ...old, ...tableColumnNativeSizesCalculated.value }
+  })
+
+  table.setColumnSizingInfo((old) => ({
+    ...old,
+    isResizingColumn: false,
+    startOffset: null,
+    startSize: null,
+    deltaOffset: null,
+    deltaPercentage: null,
+    columnSizingStart: []
+  }))
+}
 </script>
 
 <template>
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <div>{{ tableColumnSizes }}</div>
-  <div>{{ tableColumnNativeSizes }}</div>
-  <BuiTable :style="{ ...tableColumnSizes }" v-memo="[tableColumnSizes]">
+  <div>initial {{ tableColumnNativeSizes }}</div>
+  <div>tanstack {{ tableColumnSizes }}</div>
+  <div>native {{ tableColumnNativeSizesCalculated }}</div>
+  <BuiTable
+    :style="{ ...tableColumnSizesVars }"
+    v-memo="[tableColumnSizesVars, tableColumnSizes]"
+    @mouseup="(e) => handleMouseUp(e)"
+  >
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>
@@ -339,7 +392,7 @@ const tableColumnSizes = computed(() => {
         :id="`${header.id}_cell`"
         :style="{
           ...getPinningStyle(header.column),
-          width: `calc(var(--header-${header.id}-size) * 1px)`
+          width: header.getSize() + 'px'
         }"
         :freeze-header="props.freezeHeader"
       >
