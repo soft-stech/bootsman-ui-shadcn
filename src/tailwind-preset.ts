@@ -73,6 +73,44 @@ export default {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
+        },
+        status: {
+          ready: {
+            DEFAULT: 'hsl(var(--status-ready))',
+            foreground: 'hsl(var(--status-ready-foreground))'
+          },
+          inProgress: {
+            DEFAULT: 'hsl(var(--status-in-progress))',
+            foreground: 'hsl(var(--status-in-progress-foreground))'
+          },
+          problem: {
+            minor: {
+              DEFAULT: 'hsl(var(--status-problem-minor))',
+              foreground: 'hsl(var(--status-problem-minor-foreground))'
+            },
+            blocking: {
+              DEFAULT: 'hsl(var(--status-problem-blocking))',
+              foreground: 'hsl(var(--status-problem-blocking-foreground))'
+            }
+          },
+          involved: {
+            DEFAULT: 'hsl(var(--status-involved))',
+            foreground: 'hsl(var(--status-involved-foreground))'
+          },
+          notInvolved: {
+            stroke: 'hsl(var(--status-not-involved-stroke))',
+            foreground: 'hsl(var(--status-not-involved-foreground))'
+          },
+          completed: {
+            good: {
+              DEFAULT: 'hsl(var(--status-completed-good))',
+              foreground: 'hsl(var(--status-completed-good-foreground))'
+            },
+            bad: {
+              DEFAULT: 'hsl(var(--status-completed-bad))',
+              foreground: 'hsl(var(--status-completed-bad-foreground))'
+            }
+          }
         }
       },
       borderRadius: {

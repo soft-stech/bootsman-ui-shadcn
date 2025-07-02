@@ -45,6 +45,30 @@
 
   --tooltip: 225 5% 47%;
   --tooltip-link: 241 100% 88%;
+
+  --status-ready: 74 93% 95%;
+  --status-ready-foreground: 81 100% 30%;
+
+  --status-in-progress: 210 33% 98%;
+  --status-in-progress-foreground: 218 18% 43%;
+
+  --status-problem-minor: 55 97% 87%;
+  --status-problem-minor-foreground: 40 100% 38%;
+
+  --status-problem-blocking: 358 100% 94%;
+  --status-problem-blocking-foreground: 358 79% 51%;
+
+  --status-involved: 231 100% 94%;
+  --status-involved-foreground: 245 93% 67%;
+
+  --status-not-involved-stroke: 220 31% 90%;
+  --status-not-involved-foreground: 218 20% 61%;
+
+  --status-completed-good: 154 91% 36%;
+  --status-completed-good-foreground: 0 0% 100%;
+
+  --status-completed-bad: 359 93% 60%;
+  --status-completed-bad-foreground: 0 0% 100%;
 }
 
 .dark {
