@@ -22,7 +22,7 @@ const props = defineProps<{
       :class="{ 'bg-foreground/[0.04]': props.freezeHeader }"
     >
       <div
-        class="flex h-8 w-full items-center whitespace-nowrap border-r border-border/[0.16] px-3 text-sm font-semibold"
+        class="flex h-8 w-full items-center whitespace-nowrap border-r border-border/[0.16] px-2 text-sm font-semibold"
       >
         <slot />
       </div>

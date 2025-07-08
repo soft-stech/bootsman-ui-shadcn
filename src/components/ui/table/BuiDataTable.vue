@@ -392,7 +392,7 @@ watch(columnsListIds, () => {
   </BuiTable>
   <div
     v-if="(showPagination || $slots.numberOfItems) && computedItems > 0"
-    class="flex w-full border-x border-b border-border/[0.16] bg-primary/[0.04] px-4 py-1 text-sm text-muted-foreground"
+    class="flex w-full border-x border-b border-border/[0.16] bg-primary/[0.04] px-2.5 py-1 text-sm text-muted-foreground"
     :class="{
       'justify-between': showPagination && $slots.numberOfItems,
       'justify-start': $slots.numberOfItems && !showPagination,

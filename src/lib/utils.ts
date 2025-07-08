@@ -33,6 +33,9 @@ export const tableColumnSortCommon = (column: Column<any>, name: string) => {
       class: 'text-foreground px-0 text-sm font-semibold',
       onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
     },
-    () => [name, h(icon, { class: 'ml-2 h-4 w-4 text-muted-foreground' })]
+    () => [
+      h('div', { class: 'whitespace-normal break-normal' }, [name]),
+      h(icon, { class: 'ml-2 h-4 w-4 text-muted-foreground' })
+    ]
   )
 }
