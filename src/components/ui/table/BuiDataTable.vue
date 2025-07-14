@@ -48,6 +48,7 @@ import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/u
 import { BuiScrollArea } from '@/components/ui/scroll-area'
 import { BuiButton } from '@/components/ui/button'
 import { Settings2Icon } from 'lucide-vue-next'
+import { useElementSize } from '@vueuse/core'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 
@@ -237,9 +238,13 @@ const tableHeaders = computed(() =>
 watch(columnsListIds, () => {
   table.setColumnOrder(columnsListIds.value)
 })
+
+const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
+const { height } = useElementSize(tableHeaderRef)
 </script>
 
 <template>
+  <div>{{ height }}</div>
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
@@ -247,7 +252,10 @@ watch(columnsListIds, () => {
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>
-          <div class="absolute right-0 top-0 z-10 h-10 bg-background">
+          <div
+            class="absolute right-0 top-0 z-10 bg-background"
+            :style="{ height: `${height.toFixed(1)}px` }"
+          >
             <div
               class="flex h-full items-center border-b border-l border-border/[0.16] bg-foreground/[0.04] px-1"
             >
@@ -286,7 +294,7 @@ watch(columnsListIds, () => {
         </BuiPopoverContent>
       </BuiPopover>
     </template>
-    <BuiTableHeader v-if="tableHeaders" :freeze-header="props.freezeHeader">
+    <BuiTableHeader v-if="tableHeaders" :freeze-header="props.freezeHeader" ref="tableHeaderRef">
       <BuiTableHead
         v-for="header in tableHeaders"
         :key="header.id"
