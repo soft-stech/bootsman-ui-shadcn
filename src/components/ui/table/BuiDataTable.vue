@@ -244,7 +244,6 @@ const { height } = useElementSize(tableHeaderRef)
 </script>
 
 <template>
-  <div>{{ height }}</div>
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
