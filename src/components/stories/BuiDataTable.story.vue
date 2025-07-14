@@ -73,7 +73,7 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => tableColumnSortCommon(column, 'Status'),
+    header: ({ column }) => tableColumnSortCommon(column, 'Очень длинный заголовок для статуса'),
     meta: { title: 'Статус таска' }
   },
   {
