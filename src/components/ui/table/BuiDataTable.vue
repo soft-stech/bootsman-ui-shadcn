@@ -274,6 +274,7 @@ const cells = ref<
     }
   | undefined
 >(undefined)
+const minCellWidth = ref<number>(90)
 
 const handleResizeControlMouseDown = (e: MouseEvent, cellId: string) => {
   isResizing.value = true
@@ -300,10 +301,43 @@ const handleResizeControlMouseUp = (e: MouseEvent) => {
   resizingCellId.value = ''
   neighborCellId.value = ''
   document.removeEventListener('mousemove', handleCellResize)
+
+  if (cells.value) {
+    for (let cell in cells.value) {
+      const newWidth =
+        cells.value[cell].cell.offsetWidth < minCellWidth.value
+          ? minCellWidth.value
+          : cells.value[cell].cell.offsetWidth
+      cells.value[cell].cell.style.width = newWidth + 'px'
+    }
+  }
 }
 
-const handleCellResize = () => {
-  console.log('resizing')
+const handleCellResize = (e: MouseEvent) => {
+  if (!props.enableColumnResizing) return
+
+  e.preventDefault()
+
+  if (cells.value) {
+    const resizingCell = cells.value[resizingCellId.value].cell
+    const neighborCell = cells.value[neighborCellId.value].cell
+
+    if (resizingCell && neighborCell) {
+      const newResizingCellWidth = parseInt(resizingCell.style.width) + e.movementX
+      const newNeighborCellWidth = parseInt(neighborCell.style.width) - e.movementX
+
+      if (e.movementX < 0) {
+        if (Math.floor(newResizingCellWidth) < minCellWidth.value) return
+      }
+
+      if (e.movementX > 0) {
+        if (Math.floor(newNeighborCellWidth) < minCellWidth.value) return
+      }
+
+      resizingCell.style.width = newResizingCellWidth + 'px'
+      neighborCell.style.width = newNeighborCellWidth + 'px'
+    }
+  }
 }
 
 const resetCells = () => {
@@ -393,7 +427,7 @@ onUnmounted(() => {
     </template>
     <BuiTableHeader v-if="tableHeaders" :freeze-header="props.freezeHeader" ref="tableHeaderRef">
       <BuiTableHead
-        v-for="header in tableHeaders"
+        v-for="(header, index) in tableHeaders"
         :key="header.id"
         :id="`${header.id}_cell`"
         :style="{
@@ -407,7 +441,7 @@ onUnmounted(() => {
           :props="header.getContext()"
         />
         <div
-          v-if="enableColumnResizing"
+          v-if="enableColumnResizing && index < tableHeaders.length - 1"
           @dblclick="resetCells"
           @mousedown="(e: MouseEvent) => handleResizeControlMouseDown(e, header.id)"
           :className="
