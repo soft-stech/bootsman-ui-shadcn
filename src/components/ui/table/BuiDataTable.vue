@@ -25,7 +25,16 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch, onMounted, nextTick } from 'vue'
+import {
+  computed,
+  watchEffect,
+  ref,
+  watch,
+  onMounted,
+  nextTick,
+  onBeforeMount,
+  onUnmounted
+} from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -67,6 +76,7 @@ const props = withDefaults(
     renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
     freezeHeader?: boolean
     enableColumnListControl?: boolean
+    enableColumnResizing?: boolean
     columnSearchPlaceholder?: string
     columnSearchNotFound?: string
     columnResetVisibility?: string
@@ -84,7 +94,8 @@ const props = withDefaults(
     totalItems: 0,
     columnSearchPlaceholder: 'Column name',
     columnSearchNotFound: 'Not found',
-    columnResetVisibility: 'Reset column visibility'
+    columnResetVisibility: 'Reset column visibility',
+    enableColumnResizing: true
   }
 )
 
@@ -92,7 +103,6 @@ const sorting = defineModel<SortingState>('sorting')
 const pagination = defineModel<PaginationState>('pagination')
 const rowSelection = defineModel<RowSelectionState>('selection')
 const columnVisibility = defineModel<VisibilityState>('columnVisibility')
-const columnSizing = defineModel<ColumnSizingState>('columnSizing')
 const columnOrder = defineModel<ColumnOrderState>('columnOrder')
 const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
@@ -128,18 +138,12 @@ const table = useVueTable({
   onColumnVisibilityChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnVisibility)
   },
-  onColumnSizingChange: (updaterOrValue) => {
-    valueUpdater(updaterOrValue, columnSizing)
-  },
   onColumnOrderChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnOrder)
   },
   autoResetPageIndex: false,
   manualPagination: props.manualPagination, // set to false to enable client-side pagination
   manualSorting: props.manualSorting,
-  enableColumnResizing: true,
-  columnResizeMode: 'onChange',
-  columnResizeDirection: 'ltr',
   state: {
     get sorting() {
       return sorting.value
@@ -152,9 +156,6 @@ const table = useVueTable({
     },
     get columnVisibility() {
       return columnVisibility.value
-    },
-    get columnSizing() {
-      return columnSizing.value
     },
     get columnOrder() {
       return columnOrder.value
@@ -240,27 +241,21 @@ watch(columnsListIds, () => {
 })
 
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
-const { height } = useElementSize(tableHeaderRef)
+const { height, width } = useElementSize(tableHeaderRef)
 
-onMounted(() => {
-  tableColumnInitialSizes.value = calcTableColumnNativeSizes()
-  tableColumnNativeSizesCalculated.value = calcTableColumnNativeSizes()
-
-  if (tableColumnInitialSizes.value) {
-    table.setColumnSizing(
-      (old: ColumnSizingState) => tableColumnInitialSizes.value as ColumnSizingState
-    )
-  }
-})
-
-const calcTableColumnNativeSizes = () => {
+const getCells = () => {
   if (tableHeaderRef.value && tableHeaderRef.value.headRef) {
     const headerCells = [...tableHeaderRef.value.headRef.querySelectorAll('th')]
-    const headerCellsWidths: { [key: string]: number } = headerCells.reduce((acc, cell) => {
+    const headerCellsWidths: {
+      [key: string]: { cell: HTMLTableCellElement; initialWidth: number }
+    } = headerCells.reduce((acc, cell) => {
       const cellId = cell.id.split('_')[0]
       return {
         ...acc,
-        [cellId]: cell.offsetWidth
+        [cellId]: {
+          cell: cell,
+          initialWidth: cell.offsetWidth
+        }
       }
     }, {})
 
@@ -270,81 +265,57 @@ const calcTableColumnNativeSizes = () => {
   return undefined
 }
 
-const tableColumnInitialSizes = ref<ColumnSizingState | undefined>(undefined)
-const tableColumnNativeSizesCalculated = ref<ColumnSizingState | undefined>(undefined)
+const isResizing = ref<boolean>(false)
+const resizingCellId = ref<string>('')
+const neighborCellId = ref<string>('')
+const cells = ref<
+  | {
+      [key: string]: { cell: HTMLTableCellElement; initialWidth: number }
+    }
+  | undefined
+>(undefined)
 
-const tableColumnSizesVars = computed(() => {
-  const headers = table.getFlatHeaders()
+const handleResizeControlMouseDown = (e: MouseEvent, cellId: string) => {
+  isResizing.value = true
+  resizingCellId.value = cellId
+}
 
-  const colSizes: { [key: string]: number } = {}
-  for (let i = 0; i < headers.length; i++) {
-    const header = headers[i]!
-    colSizes[`--header-${header.id}-size`] = header.getSize()
-    colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
-  }
+const handleResizeControlMouseUp = (e: MouseEvent) => {
+  if (!isResizing.value) return
 
-  return colSizes
+  isResizing.value = false
+  resizingCellId.value = ''
+}
+
+onBeforeMount(() => {
+  document.addEventListener('mouseup', handleResizeControlMouseUp)
 })
 
-const tableColumnSizes = computed(() => {
-  const headers = table.getFlatHeaders()
-  const colSizes: ColumnSizingState = {}
+onMounted(() => {
+  cells.value = getCells()
 
-  for (let i = 0; i < headers.length; i++) {
-    const header = headers[i]!
-    if (
-      header.column.getCanResize() &&
-      tableColumnInitialSizes.value &&
-      tableColumnInitialSizes.value[header.id]
-    ) {
-      colSizes[header.id] = header.getSize()
+  if (cells.value) {
+    for (let cell in cells.value) {
+      if (!cells.value[cell].cell.style.width) {
+        cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
+      }
     }
   }
-
-  return colSizes
 })
 
-watch(
-  tableColumnSizes,
-  () => {
-    tableColumnNativeSizesCalculated.value = calcTableColumnNativeSizes()
-  },
-  { deep: true, immediate: true }
-)
-
-const handleMouseUp = async (e: MouseEvent) => {
-  await nextTick()
-
-  console.log('mouse up?')
-  tableColumnNativeSizesCalculated.value = calcTableColumnNativeSizes()
-  table.setColumnSizing((old: ColumnSizingState) => {
-    return { ...old, ...tableColumnNativeSizesCalculated.value }
-  })
-
-  table.setColumnSizingInfo((old) => ({
-    ...old,
-    isResizingColumn: false,
-    startOffset: null,
-    startSize: null,
-    deltaOffset: null,
-    deltaPercentage: null,
-    columnSizingStart: []
-  }))
-}
+onUnmounted(() => {
+  document.removeEventListener('mouseup', handleResizeControlMouseUp)
+})
 </script>
 
 <template>
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <div>initial {{ tableColumnInitialSizes }}</div>
-  <div>tanstack {{ tableColumnSizes }}</div>
-  <div>native {{ tableColumnNativeSizesCalculated }}</div>
-  <BuiTable
-    :style="{ ...tableColumnSizesVars }"
-    v-memo="[tableColumnSizesVars, tableColumnSizes]"
-    @mouseup="(e: MouseEvent) => handleMouseUp(e)"
-  >
+  <div>table header width {{ width }}</div>
+  <div>isResizing {{ isResizing }}</div>
+  <div>resizing cell id {{ resizingCellId }}</div>
+  <BuiTable>
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>
@@ -398,8 +369,7 @@ const handleMouseUp = async (e: MouseEvent) => {
         :key="header.id"
         :id="`${header.id}_cell`"
         :style="{
-          ...getPinningStyle(header.column),
-          width: header.getSize() + 'px'
+          ...getPinningStyle(header.column)
         }"
         :freeze-header="props.freezeHeader"
       >
@@ -409,12 +379,13 @@ const handleMouseUp = async (e: MouseEvent) => {
           :props="header.getContext()"
         />
         <div
-          @dblclick="() => header.column.resetSize()"
-          @mousedown="header.getResizeHandler()?.($event)"
+          v-if="enableColumnResizing"
+          @dblclick="() => {}"
+          @mousedown="(e: MouseEvent) => handleResizeControlMouseDown(e, header.id)"
           :className="
             cn(
               'absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
-              header.column.getIsResizing() ? 'bg-primary opacity-50' : ''
+              isResizing && resizingCellId === header.id ? 'bg-primary opacity-50' : ''
             )
           "
         />
