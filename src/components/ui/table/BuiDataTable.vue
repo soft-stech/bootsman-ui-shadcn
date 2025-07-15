@@ -243,12 +243,12 @@ const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
 
 onMounted(() => {
-  tableColumnNativeSizes.value = calcTableColumnNativeSizes()
+  tableColumnInitialSizes.value = calcTableColumnNativeSizes()
   tableColumnNativeSizesCalculated.value = calcTableColumnNativeSizes()
 
-  if (tableColumnNativeSizes.value) {
+  if (tableColumnInitialSizes.value) {
     table.setColumnSizing(
-      (old: ColumnSizingState) => tableColumnNativeSizes.value as ColumnSizingState
+      (old: ColumnSizingState) => tableColumnInitialSizes.value as ColumnSizingState
     )
   }
 })
@@ -270,7 +270,7 @@ const calcTableColumnNativeSizes = () => {
   return undefined
 }
 
-const tableColumnNativeSizes = ref<ColumnSizingState | undefined>(undefined)
+const tableColumnInitialSizes = ref<ColumnSizingState | undefined>(undefined)
 const tableColumnNativeSizesCalculated = ref<ColumnSizingState | undefined>(undefined)
 
 const tableColumnSizesVars = computed(() => {
@@ -294,8 +294,8 @@ const tableColumnSizes = computed(() => {
     const header = headers[i]!
     if (
       header.column.getCanResize() &&
-      tableColumnNativeSizes.value &&
-      tableColumnNativeSizes.value[header.id]
+      tableColumnInitialSizes.value &&
+      tableColumnInitialSizes.value[header.id]
     ) {
       colSizes[header.id] = header.getSize()
     }
@@ -337,13 +337,13 @@ const handleMouseUp = async (e: MouseEvent) => {
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <div>initial {{ tableColumnNativeSizes }}</div>
+  <div>initial {{ tableColumnInitialSizes }}</div>
   <div>tanstack {{ tableColumnSizes }}</div>
   <div>native {{ tableColumnNativeSizesCalculated }}</div>
   <BuiTable
     :style="{ ...tableColumnSizesVars }"
     v-memo="[tableColumnSizesVars, tableColumnSizes]"
-    @mouseup="(e) => handleMouseUp(e)"
+    @mouseup="(e: MouseEvent) => handleMouseUp(e)"
   >
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
@@ -369,7 +369,9 @@ const handleMouseUp = async (e: MouseEvent) => {
             <BuiCommandInput
               :placeholder="columnSearchPlaceholder"
               v-model="searchColumn"
-              @input="(event) => (searchColumn = event.target.value)"
+              @input="
+                (event: InputEvent) => (searchColumn = (event.target as HTMLInputElement)?.value)
+              "
             />
             <BuiCommandList>
               <BuiScrollArea class="h-[300px]">
