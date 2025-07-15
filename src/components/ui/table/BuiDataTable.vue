@@ -278,6 +278,19 @@ const cells = ref<
 const handleResizeControlMouseDown = (e: MouseEvent, cellId: string) => {
   isResizing.value = true
   resizingCellId.value = cellId
+
+  if (cells.value) {
+    const resizingCell = cells.value[cellId].cell
+    let neighborCell = resizingCell.nextElementSibling
+
+    if (!neighborCell) {
+      neighborCell = resizingCell.previousElementSibling
+    }
+
+    neighborCellId.value = neighborCell ? neighborCell.id.split('_')[0] : ''
+
+    document.addEventListener('mousemove', handleCellResize)
+  }
 }
 
 const handleResizeControlMouseUp = (e: MouseEvent) => {
@@ -285,6 +298,20 @@ const handleResizeControlMouseUp = (e: MouseEvent) => {
 
   isResizing.value = false
   resizingCellId.value = ''
+  neighborCellId.value = ''
+  document.removeEventListener('mousemove', handleCellResize)
+}
+
+const handleCellResize = () => {
+  console.log('resizing')
+}
+
+const resetCells = () => {
+  if (cells.value) {
+    for (let cell in cells.value) {
+      cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
+    }
+  }
 }
 
 onBeforeMount(() => {
@@ -315,6 +342,7 @@ onUnmounted(() => {
   <div>table header width {{ width }}</div>
   <div>isResizing {{ isResizing }}</div>
   <div>resizing cell id {{ resizingCellId }}</div>
+  <div>neighbor cell id {{ neighborCellId }}</div>
   <BuiTable>
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
@@ -380,7 +408,7 @@ onUnmounted(() => {
         />
         <div
           v-if="enableColumnResizing"
-          @dblclick="() => {}"
+          @dblclick="resetCells"
           @mousedown="(e: MouseEvent) => handleResizeControlMouseDown(e, header.id)"
           :className="
             cn(
