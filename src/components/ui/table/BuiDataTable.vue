@@ -11,7 +11,6 @@ import type {
   Column,
   ColumnDef,
   ColumnOrderState,
-  ColumnSizingState,
   PaginationState,
   Row,
   RowSelectionState,
@@ -25,16 +24,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import {
-  computed,
-  watchEffect,
-  ref,
-  watch,
-  onMounted,
-  nextTick,
-  onBeforeMount,
-  onUnmounted
-} from 'vue'
+import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -282,10 +272,10 @@ const handleResizeControlMouseDown = (e: MouseEvent, cellId: string) => {
 
   if (cells.value) {
     const resizingCell = cells.value[cellId].cell
-    let neighborCell = resizingCell.nextElementSibling
+    let neighborCell = resizingCell.nextElementSibling as HTMLTableCellElement
 
     if (!neighborCell) {
-      neighborCell = resizingCell.previousElementSibling
+      neighborCell = resizingCell.previousElementSibling as HTMLTableCellElement
     }
 
     neighborCellId.value = neighborCell ? neighborCell.id.split('_')[0] : ''
@@ -313,30 +303,51 @@ const handleResizeControlMouseUp = (e: MouseEvent) => {
   }
 }
 
+const resizeCells = (
+  cell: HTMLTableCellElement,
+  neighborCell: HTMLTableCellElement,
+  e: MouseEvent
+) => {
+  if (!cell || !neighborCell) {
+    resizingCellId.value = ''
+    neighborCellId.value = ''
+
+    return
+  }
+
+  const newCellWidth = parseInt(cell.style.width) + e.movementX
+  const newNeighborCellWidth = parseInt(neighborCell.style.width) - e.movementX
+
+  const direction: 'left' | 'right' = e.movementX < 0 ? 'left' : 'right'
+
+  if (direction === 'left') {
+    if (Math.floor(newCellWidth) <= minCellWidth.value) {
+      const nextCell = cell.previousElementSibling as HTMLTableCellElement
+
+      resizeCells(nextCell, neighborCell, e)
+    }
+  } else {
+    if (Math.floor(newNeighborCellWidth) <= minCellWidth.value) {
+      const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement
+
+      resizeCells(cell, nextNeighborCell, e)
+    }
+  }
+
+  cell.style.width = newCellWidth + 'px'
+  neighborCell.style.width = newNeighborCellWidth + 'px'
+}
+
 const handleCellResize = (e: MouseEvent) => {
   if (!props.enableColumnResizing) return
 
   e.preventDefault()
 
   if (cells.value) {
-    const resizingCell = cells.value[resizingCellId.value].cell
-    const neighborCell = cells.value[neighborCellId.value].cell
+    const resizingCell = cells.value[resizingCellId.value]?.cell
+    const neighborCell = cells.value[neighborCellId.value]?.cell
 
-    if (resizingCell && neighborCell) {
-      const newResizingCellWidth = parseInt(resizingCell.style.width) + e.movementX
-      const newNeighborCellWidth = parseInt(neighborCell.style.width) - e.movementX
-
-      if (e.movementX < 0) {
-        if (Math.floor(newResizingCellWidth) < minCellWidth.value) return
-      }
-
-      if (e.movementX > 0) {
-        if (Math.floor(newNeighborCellWidth) < minCellWidth.value) return
-      }
-
-      resizingCell.style.width = newResizingCellWidth + 'px'
-      neighborCell.style.width = newNeighborCellWidth + 'px'
-    }
+    resizeCells(resizingCell, neighborCell, e)
   }
 }
 
