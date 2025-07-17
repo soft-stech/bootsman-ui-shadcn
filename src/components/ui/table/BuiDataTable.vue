@@ -94,6 +94,7 @@ const pagination = defineModel<PaginationState>('pagination')
 const rowSelection = defineModel<RowSelectionState>('selection')
 const columnVisibility = defineModel<VisibilityState>('columnVisibility')
 const columnOrder = defineModel<ColumnOrderState>('columnOrder')
+const columnSizing = defineModel<Record<string, number>>('columnSizing')
 const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
 )
@@ -244,7 +245,10 @@ const getCells = () => {
         ...acc,
         [cellId]: {
           cell: cell,
-          initialWidth: cell.offsetWidth
+          initialWidth:
+            columnSizing.value && columnSizing.value[cellId]
+              ? columnSizing.value[cellId]
+              : cell.offsetWidth
         }
       }
     }, {})
@@ -293,13 +297,19 @@ const handleResizeControlMouseUp = (e: MouseEvent) => {
   document.removeEventListener('mousemove', handleCellResize)
 
   if (cells.value) {
+    const updatedColumnSizingValue: Record<string, number> = {}
+
     for (let cell in cells.value) {
       const newWidth =
         cells.value[cell].cell.offsetWidth < minCellWidth.value
           ? minCellWidth.value
           : cells.value[cell].cell.offsetWidth
+
       cells.value[cell].cell.style.width = newWidth + 'px'
+      updatedColumnSizingValue[cell] = newWidth
     }
+
+    columnSizing.value = updatedColumnSizingValue
   }
 }
 

@@ -107,7 +107,7 @@ function updateSelection(val: RowSelectionState) {
 }
 
 const columnVisibility = ref<VisibilityState>({ hiddenColumn: false })
-const columnSizing = ref<Record<string, number>>({ title: 300 })
+const columnSizing = ref<Record<string, number>>({ title: 350 })
 const columnOrder = ref<ColumnOrderState>()
 
 type GroupBy = 'none' | 'status' | 'priority'
@@ -190,6 +190,7 @@ function groupName(group: string | number) {
         v-model:sorting="sorting"
         v-model:pagination="pagination"
         v-model:column-visibility="columnVisibility"
+        v-model:column-sizing="columnSizing"
         v-model:column-order="columnOrder"
         @update:selection="updateSelection"
         :total-items="totalItems"
