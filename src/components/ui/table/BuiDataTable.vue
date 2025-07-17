@@ -24,7 +24,16 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
+import {
+  computed,
+  watchEffect,
+  ref,
+  watch,
+  onMounted,
+  onBeforeMount,
+  onUnmounted,
+  nextTick
+} from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -234,6 +243,21 @@ watch(columnsListIds, () => {
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const { height, width } = useElementSize(tableHeaderRef)
 
+const setInititalCellWidths = () => {
+  if (tableHeaderRef.value && tableHeaderRef.value.headRef) {
+    const headerCells = [...tableHeaderRef.value.headRef.querySelectorAll('th')]
+
+    //установить заданные как модель изначальные размеры
+    headerCells.forEach((cell) => {
+      const cellId = cell.id.split('_')[0]
+
+      if (columnSizing.value && columnSizing.value[cellId]) {
+        cell.style.width = columnSizing.value[cellId] + 'px'
+      }
+    })
+  }
+}
+
 const getCells = () => {
   if (tableHeaderRef.value && tableHeaderRef.value.headRef) {
     const headerCells = [...tableHeaderRef.value.headRef.querySelectorAll('th')]
@@ -245,10 +269,7 @@ const getCells = () => {
         ...acc,
         [cellId]: {
           cell: cell,
-          initialWidth:
-            columnSizing.value && columnSizing.value[cellId]
-              ? columnSizing.value[cellId]
-              : cell.offsetWidth
+          initialWidth: cell.offsetWidth
         }
       }
     }, {})
@@ -300,18 +321,22 @@ const handleResizeControlMouseUp = (e: MouseEvent) => {
     const updatedColumnSizingValue: Record<string, number> = {}
 
     for (let cell in cells.value) {
-      const newWidth =
-        cells.value[cell].cell.offsetWidth < minCellWidth.value
+      const currentCell = cells.value[cell]
+      const newWidth = !currentCell.cell.hasAttribute('can-resize')
+        ? currentCell.initialWidth
+        : Math.floor(currentCell.cell.offsetWidth) <= minCellWidth.value
           ? minCellWidth.value
-          : cells.value[cell].cell.offsetWidth
+          : currentCell.cell.offsetWidth
 
-      cells.value[cell].cell.style.width = newWidth + 'px'
+      currentCell.cell.style.width = newWidth + 'px'
       updatedColumnSizingValue[cell] = newWidth
     }
 
     columnSizing.value = updatedColumnSizingValue
   }
 }
+
+const isLastCellOnTheRight = (cell: HTMLTableCellElement) => !cell.nextElementSibling
 
 const resizeCells = (
   cell: HTMLTableCellElement,
@@ -325,27 +350,35 @@ const resizeCells = (
     return
   }
 
+  const direction: 'left' | 'right' = e.movementX < 0 ? 'left' : 'right'
+
   const newCellWidth = parseInt(cell.style.width) + e.movementX
   const newNeighborCellWidth = parseInt(neighborCell.style.width) - e.movementX
 
-  const direction: 'left' | 'right' = e.movementX < 0 ? 'left' : 'right'
-
   if (direction === 'left') {
-    if (Math.floor(newCellWidth) <= minCellWidth.value) {
+    if (Math.floor(newCellWidth) <= minCellWidth.value || !cell.hasAttribute('can-resize')) {
       const nextCell = cell.previousElementSibling as HTMLTableCellElement
 
       resizeCells(nextCell, neighborCell, e)
+    } else {
+      cell.style.width = Math.floor(newCellWidth) + 'px'
+      neighborCell.style.width = Math.floor(newNeighborCellWidth) + 'px'
     }
   } else {
-    if (Math.floor(newNeighborCellWidth) <= minCellWidth.value) {
+    if (
+      Math.floor(newNeighborCellWidth) <= minCellWidth.value ||
+      !neighborCell.hasAttribute('can-resize') ||
+      (isLastCellOnTheRight(neighborCell) &&
+        Math.floor(newNeighborCellWidth) <= minCellWidth.value + 56)
+    ) {
       const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement
 
       resizeCells(cell, nextNeighborCell, e)
+    } else {
+      cell.style.width = newCellWidth + 'px'
+      neighborCell.style.width = newNeighborCellWidth + 'px'
     }
   }
-
-  cell.style.width = newCellWidth + 'px'
-  neighborCell.style.width = newNeighborCellWidth + 'px'
 }
 
 const handleCellResize = (e: MouseEvent) => {
@@ -374,6 +407,8 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
+  setInititalCellWidths()
+
   cells.value = getCells()
 
   if (cells.value) {
@@ -394,10 +429,6 @@ onUnmounted(() => {
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <div>table header width {{ width }}</div>
-  <div>isResizing {{ isResizing }}</div>
-  <div>resizing cell id {{ resizingCellId }}</div>
-  <div>neighbor cell id {{ neighborCellId }}</div>
   <BuiTable>
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
@@ -455,6 +486,7 @@ onUnmounted(() => {
           ...getPinningStyle(header.column)
         }"
         :freeze-header="props.freezeHeader"
+        :can-resize="header.column.getCanResize() ? true : undefined"
       >
         <FlexRender
           v-if="!header.isPlaceholder"
@@ -462,7 +494,9 @@ onUnmounted(() => {
           :props="header.getContext()"
         />
         <div
-          v-if="enableColumnResizing && index < tableHeaders.length - 1"
+          v-if="
+            enableColumnResizing && index < tableHeaders.length - 1 && header.column.getCanResize()
+          "
           @dblclick="resetCells"
           @mousedown="(e: MouseEvent) => handleResizeControlMouseDown(e, header.id)"
           :className="

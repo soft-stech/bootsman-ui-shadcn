@@ -68,7 +68,8 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'title',
-    header: 'Title'
+    header: 'Title',
+    enableResizing: false
   },
   {
     accessorKey: 'status',
@@ -107,7 +108,7 @@ function updateSelection(val: RowSelectionState) {
 }
 
 const columnVisibility = ref<VisibilityState>({ hiddenColumn: false })
-const columnSizing = ref<Record<string, number>>({ title: 350 })
+const columnSizing = ref<Record<string, number>>({ title: 350, status: 200 })
 const columnOrder = ref<ColumnOrderState>()
 
 type GroupBy = 'none' | 'status' | 'priority'
