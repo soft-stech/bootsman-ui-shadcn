@@ -241,7 +241,7 @@ watch(columnsListIds, () => {
 })
 
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
-const { height, width } = useElementSize(tableHeaderRef)
+const { height } = useElementSize(tableHeaderRef)
 
 const setInititalCellWidths = () => {
   if (tableHeaderRef.value && tableHeaderRef.value.headRef) {
@@ -336,7 +336,17 @@ const handleResizeControlMouseUp = (e: MouseEvent) => {
   }
 }
 
-const isLastCellOnTheRight = (cell: HTMLTableCellElement) => !cell.nextElementSibling
+const getLastCellOnTheRightExtraSpace = (cell: HTMLTableCellElement) => {
+  if (!cell.nextElementSibling) {
+    const cellWrapperElement = cell.querySelector('.header-cell_wrapper') as HTMLElement | undefined
+
+    if (cellWrapperElement) {
+      return parseInt(window.getComputedStyle(cellWrapperElement).paddingRight)
+    }
+  }
+
+  return 0
+}
 
 const resizeCells = (
   cell: HTMLTableCellElement,
@@ -366,10 +376,9 @@ const resizeCells = (
     }
   } else {
     if (
-      Math.floor(newNeighborCellWidth) <= minCellWidth.value ||
-      !neighborCell.hasAttribute('can-resize') ||
-      (isLastCellOnTheRight(neighborCell) &&
-        Math.floor(newNeighborCellWidth) <= minCellWidth.value + 56)
+      Math.floor(newNeighborCellWidth) <=
+        minCellWidth.value + getLastCellOnTheRightExtraSpace(neighborCell) ||
+      !neighborCell.hasAttribute('can-resize')
     ) {
       const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement
 
