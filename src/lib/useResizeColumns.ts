@@ -100,9 +100,7 @@ export function useResizeColumns() {
   }
   const getLastCellOnTheRightExtraSpace = (cell: HTMLTableCellElement) => {
     if (!cell.nextElementSibling) {
-      const cellWrapperElement = cell.querySelector('.header-cell_wrapper') as
-        | HTMLElement
-        | undefined
+      const cellWrapperElement = cell.querySelector('.header-cell_wrapper') as HTMLElement | null
 
       if (cellWrapperElement) {
         return parseInt(window.getComputedStyle(cellWrapperElement).paddingRight)
@@ -113,8 +111,8 @@ export function useResizeColumns() {
   }
 
   const resizeCells = (
-    cell: HTMLTableCellElement,
-    neighborCell: HTMLTableCellElement,
+    cell: HTMLTableCellElement | null,
+    neighborCell: HTMLTableCellElement | null,
     e: MouseEvent
   ) => {
     if (!cell || !neighborCell) {
@@ -124,14 +122,14 @@ export function useResizeColumns() {
       return
     }
 
-    const direction: 'left' | 'right' = e.movementX < 0 ? 'left' : 'right'
-
-    const newCellWidth = Math.floor(parseInt(cell.style.width)) + e.movementX
-    const newNeighborCellWidth = Math.floor(parseInt(neighborCell.style.width)) - e.movementX
+    const movementX = e.movementX
+    const direction: 'left' | 'right' = movementX < 0 ? 'left' : 'right'
+    const newCellWidth = Math.floor(parseInt(cell.style.width)) + movementX
+    const newNeighborCellWidth = Math.floor(parseInt(neighborCell.style.width)) - movementX
 
     if (direction === 'left') {
       if (newCellWidth <= minCellWidth.value || !cell.hasAttribute('can-resize')) {
-        const nextCell = cell.previousElementSibling as HTMLTableCellElement
+        const nextCell = cell.previousElementSibling as HTMLTableCellElement | null
 
         resizeCells(nextCell, neighborCell, e)
       } else {
@@ -144,7 +142,7 @@ export function useResizeColumns() {
           minCellWidth.value + getLastCellOnTheRightExtraSpace(neighborCell) ||
         !neighborCell.hasAttribute('can-resize')
       ) {
-        const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement
+        const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement | null
 
         resizeCells(cell, nextNeighborCell, e)
       } else {
@@ -190,10 +188,8 @@ export function useResizeColumns() {
     calculatedColumnSizing,
     isResizing,
     resizingCellId,
-    neighborCellId,
     handleResizeControlMouseDown,
     handleResizeControlMouseUp,
-    handleCellResize,
     resetCells,
     setInititalColumnWidths,
     setProvidedCellWidths

@@ -24,16 +24,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import {
-  computed,
-  watchEffect,
-  ref,
-  watch,
-  onMounted,
-  onBeforeMount,
-  onUnmounted,
-  nextTick
-} from 'vue'
+import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
