@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils'
+import { ref } from 'vue'
+
+const headRef = ref<HTMLElement | null>(null)
+
+defineExpose({ headRef })
 
 const props = defineProps<{
   class?: string
@@ -9,6 +14,7 @@ const props = defineProps<{
 
 <template>
   <thead
+    ref="headRef"
     :class="
       cn(
         '[&_tr]:border-border/[0.16]',

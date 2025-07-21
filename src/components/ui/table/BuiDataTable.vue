@@ -11,7 +11,6 @@ import type {
   Column,
   ColumnDef,
   ColumnOrderState,
-  ColumnSizingState,
   PaginationState,
   Row,
   RowSelectionState,
@@ -25,7 +24,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch } from 'vue'
+import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -48,7 +47,9 @@ import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/u
 import { BuiScrollArea } from '@/components/ui/scroll-area'
 import { BuiButton } from '@/components/ui/button'
 import { Settings2Icon } from 'lucide-vue-next'
-import { useElementSize } from '@vueuse/core'
+import { useElementSize, useEventListener } from '@vueuse/core'
+import { useResizeColumns } from '@/lib/useResizeColumns'
+import { isEqual } from 'lodash-es'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 
@@ -67,6 +68,7 @@ const props = withDefaults(
     renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
     freezeHeader?: boolean
     enableColumnListControl?: boolean
+    enableColumnResizing?: boolean
     columnSearchPlaceholder?: string
     columnSearchNotFound?: string
     columnResetVisibility?: string
@@ -84,7 +86,8 @@ const props = withDefaults(
     totalItems: 0,
     columnSearchPlaceholder: 'Column name',
     columnSearchNotFound: 'Not found',
-    columnResetVisibility: 'Reset column visibility'
+    columnResetVisibility: 'Reset column visibility',
+    enableColumnResizing: true
   }
 )
 
@@ -92,8 +95,8 @@ const sorting = defineModel<SortingState>('sorting')
 const pagination = defineModel<PaginationState>('pagination')
 const rowSelection = defineModel<RowSelectionState>('selection')
 const columnVisibility = defineModel<VisibilityState>('columnVisibility')
-const columnSizing = defineModel<ColumnSizingState>('columnSizing')
 const columnOrder = defineModel<ColumnOrderState>('columnOrder')
+const columnSizing = defineModel<Record<string, number>>('columnSizing')
 const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
 )
@@ -128,18 +131,12 @@ const table = useVueTable({
   onColumnVisibilityChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnVisibility)
   },
-  onColumnSizingChange: (updaterOrValue) => {
-    valueUpdater(updaterOrValue, columnSizing)
-  },
   onColumnOrderChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnOrder)
   },
   autoResetPageIndex: false,
   manualPagination: props.manualPagination, // set to false to enable client-side pagination
   manualSorting: props.manualSorting,
-  enableColumnResizing: true,
-  columnResizeMode: 'onChange',
-  columnResizeDirection: 'ltr',
   state: {
     get sorting() {
       return sorting.value
@@ -152,9 +149,6 @@ const table = useVueTable({
     },
     get columnVisibility() {
       return columnVisibility.value
-    },
-    get columnSizing() {
-      return columnSizing.value
     },
     get columnOrder() {
       return columnOrder.value
@@ -241,6 +235,39 @@ watch(columnsListIds, () => {
 
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
+
+const {
+  tableHeaderElement,
+  calculatedColumnSizing,
+  isResizing,
+  resizingCellId,
+  resetCells,
+  handleResizeControlMouseDown,
+  handleResizeControlMouseUp,
+  setInitialColumnWidths,
+  setProvidedCellWidths
+} = useResizeColumns()
+
+onBeforeMount(() => {
+  calculatedColumnSizing.value = columnSizing.value
+})
+
+onMounted(() => {
+  if (tableHeaderRef.value) {
+    tableHeaderElement.value = tableHeaderRef.value
+
+    setProvidedCellWidths(columnSizing.value)
+    setInitialColumnWidths()
+  }
+})
+
+watchEffect(() => {
+  if (!isEqual(calculatedColumnSizing.value, columnSizing.value)) {
+    columnSizing.value = calculatedColumnSizing.value
+  }
+})
+
+useEventListener(document, 'mouseup', handleResizeControlMouseUp)
 </script>
 
 <template>
@@ -272,7 +299,9 @@ const { height } = useElementSize(tableHeaderRef)
             <BuiCommandInput
               :placeholder="columnSearchPlaceholder"
               v-model="searchColumn"
-              @input="(event) => (searchColumn = event.target.value)"
+              @input="
+                (event: InputEvent) => (searchColumn = (event.target as HTMLInputElement)?.value)
+              "
             />
             <BuiCommandList>
               <BuiScrollArea class="h-[300px]">
@@ -295,10 +324,14 @@ const { height } = useElementSize(tableHeaderRef)
     </template>
     <BuiTableHeader v-if="tableHeaders" :freeze-header="props.freezeHeader" ref="tableHeaderRef">
       <BuiTableHead
-        v-for="header in tableHeaders"
+        v-for="(header, index) in tableHeaders"
         :key="header.id"
-        :style="{ ...getPinningStyle(header.column), width: header.getSize() + 'px' }"
+        :id="`${header.id}_cell`"
+        :style="{
+          ...getPinningStyle(header.column)
+        }"
         :freeze-header="props.freezeHeader"
+        :can-resize="header.column.getCanResize() ? true : undefined"
       >
         <FlexRender
           v-if="!header.isPlaceholder"
@@ -306,12 +339,15 @@ const { height } = useElementSize(tableHeaderRef)
           :props="header.getContext()"
         />
         <div
-          @dblclick="() => header.column.resetSize()"
-          @mousedown="header.getResizeHandler()?.($event)"
+          v-if="
+            enableColumnResizing && index < tableHeaders.length - 1 && header.column.getCanResize()
+          "
+          @dblclick="resetCells"
+          @mousedown="() => handleResizeControlMouseDown(header.id, props.enableColumnResizing)"
           :className="
             cn(
               'absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
-              header.column.getIsResizing() ? 'bg-primary opacity-50' : ''
+              isResizing && resizingCellId === header.id ? 'bg-primary opacity-50' : ''
             )
           "
         />
