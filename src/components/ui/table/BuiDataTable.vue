@@ -47,7 +47,7 @@ import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/u
 import { BuiScrollArea } from '@/components/ui/scroll-area'
 import { BuiButton } from '@/components/ui/button'
 import { Settings2Icon } from 'lucide-vue-next'
-import { useElementSize } from '@vueuse/core'
+import { useElementSize, useEventListener } from '@vueuse/core'
 import { useResizeColumns } from '@/lib/useResizeColumns'
 import { isEqual } from 'lodash-es'
 
@@ -244,12 +244,11 @@ const {
   resetCells,
   handleResizeControlMouseDown,
   handleResizeControlMouseUp,
-  setInititalColumnWidths,
+  setInitialColumnWidths,
   setProvidedCellWidths
 } = useResizeColumns()
 
 onBeforeMount(() => {
-  document.addEventListener('mouseup', handleResizeControlMouseUp)
   calculatedColumnSizing.value = columnSizing.value
 })
 
@@ -258,12 +257,8 @@ onMounted(() => {
     tableHeaderElement.value = tableHeaderRef.value
 
     setProvidedCellWidths(columnSizing.value)
-    setInititalColumnWidths()
+    setInitialColumnWidths()
   }
-})
-
-onUnmounted(() => {
-  document.removeEventListener('mouseup', handleResizeControlMouseUp)
 })
 
 watchEffect(() => {
@@ -271,6 +266,8 @@ watchEffect(() => {
     columnSizing.value = calculatedColumnSizing.value
   }
 })
+
+useEventListener(document, 'mouseup', handleResizeControlMouseUp)
 </script>
 
 <template>

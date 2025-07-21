@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import BuiTableHeader from '@/components/ui/table/BuiTableHeader.vue'
+import { useEventListener } from '@vueuse/core'
 
 export function useResizeColumns() {
   const isResizing = ref<boolean>(false)
@@ -14,6 +15,7 @@ export function useResizeColumns() {
   const minCellWidth = ref<number>(90)
   const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
+  const unregisterMouseMove = ref<Function | undefined>(undefined)
 
   const setProvidedCellWidths = (columnSizing: Record<string, number> | undefined) => {
     if (tableHeaderElement.value && tableHeaderElement.value.headRef) {
@@ -68,7 +70,7 @@ export function useResizeColumns() {
 
       neighborCellId.value = neighborCell ? neighborCell.id.split('_')[0] : ''
 
-      document.addEventListener('mousemove', handleCellResize)
+      unregisterMouseMove.value = useEventListener(document, 'mousemove', handleCellResize)
     }
   }
 
@@ -78,7 +80,10 @@ export function useResizeColumns() {
     isResizing.value = false
     resizingCellId.value = ''
     neighborCellId.value = ''
-    document.removeEventListener('mousemove', handleCellResize)
+
+    if (unregisterMouseMove.value) {
+      unregisterMouseMove.value()
+    }
 
     if (cells.value) {
       const updatedColumnSizingValue: Record<string, number> = {}
@@ -171,7 +176,7 @@ export function useResizeColumns() {
     }
   }
 
-  const setInititalColumnWidths = () => {
+  const setInitialColumnWidths = () => {
     cells.value = getCells()
 
     if (cells.value) {
@@ -191,7 +196,7 @@ export function useResizeColumns() {
     handleResizeControlMouseDown,
     handleResizeControlMouseUp,
     resetCells,
-    setInititalColumnWidths,
+    setInitialColumnWidths,
     setProvidedCellWidths
   }
 }
