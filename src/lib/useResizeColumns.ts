@@ -12,7 +12,7 @@ export function useResizeColumns() {
     | undefined
   >(undefined)
   const minCellWidth = ref<number>(90)
-  const calculatedColumnSizing = ref<Record<string, number>>({})
+  const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 
   const setProvidedCellWidths = (columnSizing: Record<string, number> | undefined) => {

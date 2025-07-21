@@ -58,6 +58,7 @@ import { BuiButton } from '@/components/ui/button'
 import { Settings2Icon } from 'lucide-vue-next'
 import { useElementSize } from '@vueuse/core'
 import { useResizeColumns } from '@/lib/useResizeColumns'
+import { isEqual } from 'lodash-es'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 
@@ -258,6 +259,7 @@ const {
 
 onBeforeMount(() => {
   document.addEventListener('mouseup', handleResizeControlMouseUp)
+  calculatedColumnSizing.value = columnSizing.value
 })
 
 onMounted(() => {
@@ -274,7 +276,7 @@ onUnmounted(() => {
 })
 
 watchEffect(() => {
-  if (calculatedColumnSizing.value) {
+  if (!isEqual(calculatedColumnSizing.value, columnSizing.value)) {
     columnSizing.value = calculatedColumnSizing.value
   }
 })
