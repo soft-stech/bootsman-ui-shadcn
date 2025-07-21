@@ -57,6 +57,7 @@ import { BuiScrollArea } from '@/components/ui/scroll-area'
 import { BuiButton } from '@/components/ui/button'
 import { Settings2Icon } from 'lucide-vue-next'
 import { useElementSize } from '@vueuse/core'
+import { useResizeColumns } from '@/lib/useResizeColumns'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 
@@ -243,194 +244,39 @@ watch(columnsListIds, () => {
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
 
-const setInititalCellWidths = () => {
-  if (tableHeaderRef.value && tableHeaderRef.value.headRef) {
-    const headerCells = [...tableHeaderRef.value.headRef.querySelectorAll('th')]
-
-    //установить заданные как модель изначальные размеры
-    headerCells.forEach((cell) => {
-      const cellId = cell.id.split('_')[0]
-
-      if (columnSizing.value && columnSizing.value[cellId]) {
-        cell.style.width = columnSizing.value[cellId] + 'px'
-      }
-    })
-  }
-}
-
-const getCells = () => {
-  if (tableHeaderRef.value && tableHeaderRef.value.headRef) {
-    const headerCells = [...tableHeaderRef.value.headRef.querySelectorAll('th')]
-    const headerCellsWidths: {
-      [key: string]: { cell: HTMLTableCellElement; initialWidth: number }
-    } = headerCells.reduce((acc, cell) => {
-      const cellId = cell.id.split('_')[0]
-      return {
-        ...acc,
-        [cellId]: {
-          cell: cell,
-          initialWidth: cell.offsetWidth
-        }
-      }
-    }, {})
-
-    return headerCellsWidths
-  }
-
-  return undefined
-}
-
-const isResizing = ref<boolean>(false)
-const resizingCellId = ref<string>('')
-const neighborCellId = ref<string>('')
-const cells = ref<
-  | {
-      [key: string]: { cell: HTMLTableCellElement; initialWidth: number }
-    }
-  | undefined
->(undefined)
-const minCellWidth = ref<number>(90)
-
-const handleResizeControlMouseDown = (e: MouseEvent, cellId: string) => {
-  isResizing.value = true
-  resizingCellId.value = cellId
-
-  if (cells.value) {
-    const resizingCell = cells.value[cellId].cell
-    let neighborCell = resizingCell.nextElementSibling as HTMLTableCellElement
-
-    if (!neighborCell) {
-      neighborCell = resizingCell.previousElementSibling as HTMLTableCellElement
-    }
-
-    neighborCellId.value = neighborCell ? neighborCell.id.split('_')[0] : ''
-
-    document.addEventListener('mousemove', handleCellResize)
-  }
-}
-
-const handleResizeControlMouseUp = (e: MouseEvent) => {
-  if (!isResizing.value) return
-
-  isResizing.value = false
-  resizingCellId.value = ''
-  neighborCellId.value = ''
-  document.removeEventListener('mousemove', handleCellResize)
-
-  if (cells.value) {
-    const updatedColumnSizingValue: Record<string, number> = {}
-
-    for (let cell in cells.value) {
-      const currentCell = cells.value[cell]
-      const newWidth = !currentCell.cell.hasAttribute('can-resize')
-        ? currentCell.initialWidth
-        : Math.floor(currentCell.cell.offsetWidth) <= minCellWidth.value
-          ? minCellWidth.value
-          : currentCell.cell.offsetWidth
-
-      currentCell.cell.style.width = newWidth + 'px'
-      updatedColumnSizingValue[cell] = newWidth
-    }
-
-    columnSizing.value = updatedColumnSizingValue
-  }
-}
-
-const getLastCellOnTheRightExtraSpace = (cell: HTMLTableCellElement) => {
-  if (!cell.nextElementSibling) {
-    const cellWrapperElement = cell.querySelector('.header-cell_wrapper') as HTMLElement | undefined
-
-    if (cellWrapperElement) {
-      return parseInt(window.getComputedStyle(cellWrapperElement).paddingRight)
-    }
-  }
-
-  return 0
-}
-
-const resizeCells = (
-  cell: HTMLTableCellElement,
-  neighborCell: HTMLTableCellElement,
-  e: MouseEvent
-) => {
-  if (!cell || !neighborCell) {
-    resizingCellId.value = ''
-    neighborCellId.value = ''
-
-    return
-  }
-
-  const direction: 'left' | 'right' = e.movementX < 0 ? 'left' : 'right'
-
-  const newCellWidth = parseInt(cell.style.width) + e.movementX
-  const newNeighborCellWidth = parseInt(neighborCell.style.width) - e.movementX
-
-  if (direction === 'left') {
-    if (Math.floor(newCellWidth) <= minCellWidth.value || !cell.hasAttribute('can-resize')) {
-      const nextCell = cell.previousElementSibling as HTMLTableCellElement
-
-      resizeCells(nextCell, neighborCell, e)
-    } else {
-      cell.style.width = Math.floor(newCellWidth) + 'px'
-      neighborCell.style.width = Math.floor(newNeighborCellWidth) + 'px'
-    }
-  } else {
-    if (
-      Math.floor(newNeighborCellWidth) <=
-        minCellWidth.value + getLastCellOnTheRightExtraSpace(neighborCell) ||
-      !neighborCell.hasAttribute('can-resize')
-    ) {
-      const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement
-
-      resizeCells(cell, nextNeighborCell, e)
-    } else {
-      cell.style.width = newCellWidth + 'px'
-      neighborCell.style.width = newNeighborCellWidth + 'px'
-    }
-  }
-}
-
-const handleCellResize = (e: MouseEvent) => {
-  if (!props.enableColumnResizing) return
-
-  e.preventDefault()
-
-  if (cells.value) {
-    const resizingCell = cells.value[resizingCellId.value]?.cell
-    const neighborCell = cells.value[neighborCellId.value]?.cell
-
-    resizeCells(resizingCell, neighborCell, e)
-  }
-}
-
-const resetCells = () => {
-  if (cells.value) {
-    for (let cell in cells.value) {
-      cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
-    }
-  }
-}
+const {
+  tableHeaderElement,
+  calculatedColumnSizing,
+  isResizing,
+  resizingCellId,
+  resetCells,
+  handleResizeControlMouseDown,
+  handleResizeControlMouseUp,
+  setInititalColumnWidths,
+  setProvidedCellWidths
+} = useResizeColumns()
 
 onBeforeMount(() => {
   document.addEventListener('mouseup', handleResizeControlMouseUp)
 })
 
 onMounted(() => {
-  setInititalCellWidths()
+  if (tableHeaderRef.value) {
+    tableHeaderElement.value = tableHeaderRef.value
 
-  cells.value = getCells()
-
-  if (cells.value) {
-    for (let cell in cells.value) {
-      if (!cells.value[cell].cell.style.width) {
-        cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
-      }
-    }
+    setProvidedCellWidths(columnSizing.value)
+    setInititalColumnWidths()
   }
 })
 
 onUnmounted(() => {
   document.removeEventListener('mouseup', handleResizeControlMouseUp)
+})
+
+watchEffect(() => {
+  if (calculatedColumnSizing.value) {
+    columnSizing.value = calculatedColumnSizing.value
+  }
 })
 </script>
 
@@ -507,7 +353,7 @@ onUnmounted(() => {
             enableColumnResizing && index < tableHeaders.length - 1 && header.column.getCanResize()
           "
           @dblclick="resetCells"
-          @mousedown="(e: MouseEvent) => handleResizeControlMouseDown(e, header.id)"
+          @mousedown="() => handleResizeControlMouseDown(header.id, props.enableColumnResizing)"
           :className="
             cn(
               'absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
