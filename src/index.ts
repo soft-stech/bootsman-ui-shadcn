@@ -40,6 +40,7 @@ export * from './components/ui/scroll-area/index'
 export * from './components/ui/collapsible/index'
 export * from './components/ui/auto-form/index'
 export * from './components/ui/sheet/index'
+export * from './components/ui/color-picker/index'
 
 export * from './lib/utils'
 export { default as tailwind } from './tailwind-preset'
