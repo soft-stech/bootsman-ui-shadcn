@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
+import { watchThrottled, watchPausable } from '@vueuse/core'
 import { Primitive } from 'radix-vue'
 import { ColorTranslator } from 'colortranslator'
 import { colorPickerSelectorVariants, colorPickerTrackVariants } from '.'
@@ -19,11 +20,13 @@ const props = withDefaults(
     size?: NonNullable<Parameters<typeof colorPickerSelectorVariants>[0]>['size']
     defaultValue?: string
     format?: 'hex' | 'rgb' | 'hsl' | 'cmyk' | 'lab'
+    throttle?: number
   }>(),
   {
     as: 'div',
     format: 'hex',
-    defaultValue: '#FFFFFF'
+    defaultValue: '#FFFFFF',
+    throttle: 50
   }
 )
 
@@ -119,6 +122,33 @@ const trackThumbStyle = computed(() => ({
   backgroundColor: trackThumbColor.value,
   top: `${trackThumbPosition.value.y}%`
 }))
+
+const { pause: pauseWatchColor, resume: resumeWatchColor } = watchPausable(pickedColor, (hsv) => {
+  selectorThumbPosition.value = {
+    x: hsv.s,
+    y: normalizeBrightness(hsv.v)
+  }
+  trackThumbPosition.value = {
+    x: 0,
+    y: normalizeHue(hsv.h, 'right')
+  }
+})
+
+watchThrottled(
+  [selectorThumbPosition, trackThumbPosition],
+  () => {
+    pauseWatchColor()
+
+    pickedColor.value = {
+      h: normalizeHue(trackThumbPosition.value.y),
+      s: selectorThumbPosition.value.x,
+      v: normalizeBrightness(selectorThumbPosition.value.y)
+    }
+
+    nextTick(resumeWatchColor)
+  },
+  { throttle: () => props.throttle }
+)
 </script>
 <template>
   <Primitive
