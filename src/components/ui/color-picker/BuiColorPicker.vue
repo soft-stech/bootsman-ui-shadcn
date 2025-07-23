@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Primitive } from 'radix-vue'
-import { colorPickerVariants } from '.'
+import { colorPickerSelectorVariants, colorPickerTrackVariants } from '.'
 
 const props = withDefaults(
   defineProps<{
     as?: string
     disabled?: boolean
-    size?: NonNullable<Parameters<typeof colorPickerVariants>[0]>['size']
+    size?: NonNullable<Parameters<typeof colorPickerSelectorVariants>[0]>['size']
   }>(),
   {
     as: 'div'
@@ -26,20 +26,19 @@ const trackThumbRef = ref<HTMLDivElement | null>(null)
     :data-disabled="disabled ? true : undefined"
   >
     <div class="flex gap-4">
-      <div>{{ colorPickerVariants() }}</div>
-      <div ref="selectorRef" class="touch-none rounded-md">
+      <div ref="selectorRef" :class="colorPickerSelectorVariants({ size })">
         <div class="relative h-full w-full rounded-md" data-color-picker-background>
           <div
             ref="selectorThumbRef"
-            class="ring-(--color-white) absolute size-4 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full ring-2 data-[disabled]:cursor-not-allowed"
+            class="absolute size-4 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full ring-2 ring-background data-[disabled]:cursor-not-allowed"
             :data-disabled="disabled ? true : undefined"
           ></div>
         </div>
       </div>
-      <div ref="trackRef" class="relative w-[8px] touch-none rounded-md" data-color-picker-track>
+      <div ref="trackRef" :class="colorPickerTrackVariants({ size })" data-color-picker-track>
         <div
           ref="trackThumbRef"
-          class="ring-(--color-white) absolute size-4 -translate-x-[4px] -translate-y-1/2 transform cursor-pointer rounded-full ring-2 data-[disabled]:cursor-not-allowed rtl:translate-x-[4px]"
+          class="absolute size-4 -translate-x-[4px] -translate-y-1/2 transform cursor-pointer rounded-full ring-2 ring-background data-[disabled]:cursor-not-allowed rtl:translate-x-[4px]"
           :data-disabled="disabled ? true : undefined"
         ></div>
       </div>

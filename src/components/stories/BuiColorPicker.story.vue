@@ -5,7 +5,9 @@ import BuiColorPicker from '@/components/ui/color-picker/BuiColorPicker.vue'
 <template>
   <Story title="BuiColorPicker" autoPropsDisabled :layout="{ type: 'grid', width: '95%' }">
     <Variant key="lg" title="Large">
-      <BuiColorPicker :size="'lg'"></BuiColorPicker>
+      <div class="p-4">
+        <BuiColorPicker :size="'lg'"></BuiColorPicker>
+      </div>
     </Variant>
   </Story>
 </template>
