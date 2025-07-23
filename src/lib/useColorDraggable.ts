@@ -10,13 +10,13 @@ export function useColorDraggable(
 ) {
   const position = ref<{ x: number; y: number }>(initialPosition)
   const pressedDelta = ref<{ x: number; y: number }>()
-  const targetRect = useElementBounding(targetElement)
-  const containerRect = useElementBounding(containerElement)
 
   const handlePointerDown = (event: PointerEvent) => {
     if (toValue(disabled)) return event.preventDefault()
 
     const container = toValue(containerElement)
+    const targetRect = useElementBounding(targetElement)
+    const containerRect = useElementBounding(containerElement)
 
     pressedDelta.value = {
       x:
