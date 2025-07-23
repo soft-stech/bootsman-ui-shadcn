@@ -1,23 +1,124 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Primitive } from 'radix-vue'
+import { ColorTranslator } from 'colortranslator'
 import { colorPickerSelectorVariants, colorPickerTrackVariants } from '.'
+import {
+  type HSVColor,
+  HSLtoHSV,
+  HSVtoHSL,
+  normalizeBrightness,
+  normalizeHue
+} from '@/lib/colorUtils'
+import { useColorDraggable } from '@/lib/useColorDraggable'
 
 const props = withDefaults(
   defineProps<{
     as?: string
     disabled?: boolean
     size?: NonNullable<Parameters<typeof colorPickerSelectorVariants>[0]>['size']
+    defaultValue?: string
+    format?: 'hex' | 'rgb' | 'hsl' | 'cmyk' | 'lab'
   }>(),
   {
-    as: 'div'
+    as: 'div',
+    format: 'hex',
+    defaultValue: '#FFFFFF'
   }
 )
+
+const modelValue = defineModel<string>(undefined)
+
+const pickedColor = computed<HSVColor>({
+  get() {
+    try {
+      const color = new ColorTranslator(modelValue.value || props.defaultValue)
+
+      return HSLtoHSV(color.HSLObject)
+    } catch (_) {
+      return { h: 0, s: 0, v: 100 }
+    }
+  },
+
+  set(value) {
+    const color = new ColorTranslator(HSVtoHSL(value), {
+      labUnit: 'percent',
+      cmykUnit: 'percent',
+      cmykFunction: 'cmyk'
+    })
+
+    switch (props.format) {
+      case 'rgb':
+        modelValue.value = color.RGB
+        break
+      case 'hsl':
+        modelValue.value = color.HSL
+        break
+      case 'cmyk':
+        modelValue.value = color.CMYK
+        break
+      case 'lab':
+        modelValue.value = color.CIELab
+        break
+      case 'hex':
+      default:
+        modelValue.value = color.HEX
+    }
+  }
+})
 
 const selectorRef = ref<HTMLDivElement | null>(null)
 const selectorThumbRef = ref<HTMLDivElement | null>(null)
 const trackRef = ref<HTMLDivElement | null>(null)
 const trackThumbRef = ref<HTMLDivElement | null>(null)
+
+const { position: selectorThumbPosition } = useColorDraggable(
+  selectorThumbRef,
+  selectorRef,
+  'both',
+  {
+    x: pickedColor.value.s,
+    y: normalizeBrightness(pickedColor.value.v)
+  },
+  props.disabled
+)
+
+const { position: trackThumbPosition } = useColorDraggable(
+  trackThumbRef,
+  trackRef,
+  'y',
+  {
+    x: 0,
+    y: normalizeHue(pickedColor.value.h, 'right')
+  },
+  props.disabled
+)
+
+const trackThumbColor = computed(
+  () =>
+    new ColorTranslator(
+      HSVtoHSL({
+        h: normalizeHue(trackThumbPosition.value.y),
+        s: 100,
+        v: 100
+      })
+    ).HEX
+)
+
+const selectorStyle = computed(() => ({
+  backgroundColor: trackThumbColor.value
+}))
+
+const selectorThumbStyle = computed(() => ({
+  backgroundColor: new ColorTranslator(modelValue.value || props.defaultValue).HEX,
+  left: `${selectorThumbPosition.value.x}%`,
+  top: `${selectorThumbPosition.value.y}%`
+}))
+
+const trackThumbStyle = computed(() => ({
+  backgroundColor: trackThumbColor.value,
+  top: `${trackThumbPosition.value.y}%`
+}))
 </script>
 <template>
   <Primitive
@@ -26,11 +127,12 @@ const trackThumbRef = ref<HTMLDivElement | null>(null)
     :data-disabled="disabled ? true : undefined"
   >
     <div class="flex gap-4">
-      <div ref="selectorRef" :class="colorPickerSelectorVariants({ size })">
+      <div ref="selectorRef" :class="colorPickerSelectorVariants({ size })" :style="selectorStyle">
         <div class="relative h-full w-full rounded-md" data-color-picker-background>
           <div
             ref="selectorThumbRef"
             class="absolute size-4 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full ring-2 ring-background data-[disabled]:cursor-not-allowed"
+            :style="selectorThumbStyle"
             :data-disabled="disabled ? true : undefined"
           ></div>
         </div>
@@ -39,6 +141,7 @@ const trackThumbRef = ref<HTMLDivElement | null>(null)
         <div
           ref="trackThumbRef"
           class="absolute size-4 -translate-x-[4px] -translate-y-1/2 transform cursor-pointer rounded-full ring-2 ring-background data-[disabled]:cursor-not-allowed rtl:translate-x-[4px]"
+          :style="trackThumbStyle"
           :data-disabled="disabled ? true : undefined"
         ></div>
       </div>
