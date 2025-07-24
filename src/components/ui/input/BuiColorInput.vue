@@ -23,7 +23,11 @@ const { width } = useElementBounding(paletteBadge)
 const MAGIC_NUMBER = 12 // 8 (right-2) + 4 (just some offset)
 
 const validatedDefaultValue = () => {
-  return props.defaultValue && HEX_REGEXP.test(props.defaultValue) ? props.defaultValue : '#FFFFFF'
+  if (modelValue.value && HEX_REGEXP.test(modelValue.value)) return modelValue.value
+
+  if (props.defaultValue && HEX_REGEXP.test(props.defaultValue)) return props.defaultValue
+
+  return '#FFFFFF'
 }
 
 const writtenColor = ref<string>(validatedDefaultValue().substring(1))
