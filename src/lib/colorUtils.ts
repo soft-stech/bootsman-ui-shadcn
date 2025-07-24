@@ -1,5 +1,8 @@
 import { type HSLObject } from 'colortranslator'
 
+export const HEX_REGEXP = /^#(?:(?:[\da-f]{3}){1,2}|(?:[\da-f]{4}){1,2})$/i
+export const HEX_REGEXP_NO_POUND = /^(?:(?:[\da-f]{3}){1,2}|(?:[\da-f]{4}){1,2})$/i
+
 export type HSVColor = {
   h: number
   s: number

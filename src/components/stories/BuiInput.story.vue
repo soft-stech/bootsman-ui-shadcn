@@ -3,6 +3,7 @@ import BuiInput from '@/components/ui/input/BuiInput.vue'
 import BuiLabel from '@/components/ui/label/BuiLabel.vue'
 import { BuiPasswordInput } from '@/components/ui/input'
 import { BuiBadgedInput } from '@/components/ui/input'
+import { BuiColorInput } from '@/components/ui/input'
 </script>
 
 <template>
@@ -78,6 +79,15 @@ import { BuiBadgedInput } from '@/components/ui/input'
         <div class="grid w-full max-w-sm items-center gap-1.5">
           <BuiLabel for="email">CPU limit</BuiLabel>
           <BuiBadgedInput badge="mCPUs" type="number" placeholder="CPU limit" />
+        </div>
+      </div>
+    </Variant>
+
+    <Variant title="Color picker">
+      <div class="flex items-center space-x-2 p-1">
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <BuiLabel for="colorPicker">Color</BuiLabel>
+          <BuiColorInput id="colorPicker" :defaultValue="'#E05FA3'" />
         </div>
       </div>
     </Variant>
