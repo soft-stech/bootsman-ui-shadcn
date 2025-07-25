@@ -62,7 +62,7 @@ watch(pickedColor, () => {
         />
       </div>
     </BuiPopoverTrigger>
-    <BuiPopoverContent class="w-60">
+    <BuiPopoverContent class="w-fit" align="start">
       <BuiColorPicker v-model="pickedColor" format="hex" />
     </BuiPopoverContent>
   </BuiPopover>
