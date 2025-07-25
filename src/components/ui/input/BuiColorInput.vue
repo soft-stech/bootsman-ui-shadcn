@@ -52,7 +52,10 @@ watch(pickedColor, () => {
   <BuiPopover>
     <BuiPopoverTrigger>
       <div class="nowrap relative flex w-32 flex-row font-medium uppercase text-foreground">
-        <div ref="paletteBadge" class="absolute left-2 top-1.5 flex flex-row items-center gap-1">
+        <div
+          ref="paletteBadge"
+          class="absolute bottom-1.5 left-2 top-1.5 flex flex-row items-center gap-1"
+        >
           <PaletteIcon class="h-4 w-4 shrink-0" />
           <div class="h-4 w-4 rounded" :style="{ backgroundColor: pickedColor }"></div>
           <div class="font-bold text-foreground/[.56]">#</div>
