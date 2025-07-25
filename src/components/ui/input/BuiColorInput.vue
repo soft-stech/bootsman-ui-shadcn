@@ -10,9 +10,11 @@ const props = withDefaults(
   defineProps<{
     id?: string
     defaultValue?: string
+    disabled?: boolean
   }>(),
   {
-    defaultValue: '#FFFFFF'
+    defaultValue: '#FFFFFF',
+    disabled: false
   }
 )
 
@@ -59,11 +61,17 @@ watch(pickedColor, () => {
           v-model="writtenColor"
           :id="id"
           :style="{ paddingLeft: width + MAGIC_NUMBER + 'px' }"
+          :disabled="disabled"
         />
       </div>
     </BuiPopoverTrigger>
     <BuiPopoverContent class="w-fit" align="start">
-      <BuiColorPicker v-model="pickedColor" format="hex" />
+      <BuiColorPicker
+        v-model="pickedColor"
+        format="hex"
+        :disabled="disabled"
+        :ui="{ selectorClass: 'ring-popover', trackClass: 'ring-popover' }"
+      />
     </BuiPopoverContent>
   </BuiPopover>
 </template>
