@@ -5,12 +5,17 @@ import { ref, watch } from 'vue'
 import { Palette as PaletteIcon } from 'lucide-vue-next'
 import BuiColorPicker from '../color-picker/BuiColorPicker.vue'
 import { HEX_REGEXP, HEX_REGEXP_NO_POUND } from '@/lib/colorUtils'
+import { cn } from '@/lib/utils'
 
 const props = withDefaults(
   defineProps<{
     id?: string
     defaultValue?: string
     disabled?: boolean
+    ui?: {
+      badgeClass?: string
+      inputClass?: string
+    }
   }>(),
   {
     defaultValue: '#FFFFFF',
@@ -54,7 +59,7 @@ watch(pickedColor, () => {
       <div class="nowrap relative flex w-32 flex-row font-medium uppercase text-foreground">
         <div
           ref="paletteBadge"
-          class="absolute bottom-1.5 left-2 top-1.5 flex flex-row items-center gap-1"
+          :class="cn('absolute left-2 top-1.5 flex flex-row items-center gap-1', ui?.badgeClass)"
         >
           <PaletteIcon class="h-4 w-4 shrink-0" />
           <div class="h-4 w-4 rounded" :style="{ backgroundColor: pickedColor }"></div>
@@ -65,6 +70,7 @@ watch(pickedColor, () => {
           :id="id"
           :style="{ paddingLeft: width + MAGIC_NUMBER + 'px' }"
           :disabled="disabled"
+          :class="ui?.inputClass"
         />
       </div>
     </BuiPopoverTrigger>
