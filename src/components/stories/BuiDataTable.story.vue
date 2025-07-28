@@ -31,7 +31,8 @@ const taskSchema = z.object({
   status: z.string().nullable().optional(),
   label: z.string(),
   priority: z.string(),
-  errorMessage: z.string().optional()
+  errorMessage: z.string().optional(),
+  age: z.string().optional()
 })
 type Task = z.infer<typeof taskSchema>
 
@@ -68,8 +69,7 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'title',
-    header: 'Title',
-    enableResizing: false
+    header: 'Title'
   },
   {
     accessorKey: 'status',
@@ -79,6 +79,10 @@ const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'priority',
     header: ({ column }) => tableColumnSortCommon(column, 'Priorities')
+  },
+  {
+    accessorKey: 'age',
+    header: ({ column }) => tableColumnSortCommon(column, 'Age')
   },
   { id: 'hiddenColumn', header: 'Hidden Column', cell: 'secret info' }
 ]
@@ -108,7 +112,7 @@ function updateSelection(val: RowSelectionState) {
 }
 
 const columnVisibility = ref<VisibilityState>({ hiddenColumn: false })
-const columnSizing = ref<Record<string, number>>({ title: 350, status: 200 })
+const columnSizing = ref<Record<string, number>>({ title: 450 })
 const columnOrder = ref<ColumnOrderState>()
 
 type GroupBy = 'none' | 'status' | 'priority'

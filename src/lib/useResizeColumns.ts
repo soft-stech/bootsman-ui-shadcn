@@ -3,15 +3,13 @@ import BuiTableHeader from '@/components/ui/table/BuiTableHeader.vue'
 import { useEventListener } from '@vueuse/core'
 
 export function useResizeColumns() {
+  type CELL = {
+    [key: string]: { cell: HTMLTableCellElement; initialWidth: number; minWidth: number }
+  }
   const isResizing = ref<boolean>(false)
   const resizingCellId = ref<string>('')
   const neighborCellId = ref<string>('')
-  const cells = ref<
-    | {
-        [key: string]: { cell: HTMLTableCellElement; initialWidth: number }
-      }
-    | undefined
-  >(undefined)
+  const cells = ref<CELL | undefined>(undefined)
   const minCellWidth = ref<number>(90)
   const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
@@ -23,7 +21,7 @@ export function useResizeColumns() {
 
       //установить заданные как модель изначальные размеры
       headerCells.forEach((cell) => {
-        const cellId = cell.id.split('_')[0]
+        const cellId = getCellId(cell)
 
         if (columnSizing && columnSizing[cellId]) {
           cell.style.width = columnSizing[cellId] + 'px'
@@ -35,15 +33,17 @@ export function useResizeColumns() {
   const getCells = () => {
     if (tableHeaderElement.value && tableHeaderElement.value.headRef) {
       const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
-      const headerCellsWidths: {
-        [key: string]: { cell: HTMLTableCellElement; initialWidth: number }
-      } = headerCells.reduce((acc, cell) => {
-        const cellId = cell.id.split('_')[0]
+      const headerCellsWidths: CELL = headerCells.reduce((acc, cell) => {
+        const cellId = getCellId(cell)
         return {
           ...acc,
           [cellId]: {
             cell: cell,
-            initialWidth: cell.offsetWidth
+            initialWidth: cell.offsetWidth,
+            minWidth: Math.min(
+              minCellWidth.value,
+              cell.offsetWidth - getLastCellOnTheRightExtraSpace(cell)
+            )
           }
         }
       }, {})
@@ -115,6 +115,10 @@ export function useResizeColumns() {
     return 0
   }
 
+  const getCellId = (cell: HTMLTableCellElement) => {
+    return cell.id.split('_')[0]
+  }
+
   const resizeCells = (
     cell: HTMLTableCellElement | null,
     neighborCell: HTMLTableCellElement | null,
@@ -133,7 +137,12 @@ export function useResizeColumns() {
     const newNeighborCellWidth = Math.floor(parseInt(neighborCell.style.width)) - movementX
 
     if (direction === 'left') {
-      if (newCellWidth <= minCellWidth.value || !cell.hasAttribute('can-resize')) {
+      const min =
+        cells.value && cells.value[getCellId(cell)]
+          ? cells.value[getCellId(cell)].minWidth
+          : minCellWidth.value
+
+      if (newCellWidth <= min || !cell.hasAttribute('can-resize')) {
         const nextCell = cell.previousElementSibling as HTMLTableCellElement | null
 
         resizeCells(nextCell, neighborCell, e)
@@ -142,9 +151,13 @@ export function useResizeColumns() {
         neighborCell.style.width = newNeighborCellWidth + 'px'
       }
     } else {
+      const min =
+        cells.value && cells.value[getCellId(neighborCell)]
+          ? cells.value[getCellId(neighborCell)].minWidth
+          : minCellWidth.value
+
       if (
-        newNeighborCellWidth <=
-          minCellWidth.value + getLastCellOnTheRightExtraSpace(neighborCell) ||
+        newNeighborCellWidth <= min + getLastCellOnTheRightExtraSpace(neighborCell) ||
         !neighborCell.hasAttribute('can-resize')
       ) {
         const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement | null
@@ -189,6 +202,7 @@ export function useResizeColumns() {
   }
 
   return {
+    cells,
     tableHeaderElement,
     calculatedColumnSizing,
     isResizing,
