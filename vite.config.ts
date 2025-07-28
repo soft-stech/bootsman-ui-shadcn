@@ -18,7 +18,12 @@ export default defineConfig(({ mode }) => {
       '@vueuse/core'
     ],
     output: {
-      assetFileNames: '[name][extname]',
+      assetFileNames: (assetInfo) => {
+        if (assetInfo.name?.endsWith('.css')) {
+          return 'style.css'
+        }
+        return '[name][extname]'
+      },
       entryFileNames: '[name].js',
       globals: {
         vue: 'Vue'
@@ -30,21 +35,13 @@ export default defineConfig(({ mode }) => {
     // @ts-ignore
     rollupOptions.input = Object.fromEntries(
       glob
-        .sync(
-          [
-            'src/**/*.{ts,vue,js}',
-            'src/lib/**/*.{ts,vue,js}',
-            'src/index.ts',
-            'src/assets/main.css'
-          ],
-          {
-            ignore: [
-              'src/components/stories/**/*',
-              'src/components/__tests__/**/*',
-              'src/histoire-setup.ts'
-            ]
-          }
-        )
+        .sync(['src/**/*.{ts,vue,js}', 'src/lib/**/*.{ts,vue,js}', 'src/index.ts'], {
+          ignore: [
+            'src/components/stories/**/*',
+            'src/components/__tests__/**/*',
+            'src/histoire-setup.ts'
+          ]
+        })
         .map((file) => [
           relative('src', file.slice(0, file.length - extname(file).length)),
           fileURLToPath(new URL(file, import.meta.url))
@@ -69,7 +66,6 @@ export default defineConfig(({ mode }) => {
 
     build: {
       copyPublicDir: false,
-      cssCodeSplit: true,
       target: 'esnext',
       lib: {
         entry: resolve(__dirname, 'src/index.ts'),
