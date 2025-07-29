@@ -183,9 +183,16 @@ export function useResizeColumns() {
 
   const resetCells = () => {
     if (cells.value) {
+      const updatedColumnSizingValue: Record<string, number> = {}
+
       for (let cell in cells.value) {
-        cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
+        const inititalWidth = cells.value[cell].initialWidth
+
+        cells.value[cell].cell.style.width = inititalWidth + 'px'
+        updatedColumnSizingValue[cell] = inititalWidth
       }
+
+      calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
 
