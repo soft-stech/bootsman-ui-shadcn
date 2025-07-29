@@ -24,7 +24,16 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
+import {
+  computed,
+  watchEffect,
+  ref,
+  watch,
+  onMounted,
+  onBeforeMount,
+  onUnmounted,
+  nextTick
+} from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -128,8 +137,12 @@ const table = useVueTable({
   onRowSelectionChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, rowSelection)
   },
-  onColumnVisibilityChange: (updaterOrValue) => {
+  onColumnVisibilityChange: async (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnVisibility)
+
+    await nextTick()
+
+    setInitialColumnWidths()
   },
   onColumnOrderChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnOrder)

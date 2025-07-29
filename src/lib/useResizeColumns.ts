@@ -197,11 +197,17 @@ export function useResizeColumns() {
     cells.value = getCells()
 
     if (cells.value) {
+      const updatedColumnSizingValue: Record<string, number> = {}
+
       for (let cell in cells.value) {
         if (!cells.value[cell].cell.style.width) {
           cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
         }
+
+        updatedColumnSizingValue[cell] = cells.value[cell].cell.offsetWidth
       }
+
+      calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
 
