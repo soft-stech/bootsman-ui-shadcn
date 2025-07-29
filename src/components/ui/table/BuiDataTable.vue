@@ -237,7 +237,6 @@ const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
 
 const {
-  cells,
   tableHeaderElement,
   calculatedColumnSizing,
   isResizing,

@@ -10,7 +10,9 @@ export function useResizeColumns() {
   const resizingCellId = ref<string>('')
   const neighborCellId = ref<string>('')
   const cells = ref<CELL | undefined>(undefined)
-  const minCellWidth = ref<number>(90)
+  const MIN_CELL_WIDTH = 90
+  const LAST_CELL_EXTRA_SPACE = 56
+  const ACTIONS_CELL_MIN_WIDTH = 10
   const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
   const unregisterMouseMove = ref<Function | undefined>(undefined)
@@ -40,10 +42,10 @@ export function useResizeColumns() {
           [cellId]: {
             cell: cell,
             initialWidth: cell.offsetWidth,
-            minWidth: Math.min(
-              minCellWidth.value,
-              cell.offsetWidth - getLastCellOnTheRightExtraSpace(cell)
-            )
+            minWidth:
+              cellId === 'actions'
+                ? ACTIONS_CELL_MIN_WIDTH
+                : Math.min(cell.offsetWidth, MIN_CELL_WIDTH)
           }
         }
       }, {})
@@ -92,8 +94,8 @@ export function useResizeColumns() {
         const currentCell = cells.value[cell]
         const newWidth = !currentCell.cell.hasAttribute('can-resize')
           ? currentCell.initialWidth
-          : Math.floor(currentCell.cell.offsetWidth) <= minCellWidth.value
-            ? minCellWidth.value
+          : Math.floor(currentCell.cell.offsetWidth) <= currentCell.minWidth
+            ? currentCell.minWidth
             : currentCell.cell.offsetWidth
 
         currentCell.cell.style.width = newWidth + 'px'
@@ -103,13 +105,10 @@ export function useResizeColumns() {
       calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
-  const getLastCellOnTheRightExtraSpace = (cell: HTMLTableCellElement) => {
-    if (!cell.nextElementSibling) {
-      const cellWrapperElement = cell.querySelector('.header-cell_wrapper') as HTMLElement | null
 
-      if (cellWrapperElement) {
-        return parseInt(window.getComputedStyle(cellWrapperElement).paddingRight)
-      }
+  const getLastCellOnTheRightExtraSpace = (cell: HTMLTableCellElement) => {
+    if (getCellId(cell) === 'actions') {
+      return LAST_CELL_EXTRA_SPACE
     }
 
     return 0
@@ -140,7 +139,7 @@ export function useResizeColumns() {
       const min =
         cells.value && cells.value[getCellId(cell)]
           ? cells.value[getCellId(cell)].minWidth
-          : minCellWidth.value
+          : MIN_CELL_WIDTH
 
       if (newCellWidth <= min || !cell.hasAttribute('can-resize')) {
         const nextCell = cell.previousElementSibling as HTMLTableCellElement | null
@@ -153,13 +152,11 @@ export function useResizeColumns() {
     } else {
       const min =
         cells.value && cells.value[getCellId(neighborCell)]
-          ? cells.value[getCellId(neighborCell)].minWidth
-          : minCellWidth.value
+          ? cells.value[getCellId(neighborCell)].minWidth +
+            getLastCellOnTheRightExtraSpace(neighborCell)
+          : MIN_CELL_WIDTH
 
-      if (
-        newNeighborCellWidth <= min + getLastCellOnTheRightExtraSpace(neighborCell) ||
-        !neighborCell.hasAttribute('can-resize')
-      ) {
+      if (newNeighborCellWidth <= min || !neighborCell.hasAttribute('can-resize')) {
         const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement | null
 
         resizeCells(cell, nextNeighborCell, e)
