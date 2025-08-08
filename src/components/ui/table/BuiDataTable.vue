@@ -24,16 +24,7 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import {
-  computed,
-  watchEffect,
-  ref,
-  watch,
-  onMounted,
-  onBeforeMount,
-  onUnmounted,
-  nextTick
-} from 'vue'
+import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, nextTick } from 'vue'
 import {
   BuiTable,
   BuiTableBody,
@@ -50,7 +41,8 @@ import {
   BuiCommandEmpty,
   BuiCommandInput,
   BuiCommandList,
-  BuiCommandItem
+  BuiCommandItem,
+  BuiCommandSeparator
 } from '@/components/ui/command'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/ui/popover'
 import { BuiScrollArea } from '@/components/ui/scroll-area'
@@ -322,6 +314,7 @@ useEventListener(document, 'mouseup', handleResizeControlMouseUp)
                 <BuiDataTableColumnList
                   v-model:columns-list="columnsList as Column<TData, unknown>[]"
                 />
+                <BuiCommandSeparator class="my-1"></BuiCommandSeparator>
                 <BuiCommandItem
                   value="reset_columns_visibility"
                   class="px-2 py-1.5 font-medium text-muted-foreground"
