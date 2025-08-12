@@ -1,6 +1,6 @@
 {
   "name": "@soft-stech/bootsman-ui-shadcn",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "type": "module",
   "files": [
     "dist",
