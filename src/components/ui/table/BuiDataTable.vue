@@ -11,6 +11,7 @@ import type {
   Column,
   ColumnDef,
   ColumnOrderState,
+  Header,
   PaginationState,
   Row,
   RowSelectionState,
@@ -44,6 +45,7 @@ import {
   BuiCommandItem,
   BuiCommandSeparator
 } from '@/components/ui/command'
+import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/ui/context-menu'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/ui/popover'
 import { BuiScrollArea } from '@/components/ui/scroll-area'
 import { BuiButton } from '@/components/ui/button'
@@ -273,6 +275,14 @@ watchEffect(() => {
 })
 
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
+
+type HeaderCellAction = 'hide' | 'resetSize' | 'sortAsc' | 'sortDesc'
+const availableHeaderCellActions = computed<HeaderCellAction[]>(() => {
+  return ['hide', 'resetSize', 'sortAsc', 'sortDesc']
+})
+const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAction) => {
+  console.log(action)
+}
 </script>
 
 <template>
@@ -357,6 +367,19 @@ useEventListener(document, 'mouseup', handleResizeControlMouseUp)
             )
           "
         />
+        <template #actions>
+          <BuiContextMenuContent
+            v-if="availableHeaderCellActions && availableHeaderCellActions.length > 0"
+          >
+            <BuiContextMenuItem
+              v-for="(action, idx) in availableHeaderCellActions"
+              @click="() => onHeaderCellAction(header, action)"
+              :key="idx"
+            >
+              {{ action }}
+            </BuiContextMenuItem>
+          </BuiContextMenuContent>
+        </template>
       </BuiTableHead>
     </BuiTableHeader>
     <BuiTableBody>
