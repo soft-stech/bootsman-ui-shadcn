@@ -9,17 +9,17 @@ const props = defineProps<{
 </script>
 
 <template>
-  <BuiContextMenu v-if="$slots.actions">
-    <BuiContextMenuTrigger as-child>
-      <th
-        :class="
-          cn(
-            'relative h-10 text-left align-middle text-foreground [&:has([role=checkbox])]:pr-0 ',
-            props.class,
-            props.freezeHeader ? 'bg-background p-0' : 'bg-foreground/[0.04] p-0'
-          )
-        "
-      >
+  <th
+    :class="
+      cn(
+        'relative h-10 text-left align-middle text-foreground [&:has([role=checkbox])]:pr-0 ',
+        props.class,
+        props.freezeHeader ? 'bg-background p-0' : 'bg-foreground/[0.04] p-0'
+      )
+    "
+  >
+    <BuiContextMenu v-if="$slots.actions">
+      <BuiContextMenuTrigger as-child>
         <div
           class="flex h-full items-center !border-b !border-border/[0.16]"
           :class="{
@@ -34,21 +34,11 @@ const props = defineProps<{
             <slot />
           </div>
         </div>
-      </th>
-    </BuiContextMenuTrigger>
-    <slot name="actions" />
-  </BuiContextMenu>
-  <th
-    v-else
-    :class="
-      cn(
-        'relative h-10 text-left align-middle text-foreground [&:has([role=checkbox])]:pr-0 ',
-        props.class,
-        props.freezeHeader ? 'bg-background p-0' : 'bg-foreground/[0.04] p-0'
-      )
-    "
-  >
+      </BuiContextMenuTrigger>
+      <slot name="actions" />
+    </BuiContextMenu>
     <div
+      v-else
       class="flex h-full items-center !border-b !border-border/[0.16]"
       :class="{
         'bg-foreground/[0.04]': props.freezeHeader,
