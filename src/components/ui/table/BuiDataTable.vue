@@ -148,6 +148,7 @@ const table = useVueTable({
 
     await nextTick()
 
+    resetCells()
     setInitialColumnWidths()
   },
   onColumnOrderChange: (updaterOrValue) => {
@@ -307,7 +308,21 @@ const availableHeaderCellActions = (header: Header<TData, unknown>) => {
   return out
 }
 const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAction) => {
-  console.log(action)
+  switch (action) {
+    case 'hideColumn':
+      header.column.toggleVisibility()
+      break
+    case 'resetSize':
+      resetCells()
+      break
+    case 'sortAsc':
+      header.column.toggleSorting(false)
+      break
+    case 'sortDesc':
+      header.column.toggleSorting(true)
+    default:
+      break
+  }
 }
 </script>
 
