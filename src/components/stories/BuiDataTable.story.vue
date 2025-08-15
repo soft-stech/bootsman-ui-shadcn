@@ -69,7 +69,8 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'title',
-    header: 'Title'
+    header: 'Title',
+    enableSorting: false
   },
   {
     accessorKey: 'status',

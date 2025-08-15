@@ -55,6 +55,12 @@ import { useResizeColumns } from '@/lib/useResizeColumns'
 import { isEqual } from 'lodash-es'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
+const defaultColumnContextMenuTranslations = {
+  hideColumn: 'Hide column',
+  resetSize: 'Reset size',
+  sortAsc: 'Sort ascending',
+  sortDesc: 'Sort descending'
+}
 
 const props = withDefaults(
   defineProps<{
@@ -79,6 +85,12 @@ const props = withDefaults(
       itemsPerPage: string
       page: string
       of: string
+    }
+    headerContextMenuTranslations?: {
+      hideColumn?: string
+      resetSize?: string
+      sortAsc?: string
+      sortDesc?: string
     }
   }>(),
   {
@@ -276,10 +288,24 @@ watchEffect(() => {
 
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
 
-type HeaderCellAction = 'hide' | 'resetSize' | 'sortAsc' | 'sortDesc'
-const availableHeaderCellActions = computed<HeaderCellAction[]>(() => {
-  return ['hide', 'resetSize', 'sortAsc', 'sortDesc']
-})
+type HeaderCellAction = 'hideColumn' | 'resetSize' | 'sortAsc' | 'sortDesc'
+const availableHeaderCellActions = (header: Header<TData, unknown>) => {
+  const out: HeaderCellAction[] = []
+
+  if (props.manualSorting && header.column.getCanSort()) {
+    out.push('sortAsc', 'sortDesc')
+  }
+
+  if (props.enableColumnListControl && header.column.getCanHide()) {
+    out.push('hideColumn')
+  }
+
+  if (props.enableColumnResizing) {
+    out.push('resetSize')
+  }
+
+  return out
+}
 const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAction) => {
   console.log(action)
 }
@@ -372,11 +398,15 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
             v-if="availableHeaderCellActions && availableHeaderCellActions.length > 0"
           >
             <BuiContextMenuItem
-              v-for="(action, idx) in availableHeaderCellActions"
+              v-for="(action, idx) in availableHeaderCellActions(header)"
               @click="() => onHeaderCellAction(header, action)"
               :key="idx"
             >
-              {{ action }}
+              {{
+                headerContextMenuTranslations && headerContextMenuTranslations[action]
+                  ? headerContextMenuTranslations[action]
+                  : defaultColumnContextMenuTranslations[action]
+              }}
             </BuiContextMenuItem>
           </BuiContextMenuContent>
         </template>
