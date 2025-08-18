@@ -295,7 +295,7 @@ const availableHeaderCellActions = (header: Header<TData, unknown>) => {
 
   if (props.manualSorting) {
     const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
-      `th[id=${header.id}_cell]`
+      `th[id="${header.id}_cell"]`
     ) as HTMLTableCellElement | undefined
     const buttonForSorting = currentHeaderCell?.querySelector('button[sorting-enabled]')
 
