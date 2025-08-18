@@ -416,9 +416,7 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
           "
         />
         <template #actions>
-          <BuiContextMenuContent
-            v-if="availableHeaderCellActions && availableHeaderCellActions.length > 0"
-          >
+          <BuiContextMenuContent v-if="availableHeaderCellActions(header).length > 0">
             <BuiContextMenuItem
               v-for="(action, idx) in availableHeaderCellActions(header)"
               @click="() => onHeaderCellAction(header, action)"
