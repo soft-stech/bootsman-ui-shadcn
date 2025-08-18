@@ -327,6 +327,7 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
       break
     case 'sortDesc':
       header.column.toggleSorting(true)
+      break
     default:
       break
   }
@@ -419,7 +420,7 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
           <BuiContextMenuContent v-if="availableHeaderCellActions(header).length > 0">
             <BuiContextMenuItem
               v-for="(action, idx) in availableHeaderCellActions(header)"
-              @click="() => onHeaderCellAction(header, action)"
+              @click="onHeaderCellAction(header, action)"
               :key="idx"
             >
               {{
