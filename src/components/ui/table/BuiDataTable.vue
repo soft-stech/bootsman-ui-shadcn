@@ -293,8 +293,15 @@ type HeaderCellAction = 'hideColumn' | 'resetSize' | 'sortAsc' | 'sortDesc'
 const availableHeaderCellActions = (header: Header<TData, unknown>) => {
   const out: HeaderCellAction[] = []
 
-  if (props.manualSorting && header.column.getCanSort()) {
-    out.push('sortAsc', 'sortDesc')
+  if (props.manualSorting) {
+    const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
+      `th[id=${header.id}_cell]`
+    ) as HTMLTableCellElement | undefined
+    const buttonForSorting = currentHeaderCell?.querySelector('button[sorting-enabled]')
+
+    if (buttonForSorting) {
+      out.push('sortAsc', 'sortDesc')
+    }
   }
 
   if (props.enableColumnListControl && header.column.getCanHide()) {
