@@ -11,6 +11,7 @@ import type {
   Column,
   ColumnDef,
   ColumnOrderState,
+  Header,
   PaginationState,
   Row,
   RowSelectionState,
@@ -44,6 +45,7 @@ import {
   BuiCommandItem,
   BuiCommandSeparator
 } from '@/components/ui/command'
+import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/ui/context-menu'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/ui/popover'
 import { BuiScrollArea } from '@/components/ui/scroll-area'
 import { BuiButton } from '@/components/ui/button'
@@ -53,6 +55,12 @@ import { useResizeColumns } from '@/lib/useResizeColumns'
 import { isEqual } from 'lodash-es'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
+const defaultColumnContextMenuTranslations = {
+  hideColumn: 'Hide column',
+  resetSize: 'Reset size',
+  sortAsc: 'Sort ascending',
+  sortDesc: 'Sort descending'
+}
 
 const props = withDefaults(
   defineProps<{
@@ -77,6 +85,12 @@ const props = withDefaults(
       itemsPerPage: string
       page: string
       of: string
+    }
+    headerContextMenuTranslations?: {
+      hideColumn?: string
+      resetSize?: string
+      sortAsc?: string
+      sortDesc?: string
     }
   }>(),
   {
@@ -134,6 +148,7 @@ const table = useVueTable({
 
     await nextTick()
 
+    resetCells()
     setInitialColumnWidths()
   },
   onColumnOrderChange: (updaterOrValue) => {
@@ -273,6 +288,50 @@ watchEffect(() => {
 })
 
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
+
+type HeaderCellAction = 'hideColumn' | 'resetSize' | 'sortAsc' | 'sortDesc'
+const availableHeaderCellActions = (header: Header<TData, unknown>) => {
+  const out: HeaderCellAction[] = []
+
+  if (props.manualSorting) {
+    const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
+      `th[id="${header.id}_cell"]`
+    ) as HTMLTableCellElement | undefined
+    const buttonForSorting = currentHeaderCell?.querySelector('button[sorting-enabled]')
+
+    if (buttonForSorting) {
+      out.push('sortAsc', 'sortDesc')
+    }
+  }
+
+  if (props.enableColumnListControl && header.column.getCanHide()) {
+    out.push('hideColumn')
+  }
+
+  if (props.enableColumnResizing) {
+    out.push('resetSize')
+  }
+
+  return out
+}
+const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAction) => {
+  switch (action) {
+    case 'hideColumn':
+      header.column.toggleVisibility()
+      break
+    case 'resetSize':
+      resetCells()
+      break
+    case 'sortAsc':
+      header.column.toggleSorting(false)
+      break
+    case 'sortDesc':
+      header.column.toggleSorting(true)
+      break
+    default:
+      break
+  }
+}
 </script>
 
 <template>
@@ -357,6 +416,21 @@ useEventListener(document, 'mouseup', handleResizeControlMouseUp)
             )
           "
         />
+        <template #actions>
+          <BuiContextMenuContent v-if="availableHeaderCellActions(header).length > 0">
+            <BuiContextMenuItem
+              v-for="(action, idx) in availableHeaderCellActions(header)"
+              @click="onHeaderCellAction(header, action)"
+              :key="idx"
+            >
+              {{
+                headerContextMenuTranslations && headerContextMenuTranslations[action]
+                  ? headerContextMenuTranslations[action]
+                  : defaultColumnContextMenuTranslations[action]
+              }}
+            </BuiContextMenuItem>
+          </BuiContextMenuContent>
+        </template>
       </BuiTableHead>
     </BuiTableHeader>
     <BuiTableBody>
