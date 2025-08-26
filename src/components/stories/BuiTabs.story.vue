@@ -80,14 +80,22 @@ const variantOptions = ['default', 'ghost'] as const
 
     <Variant title="vertical">
       <BuiTabs default-value="general" class="flex" orientation="vertical">
-        <BuiTabsList class="w-40" variant="vertical">
+        <BuiTabsList variant="vertical">
           <BuiTabsTrigger value="general" variant="vertical">General</BuiTabsTrigger>
           <BuiTabsTrigger value="health" variant="vertical">Health check</BuiTabsTrigger>
-          <BuiTabsTrigger value="resources" variant="vertical">Resources</BuiTabsTrigger>
+          <BuiTabsTrigger value="resources" variant="vertical">
+            A Very Very Veeeeeery Long Label For Resources
+          </BuiTabsTrigger>
         </BuiTabsList>
-        <BuiTabsContent value="general" class="mt-0 flex-grow"> General content </BuiTabsContent>
-        <BuiTabsContent value="health" class="mt-0"> Health check content </BuiTabsContent>
-        <BuiTabsContent value="resources" class="mt-0"> Resources content </BuiTabsContent>
+        <BuiTabsContent value="general" class="mt-0 flex-grow bg-background p-2">
+          General content
+        </BuiTabsContent>
+        <BuiTabsContent value="health" class="mt-0 bg-background p-2">
+          Health check content
+        </BuiTabsContent>
+        <BuiTabsContent value="resources" class="mt-0 bg-background p-2">
+          Resources content
+        </BuiTabsContent>
       </BuiTabs>
     </Variant>
   </Story>

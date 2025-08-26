@@ -30,6 +30,7 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         sidebar: 'hsl(var(--side-bar))',
+        'tabs-sidebar': 'hsl(var(--tabs-sidebar))',
         primary: {
           DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
           foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
@@ -92,7 +93,8 @@ export default {
         level2:
           '0px 32px 16px 0px hsl(var(--tab-shadow)), 0px 16px 16px 0px hsl(var(--tab-shadow)), 0px 16px 16px 0px hsl(var(--tab-shadow))',
         level3:
-          '0px 56px 24px 0px hsl(var(--tab-shadow)), 0px 32px 24px 0px hsl(var(--tab-shadow)), 0px 32px 24px 0px hsl(var(--tab-shadow))'
+          '0px 56px 24px 0px hsl(var(--tab-shadow)), 0px 32px 24px 0px hsl(var(--tab-shadow)), 0px 32px 24px 0px hsl(var(--tab-shadow))',
+        'tab-sidebar-shadow': 'inset -8px 0px 16px 0px hsl(var(--tabs-sidebar-shadow))'
       },
       keyframes: {
         'accordion-down': {

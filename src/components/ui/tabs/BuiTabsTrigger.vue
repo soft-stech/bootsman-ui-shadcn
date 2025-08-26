@@ -13,7 +13,7 @@ const props = defineProps<Props>()
 
 <template>
   <TabsTrigger v-bind="props" :class="cn(tabsTriggerVariants({ variant }), props.class ?? '')">
-    <div class="flex items-center">
+    <div class="flex items-center text-left">
       <slot />
     </div>
   </TabsTrigger>
