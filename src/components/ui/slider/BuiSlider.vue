@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { SliderRootEmits, SliderRootProps } from 'radix-vue'
-import { SliderRange, SliderRoot, SliderThumb, SliderTrack, useEmitAsProps } from 'radix-vue'
+import type { SliderRootEmits, SliderRootProps } from 'reka-ui'
+import { SliderRange, SliderRoot, SliderThumb, SliderTrack, useEmitAsProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<SliderRootProps>()

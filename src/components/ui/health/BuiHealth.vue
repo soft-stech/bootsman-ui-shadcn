@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils'
-import { type PrimitiveProps } from 'radix-vue'
+import { type PrimitiveProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 
 import { capHealthVariants, healthVariants } from '.'

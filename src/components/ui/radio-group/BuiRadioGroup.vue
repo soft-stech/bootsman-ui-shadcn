@@ -6,7 +6,7 @@ import {
   type RadioGroupRootEmits,
   type RadioGroupRootProps,
   useForwardPropsEmits
-} from 'radix-vue'
+} from 'reka-ui'
 import { inject, toRef } from 'vue'
 
 const props = defineProps<RadioGroupRootProps & { class?: string }>()

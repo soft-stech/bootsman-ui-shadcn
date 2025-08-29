@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FORM_READONLY_INJECTION_KEY } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
-import { Primitive, type PrimitiveProps } from 'radix-vue'
+import { Primitive, type PrimitiveProps } from 'reka-ui'
 import { inject, toRef, type HTMLAttributes } from 'vue'
 import { buttonVariants } from '.'
 

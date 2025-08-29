@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ComboboxRootEmits, ComboboxRootProps } from 'radix-vue'
-import { ComboboxRoot, useForwardPropsEmits } from 'radix-vue'
+import type { ComboboxRootEmits, ComboboxRootProps } from 'reka-ui'
+import { ComboboxRoot, useForwardPropsEmits } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<ComboboxRootProps>()
@@ -16,7 +16,7 @@ const forwarded = useForwardPropsEmits(props, emits)
     :model-value="''"
     :class="
       cn(
-        'shadow-level1 flex h-full w-full flex-col overflow-hidden rounded-md border border-muted bg-popover text-popover-foreground',
+        'flex h-full w-full flex-col overflow-hidden rounded-md border border-muted bg-popover text-popover-foreground shadow-level1',
         $attrs.class ?? ''
       )
     "

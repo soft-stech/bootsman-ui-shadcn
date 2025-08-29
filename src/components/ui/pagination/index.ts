@@ -3,7 +3,7 @@ export {
   PaginationRoot as BuiPagination,
   PaginationList as BuiPaginationList,
   PaginationListItem as BuiPaginationListItem
-} from 'radix-vue'
+} from 'reka-ui'
 export { default as BuiPaginationFirst } from './BuiPaginationFirst.vue'
 export { default as BuiPaginationLast } from './BuiPaginationLast.vue'
 export { default as BuiPaginationNext } from './BuiPaginationNext.vue'

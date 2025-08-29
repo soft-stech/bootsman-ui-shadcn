@@ -15,7 +15,7 @@ const variant = 'default'
     </Variant>
 
     <Variant :key="`disabled-variant`" :title="`Disabled Checked`">
-      <BuiSwitch class="m-1" disabled checked></BuiSwitch>
+      <BuiSwitch :model-value="true" class="m-1" disabled></BuiSwitch>
     </Variant>
   </Story>
 </template>

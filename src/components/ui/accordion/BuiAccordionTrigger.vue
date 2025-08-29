@@ -3,7 +3,7 @@
 
 import { cn } from '@/lib/utils'
 import { ChevronDown } from 'lucide-vue-next'
-import { AccordionHeader, AccordionTrigger, type AccordionTriggerProps } from 'radix-vue'
+import { AccordionHeader, AccordionTrigger, type AccordionTriggerProps } from 'reka-ui'
 
 const props = defineProps<AccordionTriggerProps & { class?: string }>()
 </script>

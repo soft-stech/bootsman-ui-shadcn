@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import type { StepperTriggerProps } from 'radix-vue'
+import type { StepperTriggerProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
-import { StepperTrigger, useForwardProps } from 'radix-vue'
+import { StepperTrigger, useForwardProps } from 'reka-ui'
 
 import { computed, type HTMLAttributes } from 'vue'
 
@@ -19,7 +19,7 @@ const forwarded = useForwardProps(delegatedProps)
 <template>
   <StepperTrigger
     v-bind="forwarded"
-    :class="cn('p-1 flex flex-col items-center text-center gap-1 rounded-md', props.class)"
+    :class="cn('flex flex-col items-center gap-1 rounded-md p-1 text-center', props.class)"
   >
     <slot />
   </StepperTrigger>

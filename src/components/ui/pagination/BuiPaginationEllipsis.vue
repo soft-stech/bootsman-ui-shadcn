@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAttrs } from 'vue'
-import { PaginationEllipsis, type PaginationEllipsisProps, useForwardProps } from 'radix-vue'
+import { PaginationEllipsis, type PaginationEllipsisProps, useForwardProps } from 'reka-ui'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 

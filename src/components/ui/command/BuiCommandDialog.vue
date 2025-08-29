@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useEmitAsProps } from 'radix-vue'
-import type { DialogRootEmits, DialogRootProps } from 'radix-vue'
+import { useEmitAsProps } from 'reka-ui'
+import type { DialogRootEmits, DialogRootProps } from 'reka-ui'
 import Command from './BuiCommand.vue'
 import { BuiDialog, BuiDialogContent } from '@/components/ui/dialog'
 

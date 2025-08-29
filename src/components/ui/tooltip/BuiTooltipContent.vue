@@ -5,7 +5,7 @@ import {
   type TooltipContentProps,
   TooltipPortal,
   useForwardPropsEmits
-} from 'radix-vue'
+} from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = withDefaults(defineProps<TooltipContentProps>(), {
@@ -28,7 +28,7 @@ const forwarded = useForwardPropsEmits(props, emits)
       "
     >
       <div
-        class="scrollbar-thin scrollbar-thumb-primary-foreground scrollbar-track-[hsl(var(--tooltip))] max-h-40 overflow-y-auto px-2"
+        class="max-h-40 overflow-y-auto px-2 scrollbar-thin scrollbar-track-[hsl(var(--tooltip))] scrollbar-thumb-primary-foreground"
       >
         <slot />
       </div>

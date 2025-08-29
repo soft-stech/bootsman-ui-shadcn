@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FORM_READONLY_INJECTION_KEY } from '@/components/ui/form'
-import type { SelectRootEmits, SelectRootProps } from 'radix-vue'
-import { SelectRoot, useForwardPropsEmits } from 'radix-vue'
+import type { SelectRootEmits, SelectRootProps } from 'reka-ui'
+import { SelectRoot, useForwardPropsEmits } from 'reka-ui'
 import { inject, toRef } from 'vue'
 
 const props = defineProps<SelectRootProps>()

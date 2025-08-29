@@ -48,6 +48,7 @@
     "lodash-es": "^4.17.21",
     "lucide-vue-next": "0.441.0",
     "radix-vue": "1.9.8",
+    "reka-ui": "^2.5.0",
     "sortablejs": "^1",
     "tailwind-merge": "2.5.2",
     "tailwindcss-animate": "1.0.7",

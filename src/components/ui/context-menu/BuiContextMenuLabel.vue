@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ContextMenuLabel, type ContextMenuLabelProps } from 'radix-vue'
+import { ContextMenuLabel, type ContextMenuLabelProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<ContextMenuLabelProps & { class?: string; inset?: boolean }>()

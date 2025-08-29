@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ContextMenuSubTrigger, type ContextMenuSubTriggerProps } from 'radix-vue'
+import { ContextMenuSubTrigger, type ContextMenuSubTriggerProps } from 'reka-ui'
 import { ChevronRight } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 

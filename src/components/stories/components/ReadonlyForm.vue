@@ -113,7 +113,7 @@ const onSubmit = (values: any) => {
           <BuiFormField v-slot="{ value, handleChange }" name="remember">
             <BuiFormItem class="mt-2 flex items-center gap-2 space-y-0">
               <BuiFormControl>
-                <BuiCheckbox :checked="value" @update:checked="handleChange" />
+                <BuiCheckbox :model-value="value" @update:model-value="handleChange" />
               </BuiFormControl>
               <div class="space-y-1 leading-none">
                 <BuiFormLabel>Remember me</BuiFormLabel>

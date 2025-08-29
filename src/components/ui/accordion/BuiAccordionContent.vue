@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AccordionContent, type AccordionContentProps } from 'radix-vue'
+import { AccordionContent, type AccordionContentProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<AccordionContentProps & { class?: string }>()

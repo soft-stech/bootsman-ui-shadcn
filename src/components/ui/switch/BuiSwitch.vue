@@ -7,7 +7,7 @@ import {
   useForwardPropsEmits,
   type SwitchRootEmits,
   type SwitchRootProps
-} from 'radix-vue'
+} from 'reka-ui'
 import { inject, toRef } from 'vue'
 
 const props = defineProps<SwitchRootProps & { class?: string }>()

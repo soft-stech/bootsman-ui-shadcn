@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TabsList, type TabsListProps } from 'radix-vue'
+import { TabsList, type TabsListProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 import { tabsListVariants } from '.'
 

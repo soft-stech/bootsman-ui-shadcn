@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PaginationNext, type PaginationNextProps, useForwardProps } from 'radix-vue'
+import { PaginationNext, type PaginationNextProps, useForwardProps } from 'reka-ui'
 import { ChevronRight } from 'lucide-vue-next'
 import { BuiButton } from '@/components/ui/button'
 

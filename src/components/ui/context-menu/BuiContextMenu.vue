@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ContextMenuRoot, useForwardPropsEmits } from 'radix-vue'
-import type { ContextMenuRootEmits, ContextMenuRootProps } from 'radix-vue'
+import { ContextMenuRoot, useForwardPropsEmits } from 'reka-ui'
+import type { ContextMenuRootEmits, ContextMenuRootProps } from 'reka-ui'
 
 const props = defineProps<ContextMenuRootProps>()
 const emits = defineEmits<ContextMenuRootEmits>()

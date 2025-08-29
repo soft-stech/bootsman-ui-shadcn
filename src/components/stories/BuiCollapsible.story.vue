@@ -20,9 +20,9 @@ const isOpen = ref(false)
               </BuiButton>
             </BuiCollapsibleTrigger>
           </div>
-          <div class="rounded-md border px-4 py-3 font-mono text-sm">@radix-ui/primitives</div>
+          <div class="rounded-md border px-4 py-3 font-mono text-sm">@reka-ui/primitives</div>
           <BuiCollapsibleContent class="space-y-2">
-            <div class="rounded-md border px-4 py-3 font-mono text-sm">@radix-ui/colors</div>
+            <div class="rounded-md border px-4 py-3 font-mono text-sm">@reka-ui/colors</div>
             <div class="rounded-md border px-4 py-3 font-mono text-sm">@stitches/react</div>
           </BuiCollapsibleContent>
         </BuiCollapsible>

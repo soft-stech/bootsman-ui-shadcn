@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps } from 'radix-vue'
+import { RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps } from 'reka-ui'
 import { Circle } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, nextTick } from 'vue'
 import { watchThrottled, watchPausable } from '@vueuse/core'
-import { Primitive } from 'radix-vue'
+import { Primitive } from 'reka-ui'
 import { ColorTranslator } from 'colortranslator'
 import { colorPickerSelectorVariants, colorPickerTrackVariants } from '.'
 import {

@@ -43,13 +43,13 @@ const columns: ColumnDef<Task>[] = [
     header: ({ table, column }) => {
       return h('div', { class: 'flex items-center gap-2' }, [
         h(BuiCheckbox, {
-          checked: table.getIsSomePageRowsSelected()
+          modelValue: table.getIsSomePageRowsSelected()
             ? 'indeterminate'
             : table.getIsAllPageRowsSelected(),
-          'onUpdate:checked': (value: boolean) =>
+          'onUpdate:modelValue': (value: boolean | 'indeterminate') =>
             table.getIsSomePageRowsSelected()
               ? table.toggleAllPageRowsSelected(false)
-              : table.toggleAllPageRowsSelected(value),
+              : table.toggleAllPageRowsSelected(!!value),
           ariaLabel: 'Select row'
         }),
         tableColumnSortCommon(column, 'ID')
@@ -58,8 +58,8 @@ const columns: ColumnDef<Task>[] = [
     cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-2' }, [
         h(BuiCheckbox, {
-          checked: row.getIsSelected(),
-          'onUpdate:checked': (value: boolean) => row.toggleSelected(value),
+          modelValue: row.getIsSelected(),
+          'onUpdate:modelValue': (value: boolean | 'indeterminate') => row.toggleSelected(!!value),
           ariaLabel: 'Select row'
         }),
         `${row.getValue('id')}`
@@ -106,8 +106,8 @@ const pagination = ref<PaginationState>({
 })
 const totalItems = tasks.length
 
-const selection = ref<RowSelectionState>({})
-function updateSelection(val: RowSelectionState) {
+const selection = ref<RowSelectionState | undefined>({})
+function updateSelection(val?: RowSelectionState) {
   logEvent('selection was changed', val)
   selection.value = val
 }

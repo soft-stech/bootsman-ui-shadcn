@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ToggleEmits, ToggleProps } from 'radix-vue'
-import { Toggle, useForwardPropsEmits } from 'radix-vue'
+import type { ToggleEmits, ToggleProps } from 'reka-ui'
+import { Toggle, useForwardPropsEmits } from 'reka-ui'
 import type { VariantProps } from 'class-variance-authority'
 import { computed, useAttrs } from 'vue'
 import { toggleVariants } from '.'
@@ -15,13 +15,13 @@ interface Props extends ToggleProps {
 }
 
 defineOptions({
-  inheritAttrs: false,
+  inheritAttrs: false
 })
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
   size: 'default',
-  disabled: false,
+  disabled: false
 })
 const emits = defineEmits<ToggleEmits>()
 
@@ -39,7 +39,7 @@ const forwarded = useForwardPropsEmits(toggleProps.value, emits)
   <Toggle
     v-bind="{
       ...forwarded,
-      ...rest,
+      ...rest
     }"
     :class="cn(toggleVariants({ variant, size }), className ?? '')"
     :disabled="props.disabled"

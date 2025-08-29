@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogTitle, type DialogTitleProps } from 'radix-vue'
+import { DialogTitle, type DialogTitleProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<DialogTitleProps & { class?: string }>()
@@ -8,12 +8,7 @@ const props = defineProps<DialogTitleProps & { class?: string }>()
 <template>
   <DialogTitle
     v-bind="props"
-    :class="
-      cn(
-        'text-lg text-foreground font-semibold leading-none tracking-tight',
-        props.class,
-      )
-    "
+    :class="cn('text-lg font-semibold leading-none tracking-tight text-foreground', props.class)"
   >
     <slot />
   </DialogTitle>

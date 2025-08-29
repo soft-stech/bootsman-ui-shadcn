@@ -3,8 +3,8 @@ import { FORM_READONLY_INJECTION_KEY } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
 import { cva } from 'class-variance-authority'
 import { Check, Minus } from 'lucide-vue-next'
-import type { CheckboxRootEmits, CheckboxRootProps } from 'radix-vue'
-import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'radix-vue'
+import type { CheckboxRootEmits, CheckboxRootProps } from 'reka-ui'
+import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui'
 import { inject, toRef, useAttrs } from 'vue'
 
 const props = defineProps<CheckboxRootProps>()
@@ -28,8 +28,8 @@ const readonlyContext = inject(FORM_READONLY_INJECTION_KEY, toRef(false))
 <template>
   <CheckboxRoot v-bind="forwarded" :class="classes" :disabled="readonlyContext || props.disabled">
     <CheckboxIndicator class="flex h-full w-full items-center justify-center text-current">
-      <Check v-if="checked === true" class="h-4 w-4" />
-      <Minus v-if="checked === 'indeterminate'" class="h-4 w-4" />
+      <Check v-if="props.modelValue === true" class="h-4 w-4" />
+      <Minus v-if="props.modelValue === 'indeterminate'" class="h-4 w-4" />
     </CheckboxIndicator>
   </CheckboxRoot>
 </template>

@@ -27,7 +27,7 @@ const getColumnLabel = (col: Column<TData, unknown>) => {
       class="flex gap-4 px-2 py-1.5 text-xs font-medium capitalize text-muted-foreground"
       @select="col.toggleVisibility()"
     >
-      <BuiCheckbox :checked="col.getIsVisible()" />
+      <BuiCheckbox :model-value="col.getIsVisible()" />
       <div class="dragHandler grow">
         {{ getColumnLabel(col) }}
       </div>
