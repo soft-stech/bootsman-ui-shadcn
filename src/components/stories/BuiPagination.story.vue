@@ -38,7 +38,7 @@ import { BuiButton } from '@/components/ui/button'
             >
               <BuiButton
                 class="h-10 w-10 p-0"
-                :variant="item.value === page ? 'default' : 'outline'"
+                :variant="item.value === page ? 'default' : 'outline-solid'"
               >
                 {{ item.value }}
               </BuiButton>

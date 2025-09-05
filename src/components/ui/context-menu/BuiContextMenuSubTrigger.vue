@@ -11,7 +11,7 @@ const props = defineProps<ContextMenuSubTriggerProps & { class?: string; inset?:
     v-bind="props"
     :class="[
       cn(
-        'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent/[0.08] focus:text-accent-foreground data-[state=open]:text-accent-foreground data-[state=open]:focus:bg-accent/[0.08]',
+        'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden focus:bg-accent/8 focus:text-accent-foreground data-[state=open]:text-accent-foreground data-[state=open]:focus:bg-accent/8',
         inset && 'pl-8',
         props.class
       )

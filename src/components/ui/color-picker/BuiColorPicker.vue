@@ -158,7 +158,7 @@ watchThrottled(
 <template>
   <Primitive
     :as="as"
-    class="data-[disabled]:opacity-75"
+    class="data-disabled:opacity-75"
     :data-disabled="disabled ? true : undefined"
   >
     <div class="flex gap-4">
@@ -168,7 +168,7 @@ watchThrottled(
             ref="selectorThumbRef"
             :class="
               cn(
-                'absolute size-4 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full ring-2 ring-background data-[disabled]:cursor-not-allowed',
+                'absolute size-4 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full ring-2 ring-background data-disabled:cursor-not-allowed',
                 ui?.selectorClass
               )
             "
@@ -182,7 +182,7 @@ watchThrottled(
           ref="trackThumbRef"
           :class="
             cn(
-              'absolute size-4 -translate-x-[4px] -translate-y-1/2 transform cursor-pointer rounded-full ring-2 ring-background data-[disabled]:cursor-not-allowed rtl:translate-x-[4px]',
+              'absolute size-4 -translate-x-[4px] -translate-y-1/2 transform cursor-pointer rounded-full ring-2 ring-background data-disabled:cursor-not-allowed rtl:translate-x-[4px]',
               ui?.trackClass
             )
           "

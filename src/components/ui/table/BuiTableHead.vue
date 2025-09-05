@@ -14,21 +14,21 @@ const props = defineProps<{
       cn(
         'relative h-10 text-left align-middle text-foreground [&:has([role=checkbox])]:pr-0 ',
         props.class,
-        props.freezeHeader ? 'bg-background p-0' : 'bg-foreground/[0.04] p-0'
+        props.freezeHeader ? 'bg-background p-0' : 'bg-foreground/4 p-0'
       )
     "
   >
     <BuiContextMenu v-if="$slots.actions">
       <BuiContextMenuTrigger as-child>
         <div
-          class="flex h-full items-center !border-b !border-border/[0.16]"
+          class="flex h-full items-center border-b! border-border/16!"
           :class="{
-            'bg-foreground/[0.04]': props.freezeHeader,
+            'bg-foreground/4': props.freezeHeader,
             'header-cell_wrapper': !props.freezeHeader
           }"
         >
           <div
-            class="flex h-full w-full items-center whitespace-nowrap border-r border-border/[0.16] px-2 text-sm font-semibold"
+            class="flex h-full w-full items-center whitespace-nowrap border-r border-border/16 px-2 text-sm font-semibold"
             :class="{ 'header-cell_wrapper': props.freezeHeader }"
           >
             <slot />
@@ -39,14 +39,14 @@ const props = defineProps<{
     </BuiContextMenu>
     <div
       v-else
-      class="flex h-full items-center !border-b !border-border/[0.16]"
+      class="flex h-full items-center border-b! border-border/16!"
       :class="{
-        'bg-foreground/[0.04]': props.freezeHeader,
+        'bg-foreground/4': props.freezeHeader,
         'header-cell_wrapper': !props.freezeHeader
       }"
     >
       <div
-        class="flex h-full w-full items-center whitespace-nowrap border-r border-border/[0.16] px-2 text-sm font-semibold"
+        class="flex h-full w-full items-center whitespace-nowrap border-r border-border/16 px-2 text-sm font-semibold"
         :class="{ 'header-cell_wrapper': props.freezeHeader }"
       >
         <slot />

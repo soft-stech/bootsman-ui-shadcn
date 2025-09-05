@@ -87,7 +87,7 @@ const variantOptions = ['default', 'ghost'] as const
             A Very Very Veeeeeery Long Label For Resources
           </BuiTabsTrigger>
         </BuiTabsList>
-        <BuiTabsContent value="general" class="mt-0 flex-grow bg-background p-2">
+        <BuiTabsContent value="general" class="mt-0 grow bg-background p-2">
           General content
         </BuiTabsContent>
         <BuiTabsContent value="health" class="mt-0 bg-background p-2">

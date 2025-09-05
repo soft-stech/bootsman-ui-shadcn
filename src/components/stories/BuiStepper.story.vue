@@ -45,7 +45,7 @@ const steps = [
 
           <BuiStepperTrigger as-child>
             <BuiButton
-              :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
+              :variant="state === 'completed' || state === 'active' ? 'default' : 'outline-solid'"
               class="z-10 size-10 shrink-0 rounded-full"
               :class="[
                 state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background'
@@ -94,7 +94,7 @@ const steps = [
 
           <BuiStepperTrigger as-child>
             <BuiButton
-              :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
+              :variant="state === 'completed' || state === 'active' ? 'default' : 'outline-solid'"
               class="z-10 size-10 shrink-0 rounded-full"
               :class="[
                 state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background'

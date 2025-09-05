@@ -9,7 +9,7 @@ const props = defineProps<AlertDialogCancelProps>()
 <template>
   <AlertDialogCancel
     v-bind="props"
-    :class="cn(buttonVariants({ variant: 'outline' }), 'mt-2 sm:mt-0', $attrs.class ?? '')"
+    :class="cn(buttonVariants({ variant: 'outline-solid' }), 'mt-2 sm:mt-0', $attrs.class ?? '')"
   >
     <slot />
   </AlertDialogCancel>

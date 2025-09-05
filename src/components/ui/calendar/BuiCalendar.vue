@@ -79,11 +79,11 @@ const vCalendarSlots = computed(() => {
 
 <template>
   <div class="relative">
-    <div class="absolute top-3 z-[1] flex w-full justify-between px-4">
+    <div class="absolute top-3 z-1 flex w-full justify-between px-4">
       <button
         :class="
           cn(
-            buttonVariants({ variant: 'outline' }),
+            buttonVariants({ variant: 'outline-solid' }),
             'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
           )
         "
@@ -94,7 +94,7 @@ const vCalendarSlots = computed(() => {
       <button
         :class="
           cn(
-            buttonVariants({ variant: 'outline' }),
+            buttonVariants({ variant: 'outline-solid' }),
             'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
           )
         "
@@ -165,7 +165,7 @@ const vCalendarSlots = computed(() => {
   @apply rounded-md;
 }
 .calendar .vc-day-content {
-  @apply relative inline-flex h-9 w-9 select-none items-center justify-center p-0 text-center text-sm font-normal ring-offset-background focus-within:relative focus-within:z-20 hover:bg-accent/[0.08] hover:text-accent-foreground hover:transition-colors focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-ring focus-visible:ring-offset-2 aria-selected:opacity-100;
+  @apply relative inline-flex h-9 w-9 select-none items-center justify-center p-0 text-center text-sm font-normal ring-offset-background focus-within:relative focus-within:z-20 hover:bg-accent/8 hover:text-accent-foreground hover:transition-colors focus-visible:outline-hidden focus-visible:ring-2  focus-visible:ring-ring focus-visible:ring-offset-2 aria-selected:opacity-100;
 }
 .calendar .vc-day-content:not(.vc-highlight-content-light) {
   @apply rounded-md;
@@ -182,7 +182,7 @@ const vCalendarSlots = computed(() => {
   @apply bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground;
 }
 .calendar .vc-highlight-content-light {
-  @apply bg-accent/[0.08] text-accent-foreground;
+  @apply bg-accent/8 text-accent-foreground;
 }
 .calendar .vc-pane-container.in-transition {
   @apply overflow-hidden;

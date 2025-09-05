@@ -16,7 +16,7 @@ const modelValue = ref([50])
           v-model="modelValue"
           :max="100"
           :step="1"
-          :class="cn('w-[100%]', $attrs.class ?? '')"
+          :class="cn('w-full', $attrs.class ?? '')"
         />
       </div>
     </Variant>

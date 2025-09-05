@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 
 <template>
   <div :class="cn(alertVariants({ variant }), props.class ?? '')">
-    <div class="flex-shrink-0">
+    <div class="shrink-0">
       <slot name="icon" />
     </div>
     <div class="ml-3">

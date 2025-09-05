@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BuiButton from '@/components/ui/button/BuiButton.vue'
 
-const variantOptions = ['default', 'outline', 'ghost'] as const
+const variantOptions = ['default', 'outline-solid', 'ghost'] as const
 const sizes: {
   name: string
   value: 'lg' | 'default' | 'sm'

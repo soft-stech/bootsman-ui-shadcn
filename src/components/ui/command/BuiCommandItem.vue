@@ -14,7 +14,7 @@ const emitsAsProps = useEmitAsProps(emits)
     v-bind="{ ...props, ...emitsAsProps }"
     :class="
       cn(
-        'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-accent/[0.08] data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50',
+        'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden data-disabled:pointer-events-none data-highlighted:bg-accent/8 data-highlighted:text-accent-foreground data-disabled:opacity-50',
         $attrs.class ?? ''
       )
     "
