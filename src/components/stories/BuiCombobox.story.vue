@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { z } from 'zod'
-
 import { cn } from '@/lib/utils'
 import { BuiButton } from '@/components/ui/button'
 import {
@@ -10,10 +9,11 @@ import {
   BuiCommandGroup,
   BuiCommandInput,
   BuiCommandItem,
-  BuiCommandList
+  BuiCommandList,
+  BuiCommandNewItem
 } from '@/components/ui/command'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/ui/popover'
-import { CheckIcon, ChevronsUpDownIcon, ChevronDown } from 'lucide-vue-next'
+import { CheckIcon, ChevronsUpDownIcon, ChevronDown, CirclePlusIcon } from 'lucide-vue-next'
 import {
   BuiForm,
   BuiFormField,
@@ -34,14 +34,18 @@ const frameworks = [
 
 const open = ref(false)
 const value = ref<string>('')
+const search = ref<string>('')
 
 const formSchema = toTypedSchema(
   z.object({
-    namespace: z.string().min(2)
+    namespace: z.string().min(2),
+    groups: z.array(z.string())
   })
 )
 const isNamespacesPopoverOpen = ref(false)
+const isGroupsPopoverOpen = ref(false)
 const namespaces = ['default', 'local', 'my-namespace']
+const existingGroups = ref(['group-1', 'group-2', 'group-3'])
 
 // const filterFunction = (list: typeof frameworks, search: string) => list.filter(i => i.value.toLowerCase().includes(search.toLowerCase()))
 </script>
@@ -162,6 +166,119 @@ const namespaces = ['default', 'local', 'my-namespace']
                               :class="
                                 element === componentField.modelValue ? 'opacity-100' : 'opacity-0'
                               "
+                            />
+                            {{ element }}
+                          </BuiCommandItem>
+                        </BuiCommandGroup>
+                      </BuiCommandList>
+                    </BuiFormControl>
+                  </BuiCommand>
+                </BuiPopoverContent>
+
+                <BuiFormMessage />
+              </BuiPopover>
+            </BuiFormItem>
+          </BuiFormField>
+        </BuiForm>
+      </div>
+    </Variant>
+
+    <Variant key="multi-with-create" title="Multiselect + create">
+      <div class="p-4">
+        <BuiForm :validation-schema="formSchema" :initial-values="{ groups: ['group-1'] }">
+          <BuiFormField name="groups" v-slot="{ meta, validate, value, setValue }">
+            <BuiFormItem class="w-full">
+              <BuiLabel :for="`groups`" class="flex gap-2">
+                <div class="flex">Groups</div>
+              </BuiLabel>
+
+              <BuiPopover
+                v-model:open="isGroupsPopoverOpen"
+                @update:open="
+                  (isOpen) => {
+                    if (!isOpen) {
+                      validate()
+                    }
+                  }
+                "
+              >
+                <BuiPopoverTrigger as-child :id="`groups`">
+                  <BuiButton
+                    variant="outline"
+                    size="lg"
+                    role="combobox"
+                    :aria-expanded="isGroupsPopoverOpen"
+                    class="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-inherit ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:bg-transparent active:outline-none active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
+                    :class="!meta.valid && meta.validated ? '!border-destructive-foreground' : ''"
+                  >
+                    <span>
+                      {{ value.length ? value.join(', ') : 'Select multiple or add' }}
+                    </span>
+                    <ChevronDown class="h-4 w-4 flex-shrink-0 opacity-50" />
+                  </BuiButton>
+                </BuiPopoverTrigger>
+
+                <BuiPopoverContent class="w-[var(--radix-popper-anchor-width)] p-0">
+                  <BuiCommand class="p-0">
+                    <BuiCommandInput
+                      class="h-9"
+                      placeholder="Search or create new"
+                      v-model="search"
+                      @input="(event: Event) => (search = (event.target as HTMLInputElement).value)"
+                    />
+                    <BuiCommandEmpty class="flex w-full py-1 pl-1">
+                      <BuiCommandNewItem
+                        v-if="search"
+                        @create="
+                          () => {
+                            setValue([...value, search])
+                            existingGroups = [...existingGroups, search]
+                            search = ''
+                            isGroupsPopoverOpen = false
+                          }
+                        "
+                      >
+                        <CirclePlusIcon class="mr-2 h-4 w-4" />
+                        <span>Create "{{ search }}"</span>
+                      </BuiCommandNewItem>
+                    </BuiCommandEmpty>
+                    <BuiFormControl>
+                      <BuiCommandList>
+                        <BuiCommandGroup>
+                          <BuiCommandNewItem
+                            v-if="search"
+                            @create="
+                              () => {
+                                setValue([...value, search])
+                                existingGroups = [...existingGroups, search]
+                                search = ''
+                                isGroupsPopoverOpen = false
+                              }
+                            "
+                          >
+                            <CirclePlusIcon class="mr-2 h-4 w-4" />
+                            <span>Create "{{ search }}"</span>
+                          </BuiCommandNewItem>
+
+                          <BuiCommandItem
+                            v-for="element in existingGroups"
+                            :value="element"
+                            :key="element"
+                            @select="
+                              () => {
+                                if (value.includes(element)) {
+                                  setValue(value.filter((item: string) => item !== element))
+                                } else {
+                                  setValue([...value, element])
+                                }
+
+                                isGroupsPopoverOpen = false
+                              }
+                            "
+                          >
+                            <CheckIcon
+                              class="mr-2 h-4 w-4"
+                              :class="value.includes(element) ? 'opacity-100' : 'opacity-0'"
                             />
                             {{ element }}
                           </BuiCommandItem>
