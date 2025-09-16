@@ -3,25 +3,25 @@ import { cva } from 'class-variance-authority'
 export { default as BuiButton } from './BuiButton.vue'
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none',
+  'inline-flex items-center justify-center rounded text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none',
   {
     variants: {
       variant: {
         default: [
-          /* background*/ 'bg-primary hover:bg-primary-hover active:bg-primary-active disabled:bg-foreground/[0.04]',
-          /* border */ 'disabled:border disabled:border-foreground/[0.16]',
-          /* text */ 'text-primary-foreground disabled:text-foreground/[0.16]'
+          /* background*/ 'bg-primary hover:bg-primary-hover active:bg-primary-active disabled:bg-foreground/4',
+          /* border */ 'disabled:border disabled:border-foreground/16',
+          /* text */ 'text-primary-foreground disabled:text-foreground/16'
         ],
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline: [
-          /* background*/ 'hover:bg-accent/[0.08] active:bg-accent/[0.16] disabled:bg-accent/[0.04]',
-          /* border */ 'border border-primary disabled:border-accent/[0.32]',
-          /* text */ 'text-accent disabled:text-accent/[0.32]'
+          /* background*/ 'hover:bg-accent/8 active:bg-accent/16 disabled:bg-accent/4',
+          /* border */ 'border border-primary disabled:border-accent/32',
+          /* text */ 'text-accent disabled:text-accent/32'
         ],
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: [
           /* text */ 'text-accent disabled:text-accent/[0.56]',
-          /* background */ 'hover:bg-accent/[0.08] active:bg-accent/[0.16]'
+          /* background */ 'hover:bg-accent/8 active:bg-accent/16'
         ],
         link: 'text-primary underline-offset-4 hover:underline',
         none: 'border-none bg-transparent'

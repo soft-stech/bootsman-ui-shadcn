@@ -131,17 +131,17 @@ const existingGroups = ref(['group-1', 'group-2', 'group-3'])
                     size="lg"
                     role="combobox"
                     :aria-expanded="isNamespacesPopoverOpen"
-                    class="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-inherit ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:bg-transparent active:outline-none active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
-                    :class="!meta.valid && meta.validated ? '!border-destructive-foreground' : ''"
+                    class="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-inherit ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 active:bg-transparent active:outline-hidden active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
+                    :class="!meta.valid && meta.validated ? 'border-destructive-foreground!' : ''"
                   >
                     <span>
                       {{ componentField.modelValue ? componentField.modelValue : 'Select' }}
                     </span>
-                    <ChevronDown class="h-4 w-4 flex-shrink-0 opacity-50" />
+                    <ChevronDown class="h-4 w-4 shrink-0 opacity-50" />
                   </BuiButton>
                 </BuiPopoverTrigger>
 
-                <BuiPopoverContent class="w-[var(--reka-popper-anchor-width)] p-0">
+                <BuiPopoverContent class="w-(--reka-popper-anchor-width) p-0">
                   <BuiCommand class="p-0">
                     <BuiCommandInput class="h-9" placeholder="Search" />
                     <BuiCommandEmpty> No results </BuiCommandEmpty>
@@ -208,17 +208,17 @@ const existingGroups = ref(['group-1', 'group-2', 'group-3'])
                     size="lg"
                     role="combobox"
                     :aria-expanded="isGroupsPopoverOpen"
-                    class="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-inherit ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:bg-transparent active:outline-none active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
-                    :class="!meta.valid && meta.validated ? '!border-destructive-foreground' : ''"
+                    class="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-inherit ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 active:bg-transparent active:outline-hidden active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
+                    :class="!meta.valid && meta.validated ? 'border-destructive-foreground!' : ''"
                   >
                     <span>
                       {{ value.length ? value.join(', ') : 'Select multiple or add' }}
                     </span>
-                    <ChevronDown class="h-4 w-4 flex-shrink-0 opacity-50" />
+                    <ChevronDown class="h-4 w-4 shrink-0 opacity-50" />
                   </BuiButton>
                 </BuiPopoverTrigger>
 
-                <BuiPopoverContent class="w-[var(--radix-popper-anchor-width)] p-0">
+                <BuiPopoverContent class="w-(--radix-popper-anchor-width) p-0">
                   <BuiCommand class="p-0">
                     <BuiCommandInput
                       class="h-9"

@@ -22,8 +22,8 @@ function handleKeydown(event: KeyboardEvent) {
     @keydown="handleKeydown"
     :class="
       cn(
-        'w-full justify-start px-2 py-1.5 text-left text-primary focus:outline-none',
-        'hover:bg-accent/[0.08] focus:!bg-accent/[0.08]'
+        'w-full justify-start px-2 py-1.5 text-left text-primary focus:outline-hidden',
+        'hover:bg-accent/8 focus:bg-accent/8!'
       )
     "
   >

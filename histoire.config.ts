@@ -2,7 +2,12 @@ import { defineConfig } from 'histoire'
 import { HstVue } from '@histoire/plugin-vue'
 
 export default defineConfig({
-  plugins: [HstVue()],
+  plugins: [
+    HstVue(),
+    {
+      name: 'builtin:tailwind-tokens'
+    }
+  ],
   setupFile: 'src/histoire-setup.ts',
   theme: {
     title: 'Bootsman-ui',

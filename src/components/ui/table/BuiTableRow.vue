@@ -11,7 +11,7 @@ const props = defineProps<{ class?: string }>()
       <tr
         :class="
           cn(
-            'border-b border-border/[0.08] transition-colors data-[row-state=selected]:bg-accent/[0.04]',
+            'border-b border-border/8 transition-colors data-[row-state=selected]:bg-accent/4',
             props.class
           )
         "
@@ -26,7 +26,7 @@ const props = defineProps<{ class?: string }>()
     v-else
     :class="
       cn(
-        'border-b border-border/[0.08] transition-colors data-[row-state=selected]:bg-accent/[0.04]',
+        'border-b border-border/8 transition-colors data-[row-state=selected]:bg-accent/4',
         props.class
       )
     "

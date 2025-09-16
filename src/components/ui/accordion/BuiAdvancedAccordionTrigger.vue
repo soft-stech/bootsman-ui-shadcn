@@ -24,7 +24,7 @@ const props = defineProps<
       cn(
         'flex flex-col p-2 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b',
         props.borderColorClass ? props.borderColorClass : 'border-border',
-        props.bgColorClass ? props.bgColorClass : 'bg-primary/[0.16]'
+        props.bgColorClass ? props.bgColorClass : 'bg-primary/16'
       )
     "
     as="div"
@@ -34,7 +34,7 @@ const props = defineProps<
         v-bind="props"
         :class="
           cn(
-            'flex flex-1 items-center gap-2 rounded align-middle text-base font-semibold leading-6 ring-offset-background transition-all hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none  [&[data-state=open]>svg]:rotate-180',
+            'flex flex-1 items-center gap-2 rounded align-middle text-base font-semibold leading-6 ring-offset-background transition-all hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none  [&[data-state=open]>svg]:rotate-180',
             props.class,
             props.isDisabledAsNormal ? 'disabled:opacity-100' : 'disabled:opacity-30'
           )
@@ -46,7 +46,7 @@ const props = defineProps<
               'h-4 w-4 shrink-0 rounded-sm text-primary-foreground transition-transform duration-200',
               props.iconBgClass
                 ? `${props.iconBgClass} dark:${props.iconBgClass}`
-                : 'bg-primary/[0.56] dark:bg-primary/[1]',
+                : 'bg-primary/[0.56] dark:bg-primary',
               props.isIconHidden ? 'invisible' : 'visible'
             )
           "

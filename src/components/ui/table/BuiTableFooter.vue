@@ -8,7 +8,7 @@ const props = defineProps<{ class?: string }>()
   <tfoot
     :class="
       cn(
-        'border-t border-border/[0.16] bg-primary/[0.04] text-base text-muted-foreground',
+        'border-t border-border/16 bg-primary/4 text-base text-muted-foreground',
         props.class
       )
     "

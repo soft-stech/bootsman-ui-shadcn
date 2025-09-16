@@ -1,3 +1,141 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss' important;
+
+/* @plugin 'tailwindcss-animate' */
+/* @plugin 'tailwind-scrollbar' */
+
+@theme {
+  /* Container */
+  --container-padding: 2rem;
+  --container-screen-2xl: 1400px;
+
+  /* Colors */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar: var(--side-bar);
+  --color-tabs-sidebar: var(--tabs-sidebar);
+
+  /* Primary colors */
+  --color-primary: var(--primary); /*  / <alpha-value> */
+  --color-primary-foreground: var(--primary-foreground); /*  / <alpha-value> */
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+
+  /* Secondary colors */
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* State colors */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  /* Border Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Box Shadows */
+  --shadow-card: 0px 4px 8px 0px var(--card-shadow);
+  --shadow-tab: 0px 2px 4px 0px var(--tab-shadow), 0px 4px 4px 0px var(--tab-shadow);
+  --shadow-top: 0px -2px 4px 0px var(--tab-shadow);
+  --shadow-level1:
+    0px 16px 16px 0px var(--tab-shadow), 0px 8px 16px 0px var(--tab-shadow),
+    0px 8px 8px 0px var(--tab-shadow);
+  --shadow-level2:
+    0px 32px 16px 0px var(--tab-shadow), 0px 16px 16px 0px var(--tab-shadow),
+    0px 16px 16px 0px var(--tab-shadow);
+  --shadow-level3:
+    0px 56px 24px 0px var(--tab-shadow), 0px 32px 24px 0px var(--tab-shadow),
+    0px 32px 24px 0px var(--tab-shadow);
+  --shadow-tab-sidebar: inset -8px 0px 16px 0px var(--tabs-sidebar-shadow);
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-collapsible-down: collapsible-down 0.2s ease-in-out;
+  --animate-collapsible-up: collapsible-up 0.2s ease-in-out;
+
+  /* Background Images */
+  --bg-image-logo: url('/src/assets/logo-full.png');
+  --bg-image-logo-dark: url('/src/assets/logo-full-dark.png');
+}
+
+/* Keyframes */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--reka-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--reka-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes collapsible-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--reka-collapsible-content-height);
+  }
+}
+
+@keyframes collapsible-up {
+  from {
+    height: var(--reka-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+* {
+  @apply border-border;
+}
+body {
+  @apply bg-background text-foreground;
+}
+
+/* @config '../../tailwind.config.ts'; */
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+/* @layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+} */

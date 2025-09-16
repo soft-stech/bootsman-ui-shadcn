@@ -16,7 +16,7 @@ export const progressVariants = cva('', {
 })
 
 export const indicatorVariants = cva(
-  'absolute h-full box-content flex-1 bg-gradient-to-l transition-all duration-300',
+  'absolute h-full box-content flex-1 bg-linear-to-l transition-all duration-300',
   {
     variants: {
       variant: {

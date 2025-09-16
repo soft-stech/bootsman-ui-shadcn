@@ -17,7 +17,7 @@ const props = withDefaults(
     v-bind="props"
     :class="[
       cn(
-        'flex h-8 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-2 py-1 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-muted-foreground [&>span]:min-w-0 [&>span]:truncate',
+        'flex h-8 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-2 py-1 text-sm ring-offset-background focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&>span]:min-w-0 [&>span]:truncate',
         props.invalid && 'border-destructive-foreground',
         props.class
       )
@@ -26,7 +26,7 @@ const props = withDefaults(
     <slot />
     <slot name="icon">
       <SelectIcon as-child>
-        <ChevronDown class="h-4 w-4 flex-shrink-0 opacity-50" />
+        <ChevronDown class="h-4 w-4 shrink-0 opacity-50" />
       </SelectIcon>
     </slot>
   </SelectTrigger>

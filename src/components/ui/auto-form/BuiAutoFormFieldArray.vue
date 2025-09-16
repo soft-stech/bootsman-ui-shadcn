@@ -76,7 +76,7 @@ provide(FieldContextKey, fieldContext)
                     :config="config as ConfigItem"
                   />
 
-                  <div class="!my-4 flex justify-end">
+                  <div class="my-4! flex justify-end">
                     <Button type="button" size="icon" variant="secondary" @click="remove(index)">
                       <TrashIcon :size="16" />
                     </Button>

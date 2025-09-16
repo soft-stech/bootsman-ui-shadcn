@@ -4,6 +4,7 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
 import { glob } from 'glob'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -52,6 +53,7 @@ export default defineConfig(({ mode }) => {
     base: env.BASE_URL ?? '/',
     plugins: [
       vue(),
+      tailwindcss(),
       !env.DOCS &&
         dts({
           // rollupTypes: true,

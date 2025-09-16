@@ -43,4 +43,4 @@ export * from './components/ui/sheet/index'
 export * from './components/ui/color-picker/index'
 
 export * from './lib/utils'
-export { default as tailwind } from './tailwind-preset'
+// export { default as tailwind } from './tailwind-preset'

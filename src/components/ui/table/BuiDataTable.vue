@@ -347,13 +347,13 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
             :style="{ height: `${height.toFixed(1)}px` }"
           >
             <div
-              class="flex h-full items-center border-b border-l border-border/[0.16] bg-foreground/[0.04] px-1"
+              class="flex h-full items-center border-b border-l border-border/16 bg-foreground/4 px-1"
             >
               <BuiButton
                 variant="ghost"
                 class="flex h-8 w-8 items-center justify-center text-foreground"
               >
-                <Settings2Icon class="h-4 w-4 flex-shrink-0 opacity-50" />
+                <Settings2Icon class="h-4 w-4 shrink-0 opacity-50" />
               </BuiButton>
             </div>
           </div>
@@ -438,8 +438,8 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
         <template v-if="props.groupBy && groupedRows">
           <BuiCollapsible asChild v-for="(value, key) in groupedRows" :key="key" :open="true">
             <BuiCollapsibleTrigger asChild>
-              <BuiTableRow class="bg-foreground/[0.04]">
-                <BuiTableCell :colspan="columns.length" class="!pb-0">
+              <BuiTableRow class="bg-foreground/4">
+                <BuiTableCell :colspan="columns.length" class="pb-0!">
                   <div class="mt-1 flex w-full items-center justify-between">
                     <div
                       class="relative -mb-[6px] inline-block rounded-t-lg bg-background px-4 py-2 text-sm font-medium shadow-top-shadow"
@@ -447,14 +447,14 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
                       <div class="absolute -left-2 bottom-0 h-2 w-2 bg-background"></div>
                       <div class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-background"></div>
                       <div
-                        class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-foreground/[0.04]"
+                        class="absolute -left-4 bottom-0 h-4 w-4 rounded-lg bg-foreground/4"
                       ></div>
                       <div class="absolute -right-2 bottom-0 h-2 w-2 bg-background"></div>
                       <div
                         class="absolute -right-4 bottom-0 h-4 w-4 rounded-lg bg-background"
                       ></div>
                       <div
-                        class="absolute -right-4 bottom-0 h-4 w-4 rounded-lg bg-foreground/[0.04]"
+                        class="absolute -right-4 bottom-0 h-4 w-4 rounded-lg bg-foreground/4"
                       ></div>
                       <div></div>
                       <template v-if="key === NO_GROUP_KEY">
@@ -515,7 +515,7 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
   </BuiTable>
   <div
     v-if="(showPagination || $slots.numberOfItems) && computedItems > 0"
-    class="flex w-full border-x border-b border-border/[0.16] bg-primary/[0.04] px-2.5 py-1 text-sm text-muted-foreground"
+    class="flex w-full border-x border-b border-border/16 bg-primary/4 px-2.5 py-1 text-sm text-muted-foreground"
     :class="{
       'justify-between': showPagination && $slots.numberOfItems,
       'justify-start': $slots.numberOfItems && !showPagination,

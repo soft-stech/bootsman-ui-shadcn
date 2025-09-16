@@ -14,7 +14,7 @@ const date = ref<Date>()
         <BuiPopover>
           <BuiPopoverTrigger as-child>
             <BuiButton
-              :variant="'outline'"
+              :variant="'outline-solid'"
               :class="
                 cn(
                   'w-[280px] justify-start text-left font-normal',

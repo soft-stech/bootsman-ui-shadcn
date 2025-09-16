@@ -53,7 +53,7 @@ provide(FieldContextKey, fieldContext)
     <slot v-bind="props">
       <BuiCard as-child class="w-full border-0 shadow-none">
         <FormItem>
-          <BuiCardHeader class="border-b-[1px] border-b-border/[0.16] py-1">
+          <BuiCardHeader class="border-b border-b-border/16 py-1">
             <BuiCardTitle class="py-0 text-base">
               {{
                 schema?.description ||
@@ -71,7 +71,7 @@ provide(FieldContextKey, fieldContext)
                   :config="config as ConfigItem"
                 />
 
-                <div class="!my-4 flex justify-end">
+                <div class="my-4! flex justify-end">
                   <Button type="button" size="icon" variant="secondary" @click="remove(index)">
                     <TrashIcon :size="16" />
                   </Button>
