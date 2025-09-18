@@ -1,17 +1,17 @@
-import { BuiForm } from '@/components/form';
-import LoginForm from '@/stories/components/LoginForm.vue';
-import LoginFormHook from '@/stories/components/LoginFormHook.vue';
-import UseBuiField from '@/stories/components/UseBuiField.vue';
-import type { Meta, StoryObj } from '@storybook/vue3-vite';
+import { BuiForm } from '@/components/form'
+import LoginForm from '@/stories/components/LoginForm.vue'
+import LoginFormHook from '@/stories/components/LoginFormHook.vue'
+import UseBuiField from '@/stories/components/UseBuiField.vue'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 
 const meta = {
   component: BuiForm,
   argTypes: {},
   args: {}
-} satisfies Meta<typeof BuiForm>;
-export default meta;
+} satisfies Meta<typeof BuiForm>
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 export const FormComponent: Story = {
   render: (args) => ({

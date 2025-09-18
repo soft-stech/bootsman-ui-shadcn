@@ -23,6 +23,8 @@ export default defineConfig([
         ...globals.browser
       }
     },
-    rules: {}
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off'
+    }
   }
 ])

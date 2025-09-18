@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BuiInput } from '@/components/input'
 import {
   BuiPagination,
   BuiPaginationFirst,
@@ -7,14 +8,13 @@ import {
   BuiPaginationNext,
   BuiPaginationPrev
 } from '@/components/pagination'
-// import {
-//   BuiInput,
-//   BuiSelect,
-//   BuiSelectContent,
-//   BuiSelectItem,
-//   BuiSelectTrigger,
-//   BuiSelectValue
-// } from '@/index'
+import {
+  BuiSelect,
+  BuiSelectContent,
+  BuiSelectItem,
+  BuiSelectTrigger,
+  BuiSelectValue
+} from '@/components/select'
 import { computed } from 'vue'
 
 const pageSizes = [10, 20, 30, 40, 50] as const
@@ -54,7 +54,7 @@ const pageSizeString = computed({
       <p class="text-muted-foreground text-sm">
         {{ translations?.itemsPerPage || 'Items per page' }}
       </p>
-      <!-- <BuiSelect v-model.number="pageSizeString">
+      <BuiSelect v-model.number="pageSizeString">
         <BuiSelectTrigger class="mr-2 w-[70px]">
           <BuiSelectValue :placeholder="pageSize.toString()" />
         </BuiSelectTrigger>
@@ -63,7 +63,7 @@ const pageSizeString = computed({
             {{ pageSize }}
           </BuiSelectItem>
         </BuiSelectContent>
-      </BuiSelect> -->
+      </BuiSelect>
       <template v-if="totalPages > 1">
         <p class="text-muted-foreground text-sm">
           {{ translations?.page || 'Page' }} {{ page }} {{ translations?.of || 'of' }}
@@ -71,7 +71,7 @@ const pageSizeString = computed({
         </p>
         <BuiPaginationFirst />
         <BuiPaginationPrev />
-        <!-- <BuiInput v-model="pageIndex" class="w-28" placeholder="Page number" /> -->
+        <BuiInput v-model="pageIndex" class="w-28" placeholder="Page number" />
         <BuiPaginationNext />
         <BuiPaginationLast />
       </template>

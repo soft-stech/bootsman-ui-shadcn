@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import BuiTableHeader from '@/components/ui/table/BuiTableHeader.vue'
+import BuiTableHeader from '@/components/table/BuiTableHeader.vue'
 import { useEventListener } from '@vueuse/core'
 
 export function useResizeColumns() {
@@ -90,7 +90,7 @@ export function useResizeColumns() {
     if (cells.value) {
       const updatedColumnSizingValue: Record<string, number> = {}
 
-      for (let cell in cells.value) {
+      for (const cell in cells.value) {
         const currentCell = cells.value[cell]
         const newWidth = !currentCell.cell.hasAttribute('can-resize')
           ? currentCell.initialWidth
@@ -182,7 +182,7 @@ export function useResizeColumns() {
     if (cells.value) {
       const updatedColumnSizingValue: Record<string, number> = {}
 
-      for (let cell in cells.value) {
+      for (const cell in cells.value) {
         const inititalWidth = cells.value[cell].initialWidth
 
         cells.value[cell].cell.style.width = inititalWidth + 'px'
@@ -199,7 +199,7 @@ export function useResizeColumns() {
     if (cells.value) {
       const updatedColumnSizingValue: Record<string, number> = {}
 
-      for (let cell in cells.value) {
+      for (const cell in cells.value) {
         if (!cells.value[cell].cell.style.width) {
           cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
         }
