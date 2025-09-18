@@ -4,7 +4,6 @@ import {
   BuiSelectItem,
   BuiSelectItemText,
   BuiSelectLabel,
-  BuiSelectSeparator,
   BuiSelectGroup,
   BuiSelectTrigger,
   BuiSelectValue
@@ -49,23 +48,21 @@ export const Default: Story = {
       return { args }
     },
     template: `
-      <div class="flex min-h-[350px] w-full items-center justify-center p-10">
-        <BuiSelect>
-          <BuiSelectTrigger class="w-[180px]">
-            <BuiSelectValue placeholder="Select a fruit" />
-          </BuiSelectTrigger>
-          <BuiSelectContent>
-            <BuiSelectGroup>
-              <BuiSelectLabel>Fruits</BuiSelectLabel>
-              <BuiSelectItem value="apple"> Apple </BuiSelectItem>
-              <BuiSelectItem value="banana"> Banana </BuiSelectItem>
-              <BuiSelectItem value="blueberry"> Blueberry </BuiSelectItem>
-              <BuiSelectItem value="grapes"> Grapes </BuiSelectItem>
-              <BuiSelectItem value="pineapple"> Pineapple </BuiSelectItem>
-            </BuiSelectGroup>
-          </BuiSelectContent>
-        </BuiSelect>
-      </div>
+      <BuiSelect>
+        <BuiSelectTrigger class="w-[180px]">
+          <BuiSelectValue placeholder="Select a fruit" />
+        </BuiSelectTrigger>
+        <BuiSelectContent>
+          <BuiSelectGroup>
+            <BuiSelectLabel>Fruits</BuiSelectLabel>
+            <BuiSelectItem value="apple"> Apple </BuiSelectItem>
+            <BuiSelectItem value="banana"> Banana </BuiSelectItem>
+            <BuiSelectItem value="blueberry"> Blueberry </BuiSelectItem>
+            <BuiSelectItem value="grapes"> Grapes </BuiSelectItem>
+            <BuiSelectItem value="pineapple"> Pineapple </BuiSelectItem>
+          </BuiSelectGroup>
+        </BuiSelectContent>
+      </BuiSelect>
     `
   })
 }
@@ -88,26 +85,24 @@ export const CustomIcon: Story = {
       return { args }
     },
     template: `
-      <div class="flex min-h-[350px] w-full items-center justify-center p-10">
-        <BuiSelect>
-          <BuiSelectTrigger class="w-[180px]">
-            <BuiSelectValue placeholder="Select a fruit" />
-            <template #icon>
-              <BringToFrontIcon class="h-4 w-4 opacity-50" />
-            </template>
-          </BuiSelectTrigger>
-          <BuiSelectContent>
-            <BuiSelectGroup>
-              <BuiSelectLabel>Fruits</BuiSelectLabel>
-              <BuiSelectItem value="apple"> Apple </BuiSelectItem>
-              <BuiSelectItem value="banana"> Banana </BuiSelectItem>
-              <BuiSelectItem value="blueberry"> Blueberry </BuiSelectItem>
-              <BuiSelectItem value="grapes"> Grapes </BuiSelectItem>
-              <BuiSelectItem value="pineapple"> Pineapple </BuiSelectItem>
-            </BuiSelectGroup>
-          </BuiSelectContent>
-        </BuiSelect>
-      </div>
+      <BuiSelect>
+        <BuiSelectTrigger class="w-[180px]">
+          <BuiSelectValue placeholder="Select a fruit" />
+          <template #icon>
+            <BringToFrontIcon class="h-4 w-4 opacity-50" />
+          </template>
+        </BuiSelectTrigger>
+        <BuiSelectContent>
+          <BuiSelectGroup>
+            <BuiSelectLabel>Fruits</BuiSelectLabel>
+            <BuiSelectItem value="apple"> Apple </BuiSelectItem>
+            <BuiSelectItem value="banana"> Banana </BuiSelectItem>
+            <BuiSelectItem value="blueberry"> Blueberry </BuiSelectItem>
+            <BuiSelectItem value="grapes"> Grapes </BuiSelectItem>
+            <BuiSelectItem value="pineapple"> Pineapple </BuiSelectItem>
+          </BuiSelectGroup>
+        </BuiSelectContent>
+      </BuiSelect>
     `
   })
 }
@@ -140,13 +135,12 @@ export const WithValidation: Story = {
         favoriteFruit: 'apple'
       }
 
-      return { args }
+      return { args, validationSchema, initialValues }
     },
     template: `
       <BuiForm
         :validation-schema="validationSchema"
         :initial-values="initialValues"
-        class="flex min-h-[350px] w-full flex-col items-center justify-center gap-4 p-10"
       >
         <BuiFormField name="favoriteFruit" v-slot="{ componentField, meta }">
           <BuiFormItem>
