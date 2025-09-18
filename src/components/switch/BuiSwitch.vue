@@ -1,0 +1,41 @@
+<script setup lang="ts">
+import { FORM_READONLY_INJECTION_KEY } from '@/components/form'
+import { cn } from '@/lib/utils'
+import {
+  SwitchRoot,
+  SwitchThumb,
+  useForwardPropsEmits,
+  type SwitchRootEmits,
+  type SwitchRootProps
+} from 'reka-ui'
+import { inject, toRef } from 'vue'
+
+const props = defineProps<SwitchRootProps & { class?: string }>()
+const emits = defineEmits<SwitchRootEmits>()
+
+const forwarded = useForwardPropsEmits(props, emits)
+
+// Inject readonly state from context
+const readonlyContext = inject(FORM_READONLY_INJECTION_KEY, toRef(false))
+</script>
+
+<template>
+  <SwitchRoot
+    v-bind="forwarded"
+    :class="
+      cn(
+        `peer focus-visible:ring-ring focus-visible:ring-offset-background data-[state=checked]:border-border data-[state=checked]:bg-primary data-[state=unchecked]:bg-background data-[state=checked]:hover:bg-accent-foreground disabled:data-[state=checked]:border-accent/30 disabled:data-[state=checked]:bg-accent/30 dark:data-[state=unchecked]:border-border dark:data-[state=unchecked]:bg-input/15 dark:data-[state=unchecked]:hover:bg-accent/30 dark:data-[state=checked]:hover:enabled:border-primary-hover dark:data-[state=checked]:hover:enabled:bg-primary-hover dark:data-[state=unchecked]:disabled:border-foreground/30 dark:data-[state=unchecked]:disabled:bg-foreground/30 inline-flex h-[20px] w-[44px] shrink-0 cursor-pointer items-center rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-not-allowed data-[state=unchecked]:border-gray-300 data-[state=unchecked]:hover:bg-gray-50 disabled:data-[state=unchecked]:bg-slate-300/16`,
+        props.class
+      )
+    "
+    :disabled="readonlyContext || props.disabled"
+  >
+    <SwitchThumb
+      :class="
+        cn(
+          `data-[state=checked]:bg-background dark:data-disabled:bg-foreground/30 dark:data-[state=checked]:bg-foreground dark:data-[state=unchecked]:bg-foreground pointer-events-none block h-3 w-3 rounded-full bg-gray-400 shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-[26px] data-[state=unchecked]:translate-x-1`
+        )
+      "
+    />
+  </SwitchRoot>
+</template>

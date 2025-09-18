@@ -1,8 +1,0 @@
-export { default as BuiDialog } from './BuiDialog.vue'
-export { default as BuiDialogClose } from './BuiDialogClose.vue'
-export { default as BuiDialogTrigger } from './BuiDialogTrigger.vue'
-export { default as BuiDialogHeader } from './BuiDialogHeader.vue'
-export { default as BuiDialogTitle } from './BuiDialogTitle.vue'
-export { default as BuiDialogDescription } from './BuiDialogDescription.vue'
-export { default as BuiDialogContent } from './BuiDialogContent.vue'
-export { default as BuiDialogFooter } from './BuiDialogFooter.vue'

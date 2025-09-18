@@ -1,17 +1,13 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "dist",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "types": [
-      "./types.d.ts"
-    ]
-  },
-  "include": ["env.d.ts", "src/**/*", "types.d.ts"],
-  "exclude": ["src/**/__tests__/*", "src/stories/**/*"]
+      "@/*": ["./src/*"]
+    }
+  }
 }
