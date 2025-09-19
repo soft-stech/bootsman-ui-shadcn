@@ -3,6 +3,7 @@ import { BuiAvatar, BuiAvatarImage, BuiAvatarFallback } from '@/components/avata
 
 const meta = {
   component: BuiAvatar,
+  subcomponents: { BuiAvatarImage, BuiAvatarFallback },
   tags: ['autodocs'],
   argTypes: {
     shape: {

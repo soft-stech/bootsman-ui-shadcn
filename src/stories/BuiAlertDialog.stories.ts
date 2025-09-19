@@ -14,8 +14,18 @@ import BuiButton from '@/components/button/BuiButton.vue'
 
 const meta = {
   component: BuiAlertDialog,
+  subcomponents: {
+    BuiAlertDialogAction,
+    BuiAlertDialogCancel,
+    BuiAlertDialogContent,
+    BuiAlertDialogDescription,
+    BuiAlertDialogFooter,
+    BuiAlertDialogHeader,
+    BuiAlertDialogTitle,
+    BuiAlertDialogTrigger
+  },
   decorators: [() => ({ template: '<div class="flex justify-center p-10"><story/></div>' })],
-  //tags: ['autodocs'],
+  tags: ['autodocs'],
   args: {}
 } satisfies Meta<typeof BuiAlertDialog>
 

@@ -5,6 +5,7 @@ import { AlertTriangle, X } from 'lucide-vue-next'
 
 const meta = {
   component: BuiAlert,
+  subcomponents: { BuiAlertTitle, BuiAlertDescription },
   tags: ['autodocs'],
   argTypes: {
     variant: {
