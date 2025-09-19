@@ -3,13 +3,20 @@ import {
   BuiAccordion,
   BuiAccordionContent,
   BuiAccordionItem,
-  BuiAccordionTrigger
+  BuiAccordionTrigger,
+  BuiAdvancedAccordionTrigger
 } from '@/components/accordion'
 import BuiAccordionStory from '@/stories/components/BuiAccordionStory.vue'
 import BuiAccordionAdvancedTriggerStory from '@/stories/components/BuiAccordionAdvancedTriggerStory.vue'
 
 const meta = {
   component: BuiAccordion,
+  subcomponents: {
+    BuiAccordionContent,
+    BuiAccordionItem,
+    BuiAccordionTrigger,
+    BuiAdvancedAccordionTrigger
+  },
   tags: ['autodocs'],
   argTypes: {
     type: {
