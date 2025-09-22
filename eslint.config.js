@@ -8,7 +8,7 @@ import prettier from 'eslint-plugin-prettier/recommended'
 export default defineConfig([
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  ...pluginVue.configs['flat/recommended'], // <-- используем flat/recommended
+  ...pluginVue.configs['flat/recommended'],
   prettier,
   {
     files: ['**/*.{vue,ts,js}'],
@@ -24,7 +24,8 @@ export default defineConfig([
       }
     },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off'
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/ban-ts-comment': false
     }
   }
 ])

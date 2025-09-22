@@ -30,6 +30,7 @@
     "zod": "^3.23.6"
   },
   "dependencies": {
+    "@internationalized/date": "^3.9.0",
     "@tailwindcss/vite": "^4.1.13",
     "@vueuse/integrations": "^13.9.0",
     "class-variance-authority": "^0.7.1",

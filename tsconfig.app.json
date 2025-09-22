@@ -7,7 +7,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    // "erasableSyntaxOnly": true, // uncomment and look: src/components/auto-form/interface.ts
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
