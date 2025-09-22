@@ -67,6 +67,9 @@
 
   --bg-image-logo: url('/src/assets/logo-full.png');
   --bg-image-logo-dark: url('/src/assets/logo-full-dark.png');
+
+  --color-tooltip: var(--tooltip);
+  --color-tooltip-link: var(--tooltip-link);
 }
 
 @keyframes accordion-down {
