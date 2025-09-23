@@ -15,7 +15,7 @@ export function useResizeColumns() {
   const ACTIONS_CELL_MIN_WIDTH = 10
   const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
-  const unregisterMouseMove = ref<Function | undefined>(undefined)
+  const unregisterMouseMove = ref<(() => void) | undefined>(undefined)
 
   const setProvidedCellWidths = (columnSizing: Record<string, number> | undefined) => {
     if (tableHeaderElement.value && tableHeaderElement.value.headRef) {

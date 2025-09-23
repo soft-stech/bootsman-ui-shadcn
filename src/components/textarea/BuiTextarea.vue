@@ -26,7 +26,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 // Inject readonly state from context
 const readonlyContext = inject(FORM_READONLY_INJECTION_KEY, toRef(false))
 
-const isFocused = ref<Boolean>(false)
+const isFocused = ref<boolean>(false)
 
 const handleFocus = () => {
   isFocused.value = true

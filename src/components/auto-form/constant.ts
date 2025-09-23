@@ -1,13 +1,11 @@
-import BuiAutoFormFieldArray from './BuiAutoFormFieldArray.vue'
+import BuiAutoFormFieldArrayCard from './BuiAutoFormFieldArrayCard.vue'
 import BuiAutoFormFieldBoolean from './BuiAutoFormFieldBoolean.vue'
 import BuiAutoFormFieldDate from './BuiAutoFormFieldDate.vue'
 import BuiAutoFormFieldEnum from './BuiAutoFormFieldEnum.vue'
 import BuiAutoFormFieldFile from './BuiAutoFormFieldFile.vue'
 import BuiAutoFormFieldInput from './BuiAutoFormFieldInput.vue'
 import BuiAutoFormFieldNumber from './BuiAutoFormFieldNumber.vue'
-import BuiAutoFormFieldObject from './BuiAutoFormFieldObject.vue'
 import BuiAutoFormFieldObjectCard from './BuiAutoFormFieldObjectCard.vue'
-import BuiAutoFormFieldArrayCard from './BuiAutoFormFieldArrayCard.vue'
 
 export const INPUT_COMPONENTS = {
   date: BuiAutoFormFieldDate,

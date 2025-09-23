@@ -47,7 +47,7 @@ const indicatorClass = computed(() => {
       :style="`width: ${props.modelValue ?? 0}%;`"
     />
     <template v-if="props.modelValue && props.separators && props.separators.length > 0">
-      <template v-for="separator in props.separators">
+      <template v-for="(separator, key) in props.separators" :key="key">
         <div
           v-if="separator > 0 && separator < 100 && separator < props.modelValue"
           class="bg-background absolute top-0 bottom-0 w-px p-0!"

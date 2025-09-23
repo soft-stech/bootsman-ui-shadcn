@@ -1,31 +1,38 @@
-import { defineConfig } from 'eslint/config'
-import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
-import prettier from 'eslint-plugin-prettier/recommended'
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
-export default defineConfig([
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...pluginVue.configs['flat/recommended'],
-  prettier,
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+
+export default defineConfigWithVueTs(
+  ...pluginVue.configs['flat/essential'],
+  vueTsConfigs.recommended,
   {
-    files: ['**/*.{vue,ts,js}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      'vue/multi-word-component-names': 'off',
+      // allow _variables
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true
+        }
+      ]
+    },
     languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        extraFileExtensions: ['.vue']
-      },
+      sourceType: 'module',
       globals: {
         ...globals.browser
       }
-    },
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/ban-ts-comment': false
     }
-  }
-])
+  },
+  skipFormatting
+)

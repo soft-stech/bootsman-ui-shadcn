@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FORM_READONLY_INJECTION_KEY } from '@/components/ui/form'
+import { FORM_READONLY_INJECTION_KEY } from '@/components/form'
 import { provide, ref, watchEffect } from 'vue'
 
 const props = defineProps<{

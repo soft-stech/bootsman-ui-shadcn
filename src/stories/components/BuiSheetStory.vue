@@ -19,9 +19,9 @@ const props = defineProps<{
 <template>
   <BuiSheet>
     <BuiSheetTrigger as-child>
-      <BuiButton variant="outline"> {{ side }} </BuiButton>
+      <BuiButton variant="outline"> {{ props.side }} </BuiButton>
     </BuiSheetTrigger>
-    <BuiSheetContent :side="side">
+    <BuiSheetContent :side="props.side">
       <BuiSheetHeader>
         <BuiSheetTitle>Bootsman</BuiSheetTitle>
         <BuiSheetDescription> what is Bootsman? </BuiSheetDescription>

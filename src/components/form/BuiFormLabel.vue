@@ -1,15 +1,13 @@
 <script lang="ts" setup>
 import { useAttrs } from 'vue'
-import { Label, type LabelProps } from 'reka-ui'
+import { Label } from 'reka-ui'
 import { useFormField } from './useFormField'
 import { cn } from '@/lib/utils'
 
 defineOptions({
   inheritAttrs: false
 })
-const props = defineProps<LabelProps>()
-
-const { error, valid, formItemId } = useFormField()
+const { error, formItemId } = useFormField()
 const { class: className, ...rest } = useAttrs()
 </script>
 
@@ -17,7 +15,7 @@ const { class: className, ...rest } = useAttrs()
   <Label
     :class="
       cn(
-        'block text-left text-sm font-medium tracking-tight text-foreground',
+        'text-foreground block text-left text-sm font-medium tracking-tight',
         error && 'text-destructive-foreground',
         className ?? ''
       )
