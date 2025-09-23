@@ -78,6 +78,7 @@ const props = withDefaults(
     freezeHeader?: boolean
     enableColumnListControl?: boolean
     enableColumnResizing?: boolean
+    enableGroupFolding?: boolean
     columnSearchPlaceholder?: string
     columnSearchNotFound?: string
     columnResetVisibility?: string
@@ -102,7 +103,8 @@ const props = withDefaults(
     columnSearchPlaceholder: 'Column name',
     columnSearchNotFound: 'Not found',
     columnResetVisibility: 'Reset column visibility',
-    enableColumnResizing: true
+    enableColumnResizing: true,
+    enableGroupFolding: true
   }
 )
 
@@ -218,6 +220,8 @@ const groupedRows = computed<{ [key: string]: Row<TData>[] }>(() => {
   }, Object.create(null))
 })
 
+const groupsOpenState = ref<Record<string, boolean> | undefined>(undefined)
+
 function getGroupLabel(index: number) {
   const labels = props.groupBy && props.groupLabels ? props.groupLabels[props.groupBy] || [] : []
   return labels[index]
@@ -279,6 +283,22 @@ onMounted(() => {
     setProvidedCellWidths(columnSizing.value)
     setInitialColumnWidths()
   }
+})
+
+watchEffect(() => {
+  if (props.groupBy && groupedRows.value) {
+    groupsOpenState.value = Object.keys(groupedRows.value).reduce((acc, group) => {
+      acc[group] = true
+      return acc
+    }, Object.create(null))
+  } else {
+    groupsOpenState.value = undefined
+  }
+})
+
+watch(groupsOpenState, () => {
+  console.log('groupsOpenState.value')
+  console.log(groupsOpenState.value)
 })
 
 watchEffect(() => {
@@ -435,11 +455,17 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
     </BuiTableHeader>
     <BuiTableBody>
       <template v-if="table.getRowModel().rows?.length">
-        <template v-if="props.groupBy && groupedRows">
-          <BuiCollapsible asChild v-for="(value, key) in groupedRows" :key="key" :open="true">
-            <BuiCollapsibleTrigger asChild>
-              <BuiTableRow class="bg-foreground/4">
-                <BuiTableCell :colspan="columns.length" class="pb-0!">
+        <template v-if="props.groupBy && groupedRows && groupsOpenState">
+          <BuiCollapsible
+            as-child
+            :disabled="!enableGroupFolding"
+            v-for="(value, key) in groupedRows"
+            :key="key"
+            v-model:open="groupsOpenState[key]"
+          >
+            <BuiTableRow class="bg-foreground/4">
+              <BuiTableCell :colspan="columns.length" class="pb-0!">
+                <BuiCollapsibleTrigger class="w-full">
                   <div class="mt-1 flex w-full items-center justify-between">
                     <div
                       class="bg-background shadow-top-shadow relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
@@ -470,13 +496,13 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
                     </div>
                     <slot v-if="$slots.groupByRow" name="groupByRow" :group="key" />
                   </div>
-                </BuiTableCell>
-                <template #actions>
-                  <slot name="groupActions" :group="key" />
-                </template>
-              </BuiTableRow>
-            </BuiCollapsibleTrigger>
-            <BuiCollapsibleContent asChild>
+                </BuiCollapsibleTrigger>
+              </BuiTableCell>
+              <template #actions>
+                <slot name="groupActions" :group="key" />
+              </template>
+            </BuiTableRow>
+            <BuiCollapsibleContent as-child>
               <template v-for="row in value" :key="row.id">
                 <BuiTableRowSubrow
                   :columns="props.columns"
