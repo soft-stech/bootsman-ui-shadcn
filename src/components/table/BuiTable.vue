@@ -8,7 +8,7 @@ const props = defineProps<{ class?: string }>()
 <template>
   <BuiScrollArea class="border-border/16 w-full grow overflow-auto rounded border">
     <slot name="columnVisibility" />
-    <table :class="cn('w-full caption-top text-sm', props.class)">
+    <table :class="cn('min-h-[90px] w-full caption-top text-sm', props.class)">
       <slot />
     </table>
     <BuiScrollBar orientation="horizontal" />

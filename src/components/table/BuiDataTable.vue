@@ -48,11 +48,12 @@ import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
 import { BuiScrollArea } from '@/components/scroll-area'
 import { BuiButton } from '@/components/button'
-import { Settings2Icon } from 'lucide-vue-next'
+import { Settings2Icon, ChevronsUpDown, ChevronsDownUp } from 'lucide-vue-next'
 import { useElementSize, useEventListener } from '@vueuse/core'
 import { isEqual } from 'lodash-es'
 import { cn, valueUpdater } from '@/lib/utils'
 import { useResizeColumns } from '@/lib/useResizeColumns'
+import { useSessionStorage } from '@vueuse/core'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 const defaultColumnContextMenuTranslations = {
@@ -78,6 +79,7 @@ const props = withDefaults(
     freezeHeader?: boolean
     enableColumnListControl?: boolean
     enableColumnResizing?: boolean
+    enableGroupFolding?: boolean
     columnSearchPlaceholder?: string
     columnSearchNotFound?: string
     columnResetVisibility?: string
@@ -102,7 +104,8 @@ const props = withDefaults(
     columnSearchPlaceholder: 'Column name',
     columnSearchNotFound: 'Not found',
     columnResetVisibility: 'Reset column visibility',
-    enableColumnResizing: true
+    enableColumnResizing: true,
+    enableGroupFolding: true
   }
 )
 
@@ -279,6 +282,8 @@ onMounted(() => {
     setProvidedCellWidths(columnSizing.value)
     setInitialColumnWidths()
   }
+
+  groupsOpenStateInStorage.value = {}
 })
 
 watchEffect(() => {
@@ -332,6 +337,47 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
       break
   }
 }
+
+const groupsOpenStateInStorage = useSessionStorage('tableGroups', {})
+const groupsOpenStateRef = ref<Record<string, boolean>>(
+  props.enableGroupFolding
+    ? (groupsOpenStateInStorage.value ?? Object.create(null))
+    : Object.create(null)
+)
+
+const handleGroupToggle = (value: boolean, key: string | number) => {
+  groupsOpenStateInStorage.value = { ...groupsOpenStateRef.value, [key]: value }
+}
+
+watchEffect(() => {
+  if (props.groupBy && groupedRows.value) {
+    groupsOpenStateRef.value = Object.keys(groupedRows.value).reduce((acc, group) => {
+      acc[group] = true
+      return acc
+    }, Object.create(null))
+
+    if (props.enableGroupFolding && groupsOpenStateInStorage.value) {
+      groupsOpenStateRef.value = { ...groupsOpenStateRef.value, ...groupsOpenStateInStorage.value }
+    }
+  } else {
+    groupsOpenStateRef.value = Object.create(null)
+  }
+})
+
+watch(
+  () => props.enableGroupFolding,
+  () => {
+    if (!props.enableGroupFolding) {
+      if (props.groupBy && groupedRows.value && groupsOpenStateRef.value) {
+        Object.keys(groupsOpenStateRef.value).forEach(
+          (group) => (groupsOpenStateRef.value![group] = true)
+        )
+      }
+    } else {
+      groupsOpenStateRef.value = { ...groupsOpenStateRef.value, ...groupsOpenStateInStorage.value }
+    }
+  }
+)
 </script>
 
 <template>
@@ -435,48 +481,68 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
     </BuiTableHeader>
     <BuiTableBody>
       <template v-if="table.getRowModel().rows?.length">
-        <template v-if="props.groupBy && groupedRows">
-          <BuiCollapsible asChild v-for="(value, key) in groupedRows" :key="key" :open="true">
-            <BuiCollapsibleTrigger asChild>
-              <BuiTableRow class="bg-foreground/4">
-                <BuiTableCell :colspan="columns.length" class="pb-0!">
+        <template v-if="props.groupBy && groupedRows && groupsOpenStateRef">
+          <BuiCollapsible
+            as-child
+            :disabled="!enableGroupFolding"
+            v-for="(value, key) in groupedRows"
+            :key="key"
+            v-model:open="groupsOpenStateRef[key]"
+            @update:open="(value) => handleGroupToggle(value, key)"
+          >
+            <BuiTableRow class="bg-foreground/4">
+              <BuiTableCell :colspan="columns.length" class="pb-0!">
+                <BuiCollapsibleTrigger class="w-full">
                   <div class="mt-1 flex w-full items-center justify-between">
-                    <div
-                      class="bg-background shadow-top-shadow relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
-                    >
-                      <div class="bg-background absolute bottom-0 -left-2 h-2 w-2"></div>
-                      <div class="bg-background absolute bottom-0 -left-4 h-4 w-4 rounded-lg"></div>
+                    <div class="flex flex-row justify-start gap-1">
                       <div
-                        class="bg-foreground/4 absolute bottom-0 -left-4 h-4 w-4 rounded-lg"
-                      ></div>
-                      <div class="bg-background absolute -right-2 bottom-0 h-2 w-2"></div>
-                      <div
-                        class="bg-background absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
-                      ></div>
-                      <div
-                        class="bg-foreground/4 absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
-                      ></div>
-                      <div></div>
-                      <template v-if="key === NO_GROUP_KEY">
-                        {{ getGroupLabel(1) }}
-                      </template>
-                      <template v-else>
-                        {{ getGroupLabel(0) }}:
-                        <slot v-if="$slots.groupName" name="groupName" :group="key" />
-                        <template v-else>
-                          {{ key }}
-                        </template>
-                      </template>
+                        class="bg-background shadow-top-shadow relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+                      >
+                        <div class="bg-background absolute bottom-0 -left-2 h-2 w-2"></div>
+                        <div
+                          class="bg-background absolute bottom-0 -left-4 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div
+                          class="bg-foreground/4 absolute bottom-0 -left-4 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div class="bg-background absolute -right-2 bottom-0 h-2 w-2"></div>
+                        <div
+                          class="bg-background absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div
+                          class="bg-foreground/4 absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div></div>
+                        <div class="flex flex-row items-center gap-1">
+                          <div v-if="key === NO_GROUP_KEY">
+                            {{ getGroupLabel(1) }}
+                          </div>
+                          <div v-else>
+                            {{ getGroupLabel(0) }}:
+                            <slot v-if="$slots.groupName" name="groupName" :group="key" />
+                            <template v-else>
+                              {{ key }}
+                            </template>
+                          </div>
+                          <div v-if="enableGroupFolding" class="mt-1">
+                            <ChevronsDownUp
+                              v-if="groupsOpenStateRef[key]"
+                              class="text-accent h-4 w-4"
+                            />
+                            <ChevronsUpDown v-else class="text-accent h-4 w-4" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <slot v-if="$slots.groupByRow" name="groupByRow" :group="key" />
                   </div>
-                </BuiTableCell>
-                <template #actions>
-                  <slot name="groupActions" :group="key" />
-                </template>
-              </BuiTableRow>
-            </BuiCollapsibleTrigger>
-            <BuiCollapsibleContent asChild>
+                </BuiCollapsibleTrigger>
+              </BuiTableCell>
+              <template #actions>
+                <slot name="groupActions" :group="key" />
+              </template>
+            </BuiTableRow>
+            <BuiCollapsibleContent as-child>
               <template v-for="row in value" :key="row.id">
                 <BuiTableRowSubrow
                   :columns="props.columns"
