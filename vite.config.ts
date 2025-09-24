@@ -23,7 +23,7 @@ const rollupOptions = {
     '@vueuse/core'
   ],
   output: {
-    assetFileNames: (assetInfo) => {
+    assetFileNames: (assetInfo: any) => {
       if (assetInfo.name?.endsWith('.css')) {
         return 'style.css'
       }

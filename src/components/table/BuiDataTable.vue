@@ -116,7 +116,7 @@ const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
 )
 const pinnedColumns = props.columns
-  .map((col) => (col.meta?.pinLeft && col.id ? col.id : ''))
+  .map((col) => ((col.meta as { pinLeft: boolean })?.pinLeft && col.id ? col.id : ''))
   .filter(Boolean)
 
 const table = useVueTable({

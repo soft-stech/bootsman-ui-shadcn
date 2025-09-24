@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="TData, TValue">
+<script setup lang="ts" generic="TData, _TValue">
 import type { Column } from '@tanstack/vue-table'
 import { useTemplateRef } from 'vue'
 
@@ -14,7 +14,10 @@ const columnsList = defineModel<Column<TData, unknown>[]>('columnsList', {
 useSortable(columnsListRef, columnsList, { handle: '.dragHandler' })
 
 const getColumnLabel = (col: Column<TData, unknown>) => {
-  return col.columnDef.meta?.title || col.id.replace(/^values\./, '').replace(/([A-Z])/g, ' $1')
+  return (
+    (col.columnDef.meta as { title: string })?.title ||
+    col.id.replace(/^values\./, '').replace(/([A-Z])/g, ' $1')
+  )
 }
 </script>
 
