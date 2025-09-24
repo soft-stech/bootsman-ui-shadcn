@@ -1,7 +1,6 @@
 import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
-
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 
 export default defineConfigWithVueTs(
@@ -18,11 +17,11 @@ export default defineConfigWithVueTs(
         'error',
         {
           args: 'all',
-          argsIgnorePattern: '^_',
+          argsIgnorePattern: '^_|Schema$',
           caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_|Schema$',
+          destructuredArrayIgnorePattern: '^_|Schema$',
+          varsIgnorePattern: '^_|Schema$',
           ignoreRestSiblings: true
         }
       ]
