@@ -9,7 +9,6 @@ import {
   BuiSelectValue
 } from '@/components/select'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { toTypedSchema } from '@vee-validate/zod'
 import { BringToFrontIcon } from 'lucide-vue-next'
 import z from 'zod'
 
@@ -130,7 +129,7 @@ export const WithValidation: Story = {
       const validationRules = z.object({
         favoriteFruit: z.enum(['banana'])
       })
-      const validationSchema = toTypedSchema(validationRules)
+      const validationSchema = validationRules
       const initialValues = {
         favoriteFruit: 'apple'
       }

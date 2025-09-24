@@ -38,7 +38,6 @@ export * from './components/slider/index'
 export * from './components/skeleton/index'
 export * from './components/scroll-area/index'
 export * from './components/collapsible/index'
-// export * from './components/auto-form/index' // больше не используется
 export * from './components/sheet/index'
 export * from './components/color-picker/index'
 

@@ -25,19 +25,16 @@ import BuiSelectTrigger from '@/components/select/BuiSelectTrigger.vue'
 import BuiSelectValue from '@/components/select/BuiSelectValue.vue'
 import BuiSwitch from '@/components/switch/BuiSwitch.vue'
 import BuiTextarea from '@/components/textarea/BuiTextarea.vue'
-import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
-const loginFormSchema = toTypedSchema(
-  z.object({
-    email: z.string().email(),
-    password: z.string().min(8).max(64),
-    remember: z.boolean(),
-    favoriteFruit: z.enum(['banana']),
-    description: z.string().min(2).max(10),
-    display: z.enum(['default', 'compact', 'comfortable'])
-  })
-)
+const loginFormSchema = z.object({
+  email: z.email(),
+  password: z.string().min(8).max(64),
+  remember: z.boolean(),
+  favoriteFruit: z.enum(['banana']),
+  description: z.string().min(2).max(10),
+  display: z.enum(['default', 'compact', 'comfortable'])
+})
 
 const initialValues = {
   email: 'test@example.com',
@@ -61,7 +58,7 @@ const onSubmit = (values: any) => {
         alt="Bootsman"
       />
       <h2
-        class="mt-6 text-center text-2xl leading-9 font-bold tracking-tight text-gray-900 dark:text-white"
+        class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white"
       >
         Sign in to your account
       </h2>
@@ -196,7 +193,7 @@ const onSubmit = (values: any) => {
             <BuiPopoverContent class="w-80">
               <div class="grid gap-4">
                 <div class="space-y-2">
-                  <h4 class="leading-none font-medium">Dimensions</h4>
+                  <h4 class="font-medium leading-none">Dimensions</h4>
                   <p class="text-muted-foreground text-sm">Set the dimensions for the layer.</p>
                 </div>
                 <div class="grid gap-2">

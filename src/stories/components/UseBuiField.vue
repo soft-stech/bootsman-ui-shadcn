@@ -10,17 +10,13 @@ import {
   BuiFormMessage,
   useBuiForm
 } from '@/components/form'
-
-import { toTypedSchema } from '@vee-validate/zod'
-import * as z from 'zod'
 import SubForm from '@/stories/components/SubForm.vue'
+import * as z from 'zod'
 
-const formSchema = toTypedSchema(
-  z.object({
-    meta: z.object({ field: z.string().trim().min(1) }),
-    example: z.string().trim().min(1)
-  })
-)
+const formSchema = z.object({
+  meta: z.object({ field: z.string().trim().min(1) }),
+  example: z.string().trim().min(1)
+})
 
 const initialValues = {
   meta: {

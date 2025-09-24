@@ -17,17 +17,14 @@ import {
 } from '@/components/form'
 import { BuiLabel } from '@/components/label'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
-import { toTypedSchema } from '@vee-validate/zod'
 import { CheckIcon, ChevronDown } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { z } from 'zod'
 
-const formSchema = toTypedSchema(
-  z.object({
-    namespace: z.string().min(2),
-    groups: z.array(z.string())
-  })
-)
+const formSchema = z.object({
+  namespace: z.string().min(2),
+  groups: z.array(z.string())
+})
 const isNamespacesPopoverOpen = ref(false)
 const namespaces = ['default', 'local', 'my-namespace']
 </script>
@@ -56,7 +53,7 @@ const namespaces = ['default', 'local', 'my-namespace']
               size="lg"
               role="combobox"
               :aria-expanded="isNamespacesPopoverOpen"
-              class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex h-10 w-full items-center justify-between rounded-md border px-3 py-2 text-sm whitespace-nowrap text-inherit hover:bg-transparent focus:ring-2 focus:ring-offset-2 focus:outline-hidden active:bg-transparent active:ring-0 active:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
+              class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus:ring-ring focus:outline-hidden active:outline-hidden flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border px-3 py-2 text-sm text-inherit hover:bg-transparent focus:ring-2 focus:ring-offset-2 active:bg-transparent active:ring-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:truncate"
               :class="!meta.valid && meta.validated ? 'border-destructive-foreground!' : ''"
             >
               <span>
