@@ -208,7 +208,7 @@ function groupName(group: string | number) {
         :groupLabels="groupLabels"
         :renderSubComponent="renderSubComponent"
         enable-column-list-control
-        :enable-group-folding="false"
+        :enable-group-folding="true"
         :pagination-translations="{
           itemsPerPage: 'Tasks per page',
           page: 'Page',

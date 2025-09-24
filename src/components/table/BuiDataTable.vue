@@ -53,6 +53,7 @@ import { useElementSize, useEventListener } from '@vueuse/core'
 import { isEqual } from 'lodash-es'
 import { cn, valueUpdater } from '@/lib/utils'
 import { useResizeColumns } from '@/lib/useResizeColumns'
+import { useSessionStorage } from '@vueuse/core'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 const defaultColumnContextMenuTranslations = {
@@ -114,6 +115,7 @@ const rowSelection = defineModel<RowSelectionState>('selection')
 const columnVisibility = defineModel<VisibilityState>('columnVisibility')
 const columnOrder = defineModel<ColumnOrderState>('columnOrder')
 const columnSizing = defineModel<Record<string, number>>('columnSizing')
+const groupsOpenState = defineModel<Record<string, boolean>>('groupsOpenState')
 const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
 )
@@ -219,8 +221,6 @@ const groupedRows = computed<{ [key: string]: Row<TData>[] }>(() => {
     return acc
   }, Object.create(null))
 })
-
-const groupsOpenState = ref<Record<string, boolean> | undefined>(undefined)
 
 function getGroupLabel(index: number) {
   const labels = props.groupBy && props.groupLabels ? props.groupLabels[props.groupBy] || [] : []
@@ -337,29 +337,48 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
   }
 }
 
-watchEffect(() => {
+const groupsOpenStateInStorage = useSessionStorage('tableGroups', {})
+const groupsOpenStateRef = ref<Record<string, boolean>>(
+  props.enableGroupFolding
+    ? (groupsOpenStateInStorage.value ?? Object.create(null))
+    : Object.create(null)
+)
+
+const handleGroupToggle = (value: boolean, key: string | number) => {
+  groupsOpenStateInStorage.value = { ...groupsOpenStateRef.value, [key]: value }
+}
+
+const groupByGroup = computed(() => props.groupBy ?? 'None')
+
+watch(groupByGroup, () => {
   if (props.groupBy && groupedRows.value) {
-    groupsOpenState.value = Object.keys(groupedRows.value).reduce((acc, group) => {
+    groupsOpenStateRef.value = Object.keys(groupedRows.value).reduce((acc, group) => {
       acc[group] = true
       return acc
     }, Object.create(null))
+
+    if (props.enableGroupFolding && groupsOpenStateInStorage.value) {
+      groupsOpenStateRef.value = { ...groupsOpenStateRef.value, ...groupsOpenStateInStorage.value }
+    }
   } else {
-    groupsOpenState.value = undefined
+    groupsOpenStateRef.value = Object.create(null)
   }
 })
 
-watchEffect(() => {
-  if (!props.enableGroupFolding) {
-    if (props.groupBy && groupedRows.value && groupsOpenState.value) {
-      Object.keys(groupsOpenState.value).forEach((group) => (groupsOpenState.value![group] = true))
+watch(
+  () => props.enableGroupFolding,
+  () => {
+    if (!props.enableGroupFolding) {
+      if (props.groupBy && groupedRows.value && groupsOpenStateRef.value) {
+        Object.keys(groupsOpenStateRef.value).forEach(
+          (group) => (groupsOpenStateRef.value![group] = true)
+        )
+      }
+    } else {
+      groupsOpenStateRef.value = { ...groupsOpenStateRef.value, ...groupsOpenStateInStorage.value }
     }
   }
-})
-
-// watch(groupsOpenState, () => {
-//   console.log('groupsOpenState.value')
-//   console.log(groupsOpenState.value)
-// })
+)
 </script>
 
 <template>
@@ -463,13 +482,14 @@ watchEffect(() => {
     </BuiTableHeader>
     <BuiTableBody>
       <template v-if="table.getRowModel().rows?.length">
-        <template v-if="props.groupBy && groupedRows && groupsOpenState">
+        <template v-if="props.groupBy && groupedRows && groupsOpenStateRef">
           <BuiCollapsible
             as-child
             :disabled="!enableGroupFolding"
             v-for="(value, key) in groupedRows"
             :key="key"
-            v-model:open="groupsOpenState[key]"
+            v-model:open="groupsOpenStateRef[key]"
+            @update:open="(value) => handleGroupToggle(value, key)"
           >
             <BuiTableRow class="bg-foreground/4">
               <BuiTableCell :colspan="columns.length" class="pb-0!">
@@ -507,7 +527,7 @@ watchEffect(() => {
                       </div>
                       <div v-if="enableGroupFolding" class="mb-[2px] flex flex-row self-end">
                         <FoldVertical
-                          v-if="groupsOpenState[key]"
+                          v-if="groupsOpenStateRef[key]"
                           class="text-muted-foreground h-4 w-4 shrink-0"
                         />
                         <UnfoldVertical v-else class="text-muted-foreground h-4 w-4 shrink-0" />
