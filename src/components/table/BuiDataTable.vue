@@ -48,7 +48,7 @@ import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
 import { BuiScrollArea } from '@/components/scroll-area'
 import { BuiButton } from '@/components/button'
-import { Settings2Icon } from 'lucide-vue-next'
+import { Settings2Icon, FoldVertical, UnfoldVertical } from 'lucide-vue-next'
 import { useElementSize, useEventListener } from '@vueuse/core'
 import { isEqual } from 'lodash-es'
 import { cn, valueUpdater } from '@/lib/utils'
@@ -286,22 +286,6 @@ onMounted(() => {
 })
 
 watchEffect(() => {
-  if (props.groupBy && groupedRows.value) {
-    groupsOpenState.value = Object.keys(groupedRows.value).reduce((acc, group) => {
-      acc[group] = true
-      return acc
-    }, Object.create(null))
-  } else {
-    groupsOpenState.value = undefined
-  }
-})
-
-watch(groupsOpenState, () => {
-  console.log('groupsOpenState.value')
-  console.log(groupsOpenState.value)
-})
-
-watchEffect(() => {
   if (!isEqual(calculatedColumnSizing.value, columnSizing.value)) {
     columnSizing.value = calculatedColumnSizing.value
   }
@@ -352,6 +336,30 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
       break
   }
 }
+
+watchEffect(() => {
+  if (props.groupBy && groupedRows.value) {
+    groupsOpenState.value = Object.keys(groupedRows.value).reduce((acc, group) => {
+      acc[group] = true
+      return acc
+    }, Object.create(null))
+  } else {
+    groupsOpenState.value = undefined
+  }
+})
+
+watchEffect(() => {
+  if (!props.enableGroupFolding) {
+    if (props.groupBy && groupedRows.value && groupsOpenState.value) {
+      Object.keys(groupsOpenState.value).forEach((group) => (groupsOpenState.value![group] = true))
+    }
+  }
+})
+
+// watch(groupsOpenState, () => {
+//   console.log('groupsOpenState.value')
+//   console.log(groupsOpenState.value)
+// })
 </script>
 
 <template>
@@ -467,32 +475,43 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
               <BuiTableCell :colspan="columns.length" class="pb-0!">
                 <BuiCollapsibleTrigger class="w-full">
                   <div class="mt-1 flex w-full items-center justify-between">
-                    <div
-                      class="bg-background shadow-top-shadow relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
-                    >
-                      <div class="bg-background absolute bottom-0 -left-2 h-2 w-2"></div>
-                      <div class="bg-background absolute bottom-0 -left-4 h-4 w-4 rounded-lg"></div>
+                    <div class="flex flex-row justify-start gap-3">
                       <div
-                        class="bg-foreground/4 absolute bottom-0 -left-4 h-4 w-4 rounded-lg"
-                      ></div>
-                      <div class="bg-background absolute -right-2 bottom-0 h-2 w-2"></div>
-                      <div
-                        class="bg-background absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
-                      ></div>
-                      <div
-                        class="bg-foreground/4 absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
-                      ></div>
-                      <div></div>
-                      <template v-if="key === NO_GROUP_KEY">
-                        {{ getGroupLabel(1) }}
-                      </template>
-                      <template v-else>
-                        {{ getGroupLabel(0) }}:
-                        <slot v-if="$slots.groupName" name="groupName" :group="key" />
-                        <template v-else>
-                          {{ key }}
+                        class="bg-background shadow-top-shadow relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+                      >
+                        <div class="bg-background absolute bottom-0 -left-2 h-2 w-2"></div>
+                        <div
+                          class="bg-background absolute bottom-0 -left-4 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div
+                          class="bg-foreground/4 absolute bottom-0 -left-4 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div class="bg-background absolute -right-2 bottom-0 h-2 w-2"></div>
+                        <div
+                          class="bg-background absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div
+                          class="bg-foreground/4 absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
+                        ></div>
+                        <div></div>
+                        <template v-if="key === NO_GROUP_KEY">
+                          {{ getGroupLabel(1) }}
                         </template>
-                      </template>
+                        <template v-else>
+                          {{ getGroupLabel(0) }}:
+                          <slot v-if="$slots.groupName" name="groupName" :group="key" />
+                          <template v-else>
+                            {{ key }}
+                          </template>
+                        </template>
+                      </div>
+                      <div v-if="enableGroupFolding" class="mb-[2px] flex flex-row self-end">
+                        <FoldVertical
+                          v-if="groupsOpenState[key]"
+                          class="text-muted-foreground h-4 w-4 shrink-0"
+                        />
+                        <UnfoldVertical v-else class="text-muted-foreground h-4 w-4 shrink-0" />
+                      </div>
                     </div>
                     <slot v-if="$slots.groupByRow" name="groupByRow" :group="key" />
                   </div>
