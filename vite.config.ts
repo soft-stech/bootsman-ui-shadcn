@@ -30,9 +30,7 @@ const rollupOptions = {
       return '[name][extname]'
     },
     entryFileNames: '[name].js',
-    globals: {
-      vue: 'Vue'
-    }
+    globals: { vue: 'Vue' }
   },
   input: []
 }
@@ -55,15 +53,15 @@ export default defineConfig({
     vue(),
     tailwindcss(),
     dts({
-      // rollupTypes: true,
-      include: ['src/components/ui', 'src/lib', 'src/index.ts']
+      include: ['src/**/*.ts', 'src/**/*.vue'],
+      exclude: ['src/stories/**/*', 'src/**/*.stories.*'],
+      insertTypesEntry: true,
+      copyDtsFiles: true,
+      entryRoot: 'src',
+      tsconfigPath: './tsconfig.app.json'
     })
   ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  },
+  resolve: { alias: { '@': path.resolve(__dirname, './src') } },
   test: {
     projects: [
       {
@@ -71,9 +69,7 @@ export default defineConfig({
         plugins: [
           // The plugin will run tests for the stories defined in your Storybook config
           // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-          storybookTest({
-            configDir: path.join(dirname, '.storybook')
-          })
+          storybookTest({ configDir: path.join(dirname, '.storybook') })
         ],
         test: {
           name: 'storybook',
@@ -81,11 +77,7 @@ export default defineConfig({
             enabled: true,
             headless: true,
             provider: 'playwright',
-            instances: [
-              {
-                browser: 'chromium'
-              }
-            ]
+            instances: [{ browser: 'chromium' }]
           },
           setupFiles: ['.storybook/vitest.setup.ts']
         }
@@ -95,10 +87,7 @@ export default defineConfig({
   build: {
     copyPublicDir: false,
     target: 'esnext',
-    lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      formats: ['es']
-    },
+    lib: { entry: resolve(__dirname, 'src/index.ts'), formats: ['es'] },
     rollupOptions
   }
 })
