@@ -47,8 +47,7 @@
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4.1.13",
     "tw-animate-css": "^1.3.8",
-    "v-calendar": "3.1.2",
-    "vue": "^3.5.18"
+    "v-calendar": "3.1.2"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
