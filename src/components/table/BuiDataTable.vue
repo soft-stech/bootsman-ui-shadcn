@@ -75,7 +75,7 @@ const props = withDefaults(
     groupBy?: keyof TData
     groupLabels?: { [key in keyof TData]?: string[] }
     getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string
-    renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
+    renderSubComponent?: (row: Row<TData>) => (() => unknown) | undefined
     freezeHeader?: boolean
     enableColumnListControl?: boolean
     enableColumnResizing?: boolean

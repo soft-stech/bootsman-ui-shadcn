@@ -8,7 +8,6 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       'vue/multi-word-component-names': 'off',

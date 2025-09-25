@@ -2,12 +2,12 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { h, type FunctionalComponent } from 'vue'
 
-import type { Column, Updater } from '@tanstack/vue-table'
+import { BuiButton } from '@/components/button'
+import type { SortDirection, Updater } from '@tanstack/vue-table'
 import { ArrowDownIcon, ArrowDownUpIcon, ArrowUpIcon } from 'lucide-vue-next'
 import { type Ref } from 'vue'
-import { BuiButton } from '@/components/button'
 
-export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref) {
+export function valueUpdater<T extends Updater<unknown>>(updaterOrValue: T, ref: Ref) {
   ref.value = typeof updaterOrValue === 'function' ? updaterOrValue(ref.value) : updaterOrValue
 }
 
@@ -15,7 +15,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const tableColumnSortCommon = (column: Column<any>, name: string) => {
+export const tableColumnSortCommon = (
+  column: {
+    getIsSorted: () => false | SortDirection
+    toggleSorting: (desc?: boolean, isMulti?: boolean) => void
+  },
+  name: string
+) => {
   let icon: FunctionalComponent
 
   if (column.getIsSorted() === 'asc') {

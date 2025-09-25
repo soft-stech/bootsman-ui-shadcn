@@ -48,7 +48,7 @@ const initialValues = {
   display: 'default'
 }
 
-const onSubmit = (values: any) => {
+const onSubmit = (values: unknown) => {
   console.debug('Form submitted!', values)
 }
 </script>

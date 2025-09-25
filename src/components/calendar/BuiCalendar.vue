@@ -70,7 +70,7 @@ const $slots = useSlots()
 const vCalendarSlots = computed(() => {
   return Object.keys($slots)
     .filter((name) => isVCalendarSlot(name))
-    .reduce((obj: Record<string, any>, key: string) => {
+    .reduce((obj: Record<string, unknown>, key: string) => {
       obj[key] = $slots[key]
       return obj
     }, {})

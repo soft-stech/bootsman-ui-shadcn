@@ -6,7 +6,7 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   row: Row<TData>
-  renderSubComponent?: (row: Row<TData>) => (() => any) | undefined
+  renderSubComponent?: (row: Row<TData>) => (() => unknown) | undefined
   columns: ColumnDef<TData, TValue>[]
 }>()
 
