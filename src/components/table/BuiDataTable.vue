@@ -48,7 +48,7 @@ import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
 import { BuiScrollArea } from '@/components/scroll-area'
 import { BuiButton } from '@/components/button'
-import { Settings2Icon, FoldVertical, UnfoldVertical } from 'lucide-vue-next'
+import { Settings2Icon, ChevronsUpDown, ChevronsDownUp } from 'lucide-vue-next'
 import { useElementSize, useEventListener } from '@vueuse/core'
 import { isEqual } from 'lodash-es'
 import { cn, valueUpdater } from '@/lib/utils'
@@ -115,7 +115,6 @@ const rowSelection = defineModel<RowSelectionState>('selection')
 const columnVisibility = defineModel<VisibilityState>('columnVisibility')
 const columnOrder = defineModel<ColumnOrderState>('columnOrder')
 const columnSizing = defineModel<Record<string, number>>('columnSizing')
-const groupsOpenState = defineModel<Record<string, boolean>>('groupsOpenState')
 const computedItems = computed(() =>
   props.manualPagination ? props.totalItems : props.data.length
 )
@@ -283,6 +282,8 @@ onMounted(() => {
     setProvidedCellWidths(columnSizing.value)
     setInitialColumnWidths()
   }
+
+  groupsOpenStateInStorage.value = {}
 })
 
 watchEffect(() => {
@@ -348,9 +349,7 @@ const handleGroupToggle = (value: boolean, key: string | number) => {
   groupsOpenStateInStorage.value = { ...groupsOpenStateRef.value, [key]: value }
 }
 
-const groupByGroup = computed(() => props.groupBy ?? 'None')
-
-watch(groupByGroup, () => {
+watchEffect(() => {
   if (props.groupBy && groupedRows.value) {
     groupsOpenStateRef.value = Object.keys(groupedRows.value).reduce((acc, group) => {
       acc[group] = true
@@ -495,7 +494,7 @@ watch(
               <BuiTableCell :colspan="columns.length" class="pb-0!">
                 <BuiCollapsibleTrigger class="w-full">
                   <div class="mt-1 flex w-full items-center justify-between">
-                    <div class="flex flex-row justify-start gap-3">
+                    <div class="flex flex-row justify-start gap-1">
                       <div
                         class="bg-background shadow-top-shadow relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
                       >
@@ -514,23 +513,25 @@ watch(
                           class="bg-foreground/4 absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
                         ></div>
                         <div></div>
-                        <template v-if="key === NO_GROUP_KEY">
-                          {{ getGroupLabel(1) }}
-                        </template>
-                        <template v-else>
-                          {{ getGroupLabel(0) }}:
-                          <slot v-if="$slots.groupName" name="groupName" :group="key" />
-                          <template v-else>
-                            {{ key }}
-                          </template>
-                        </template>
-                      </div>
-                      <div v-if="enableGroupFolding" class="mb-[2px] flex flex-row self-end">
-                        <FoldVertical
-                          v-if="groupsOpenStateRef[key]"
-                          class="text-muted-foreground h-4 w-4 shrink-0"
-                        />
-                        <UnfoldVertical v-else class="text-muted-foreground h-4 w-4 shrink-0" />
+                        <div class="flex flex-row items-center gap-1">
+                          <div v-if="key === NO_GROUP_KEY">
+                            {{ getGroupLabel(1) }}
+                          </div>
+                          <div v-else>
+                            {{ getGroupLabel(0) }}:
+                            <slot v-if="$slots.groupName" name="groupName" :group="key" />
+                            <template v-else>
+                              {{ key }}
+                            </template>
+                          </div>
+                          <div v-if="enableGroupFolding" class="mt-1">
+                            <ChevronsDownUp
+                              v-if="groupsOpenStateRef[key]"
+                              class="text-accent h-4 w-4"
+                            />
+                            <ChevronsUpDown v-else class="text-accent h-4 w-4" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <slot v-if="$slots.groupByRow" name="groupByRow" :group="key" />
