@@ -54,7 +54,7 @@ const pageSizeString = computed({
       <p class="text-muted-foreground text-sm">
         {{ translations?.itemsPerPage || 'Items per page' }}
       </p>
-      <BuiSelect v-model.number="pageSizeString">
+      <BuiSelect v-model="pageSizeString">
         <BuiSelectTrigger class="mr-2 w-[70px]">
           <BuiSelectValue :placeholder="pageSize.toString()" />
         </BuiSelectTrigger>

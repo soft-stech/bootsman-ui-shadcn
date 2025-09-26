@@ -20,13 +20,17 @@ import {
   BuiFormControl,
   BuiFormMessage
 } from '@/components/form'
+import type { AcceptableValue, SelectRootProps } from 'reka-ui'
+import type { DefineComponent } from 'vue'
+
+type MySelectType = DefineComponent<SelectRootProps<AcceptableValue>>
 
 const meta = {
-  component: BuiSelect,
+  component: BuiSelect as unknown as MySelectType,
   tags: ['autodocs'],
   argTypes: {},
   args: {}
-} satisfies Meta<typeof BuiSelect>
+} satisfies Meta<MySelectType>
 export default meta
 
 type Story = StoryObj<typeof meta>
