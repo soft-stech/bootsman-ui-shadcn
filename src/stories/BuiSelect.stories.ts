@@ -23,14 +23,14 @@ import {
 import type { AcceptableValue, SelectRootProps } from 'reka-ui'
 import type { DefineComponent } from 'vue'
 
-type MySelectType = DefineComponent<SelectRootProps<AcceptableValue>>
+type BuiSelectType = DefineComponent<SelectRootProps<AcceptableValue>>
 
 const meta = {
-  component: BuiSelect as unknown as MySelectType,
+  component: BuiSelect as unknown as BuiSelectType,
   tags: ['autodocs'],
   argTypes: {},
   args: {}
-} satisfies Meta<MySelectType>
+} satisfies Meta<BuiSelectType>
 export default meta
 
 type Story = StoryObj<typeof meta>

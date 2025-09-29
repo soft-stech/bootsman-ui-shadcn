@@ -1,9 +1,15 @@
-<script setup lang="ts">
-import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText } from 'reka-ui'
+<script setup lang="ts" generic="T extends AcceptableValue = AcceptableValue">
+import {
+  type AcceptableValue,
+  SelectItem,
+  SelectItemIndicator,
+  type SelectItemProps,
+  SelectItemText
+} from 'reka-ui'
 import { Check } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<SelectItemProps & { class?: string }>()
+const props = defineProps<SelectItemProps<T> & { class?: string }>()
 </script>
 
 <template>
@@ -11,7 +17,7 @@ const props = defineProps<SelectItemProps & { class?: string }>()
     v-bind="props"
     :class="
       cn(
-        'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden focus:bg-accent/8 focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50',
+        'focus:bg-accent/8 focus:text-accent-foreground relative flex w-full cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50',
         props.class
       )
     "

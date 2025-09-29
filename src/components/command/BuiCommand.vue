@@ -1,10 +1,10 @@
-<script setup lang="ts">
-import type { ComboboxRootEmits, ComboboxRootProps } from 'reka-ui'
+<script setup lang="ts" generic="T extends AcceptableValue = AcceptableValue">
+import type { AcceptableValue, ComboboxRootEmits, ComboboxRootProps } from 'reka-ui'
 import { ComboboxRoot, useForwardPropsEmits } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<ComboboxRootProps>()
-const emits = defineEmits<ComboboxRootEmits>()
+const props = defineProps<ComboboxRootProps<T>>()
+const emits = defineEmits<ComboboxRootEmits<T>>()
 
 const forwarded = useForwardPropsEmits(props, emits)
 </script>
@@ -16,7 +16,7 @@ const forwarded = useForwardPropsEmits(props, emits)
     :model-value="''"
     :class="
       cn(
-        'flex h-full w-full flex-col overflow-hidden rounded-md border border-muted bg-popover text-popover-foreground shadow-level1',
+        'border-muted bg-popover text-popover-foreground shadow-level1 flex h-full w-full flex-col overflow-hidden rounded-md border',
         $attrs.class ?? ''
       )
     "

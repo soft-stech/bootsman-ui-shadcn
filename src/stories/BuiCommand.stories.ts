@@ -11,13 +11,17 @@ import {
   BuiCommandSeparator,
   BuiCommandShortcut
 } from '@/components/command'
+import type { DefineComponent } from 'vue'
+import type { AcceptableValue, ComboboxRootProps } from 'reka-ui'
+
+type BuiCommandType = DefineComponent<ComboboxRootProps<AcceptableValue>>
 
 const meta = {
-  component: BuiCommand,
+  component: BuiCommand as unknown as BuiCommandType,
   tags: ['autodocs'],
   argTypes: {},
   args: {}
-} satisfies Meta<typeof BuiCommand>
+} satisfies Meta<BuiCommandType>
 export default meta
 
 type Story = StoryObj<typeof meta>

@@ -5,6 +5,7 @@ import ComboboxStoryMultipleCreate from '@/stories/components/ComboboxStoryMulti
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 
 const meta = {
+  // @ts-expect-error not BuiCommand story
   component: BuiCommand,
   title: 'Combobox',
   argTypes: {},
