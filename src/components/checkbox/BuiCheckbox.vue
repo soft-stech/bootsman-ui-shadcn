@@ -17,7 +17,8 @@ const checkboxClasses = cva([
   /* border */ 'border border-foreground/24 data-[state=checked]:border-primary hover:data-[state=checked]:border-primary-hover data-[state=indeterminate]:border-primary hover:data-[state=indeterminate]:border-primary-hover',
   /* background */ 'hover:bg-foreground/4 data-[state=checked]:bg-primary hover:data-[state=checked]:bg-primary-hover data-[state=indeterminate]:bg-primary hover:data-[state=indeterminate]:bg-primary-hover',
   /* focus */ 'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-  /* text */ 'text-primary-foreground'
+  /* text */ 'text-primary-foreground',
+  /* dark */ 'dark:border-primary dark:data-[state=unchecked]:bg-primary/16 dark:hover:data-[state=unchecked]:bg-primary/32'
 ])
 const classes = cn(checkboxClasses(), attrs.class as string)
 

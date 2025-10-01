@@ -42,7 +42,7 @@ export const tableColumnSortCommon = (
     },
     () => [
       h('div', { class: 'whitespace-normal break-normal' }, [name]),
-      h(icon, { class: 'ml-1 h-4 w-4 text-muted-foreground shrink-0' })
+      h(icon, { class: 'ml-1 h-4 w-4 text-muted-foreground shrink-0 hover:text-primary' })
     ]
   )
 }

@@ -10,7 +10,7 @@ export const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-input',
+        default: 'border-input hover:border-primary focus-visible:border-primary',
         destructive: 'border-destructive-foreground',
         success: 'border-success-foreground'
       }

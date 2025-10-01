@@ -3,6 +3,7 @@ import { BuiContextMenu, BuiContextMenuTrigger } from '@/components/context-menu
 import { cn } from '@/lib/utils'
 
 const props = defineProps<{ class?: string }>()
+const emits = defineEmits(['mouseenter', 'mouseleave'])
 </script>
 
 <template>
@@ -11,11 +12,13 @@ const props = defineProps<{ class?: string }>()
       <tr
         :class="
           cn(
-            'border-border/8 data-[row-state=selected]:bg-accent/4 border-b transition-colors',
+            'border-border/8 data-[row-state=selected]:bg-accent/8 border-b transition-colors',
             props.class
           )
         "
         :data-row-state="$attrs['data-row-state']"
+        @mouseenter="emits('mouseenter')"
+        @mouseleave="emits('mouseleave')"
       >
         <slot />
       </tr>
@@ -26,11 +29,13 @@ const props = defineProps<{ class?: string }>()
     v-else
     :class="
       cn(
-        'border-border/8 data-[row-state=selected]:bg-accent/4 border-b transition-colors',
+        'border-border/8 data-[row-state=selected]:bg-accent/8 border-b transition-colors',
         props.class
       )
     "
     :data-row-state="$attrs['data-row-state']"
+    @mouseenter="emits('mouseenter')"
+    @mouseleave="emits('mouseleave')"
   >
     <slot />
   </tr>

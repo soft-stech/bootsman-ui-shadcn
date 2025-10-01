@@ -2,7 +2,8 @@
 import { BuiTableCell, BuiTableRow } from '@/components/table'
 import { FlexRender, type ColumnDef, type Row } from '@tanstack/vue-table'
 import { getPinningStyle } from './'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { cn } from '@/lib/utils'
 
 const props = defineProps<{
   row: Row<TData>
@@ -16,13 +17,19 @@ const isEmptyRow = computed(() => {
   // @ts-expect-error name с таким значением это наше внутреннее соглашение. См. Боцман Дашборд, таблицу Projects/Namespaces
   return props.row.original.name?.includes(FAKE_ROW)
 })
+
+const isHovered = ref<boolean>(false)
 </script>
 
 <template>
   <BuiTableRow
     v-if="!isEmptyRow"
     :data-row-state="row.getIsSelected() ? 'selected' : undefined"
-    :class="props.renderSubComponent?.(row) ? 'border-b-0' : ''"
+    :class="
+      cn(props.renderSubComponent?.(row) ? 'border-b-0' : '', isHovered ? 'bg-accent/4!' : '')
+    "
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
   >
     <BuiTableCell
       v-for="cell in row.getVisibleCells()"
@@ -39,6 +46,9 @@ const isEmptyRow = computed(() => {
   <BuiTableRow
     v-if="props.renderSubComponent?.(row)"
     :data-row-state="row.getIsSelected() ? 'selected' : undefined"
+    :class="cn(isHovered ? 'bg-accent/4!' : '')"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
   >
     <BuiTableCell :colspan="columns.length" class="pt-0">
       <component :is="props.renderSubComponent?.(row)?.()"></component>

@@ -12,9 +12,11 @@ const props = defineProps<{
   <th
     :class="
       cn(
-        'text-foreground relative h-10 text-left align-middle [&:has([role=checkbox])]:pr-0',
+        'text-foreground relative h-14 text-left align-middle [&:has([role=checkbox])]:pr-0',
         props.class,
-        props.freezeHeader ? 'bg-background p-0' : 'bg-foreground/4 p-0'
+        props.freezeHeader
+          ? 'bg-background p-0'
+          : 'bg-foreground/4 hover:bg-foreground/8 dark:hover:bg-accent/16 p-0'
       )
     "
   >
@@ -23,7 +25,7 @@ const props = defineProps<{
         <div
           class="border-border/16! flex h-full items-center border-b!"
           :class="{
-            'bg-foreground/4': props.freezeHeader,
+            'bg-foreground/4 hover:bg-foreground/8 dark:hover:bg-accent/16': props.freezeHeader,
             'header-cell_wrapper': !props.freezeHeader
           }"
         >
@@ -41,7 +43,7 @@ const props = defineProps<{
       v-else
       class="border-border/16! flex h-full items-center border-b!"
       :class="{
-        'bg-foreground/4': props.freezeHeader,
+        'bg-foreground/4 hover:bg-foreground/8 dark:hover:bg-accent/16': props.freezeHeader,
         'header-cell_wrapper': !props.freezeHeader
       }"
     >

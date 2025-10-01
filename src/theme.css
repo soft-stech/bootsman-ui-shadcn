@@ -150,16 +150,16 @@
   --accent: hsl(241 92% 71%);
   --accent-foreground: hsl(241 76% 62%);
 
-  --destructive: hsl(328, 68%, 63%, 0.16);
+  --destructive: hsl(328, 68%, 63%, 0.08);
   --destructive-foreground: hsl(328 68% 63%);
 
-  --success: hsl(181, 34%, 39%, 0.16);
+  --success: hsl(181, 34%, 39%, 0.08);
   --success-foreground: hsl(181 34% 39%);
 
-  --warning: hsl(48, 79%, 45%, 0.16);
+  --warning: hsl(48, 79%, 45%, 0.08);
   --warning-foreground: hsl(48 79% 45%);
 
-  --info: hsl(198, 85%, 45%, 0.16);
+  --info: hsl(198, 85%, 45%, 0.08);
   --info-foreground: hsl(198 85% 45%);
 
   --ring: hsl(241 92% 71%);

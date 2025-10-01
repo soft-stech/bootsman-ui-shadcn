@@ -393,13 +393,13 @@ watch(
             :style="{ height: `${height.toFixed(1)}px` }"
           >
             <div
-              class="border-border/16 bg-foreground/4 flex h-full items-center border-b border-l px-1"
+              class="border-border/16 bg-foreground/4 hover:bg-foreground/8 dark:hover:bg-accent/16 flex h-full items-center border-b border-l px-1"
             >
               <BuiButton
                 variant="ghost"
-                class="text-foreground flex h-8 w-8 items-center justify-center"
+                class="text-foreground/50 hover:text-primary flex h-8 w-8 items-center justify-center hover:bg-transparent"
               >
-                <Settings2Icon class="h-4 w-4 shrink-0 opacity-50" />
+                <Settings2Icon class="h-4 w-4 shrink-0" />
               </BuiButton>
             </div>
           </div>
