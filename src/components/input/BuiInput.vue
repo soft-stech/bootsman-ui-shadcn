@@ -53,6 +53,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     :readonly="readonlyContext || props.readonly"
     :disabled="props.disabled"
     :placeholder="props.placeholder"
+    :type="props.type || 'text'"
     @focus="handleFocus"
     @blur="handleBlur"
     @keydown="handleKeyDown"
