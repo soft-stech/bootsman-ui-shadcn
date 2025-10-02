@@ -26,11 +26,10 @@
   },
   "peerDependencies": {
     "@tanstack/vue-table": "8.20.5",
-    "@vee-validate/zod": "4.13.2",
     "@vueuse/core": "11.1.0",
-    "vee-validate": "^4.13.2",
+    "vee-validate": "5.0.0-beta.0",
     "vue": "^3.5.18",
-    "zod": "^3.23.6"
+    "zod": "4.1.11"
   },
   "dependencies": {
     "@internationalized/date": "^3.9.0",
