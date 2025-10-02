@@ -46,7 +46,7 @@ export const Password: Story = {
     template: `
       <div class="grid w-full max-w-sm items-center gap-1.5">
           <BuiLabel for="password">Password</BuiLabel>
-          <BuiPasswordInput v-bind="args" id="password" default-value="text" placeholder="Password"/>
+          <BuiPasswordInput v-bind="args" id="password" placeholder="Password"/>
         </div>
     `
   })
