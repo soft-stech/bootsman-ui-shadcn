@@ -1,0 +1,211 @@
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* --container-padding: 2rem; */
+  /* --container-screen-2xl: 1400px; */
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar: var(--side-bar);
+  --color-tabs-sidebar: var(--tabs-sidebar);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --shadow-card: 0px 4px 8px 0px var(--card-shadow);
+  --shadow-tab: 0px 2px 4px 0px var(--tab-shadow), 0px 4px 4px 0px var(--tab-shadow);
+  --shadow-top: 0px -2px 4px 0px var(--tab-shadow);
+  --shadow-level1:
+    0px 16px 16px 0px var(--tab-shadow), 0px 8px 16px 0px var(--tab-shadow),
+    0px 8px 8px 0px var(--tab-shadow);
+  --shadow-level2:
+    0px 32px 16px 0px var(--tab-shadow), 0px 16px 16px 0px var(--tab-shadow),
+    0px 16px 16px 0px var(--tab-shadow);
+  --shadow-level3:
+    0px 56px 24px 0px var(--tab-shadow), 0px 32px 24px 0px var(--tab-shadow),
+    0px 32px 24px 0px var(--tab-shadow);
+  --shadow-tab-sidebar: inset -8px 0px 16px 0px var(--tabs-sidebar-shadow);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-collapsible-down: collapsible-down 0.2s ease-in-out;
+  --animate-collapsible-up: collapsible-up 0.2s ease-in-out;
+
+  --bg-image-logo: url('/src/assets/logo-full.png');
+  --bg-image-logo-dark: url('/src/assets/logo-full-dark.png');
+
+  --color-tooltip: var(--tooltip);
+  --color-tooltip-link: var(--tooltip-link);
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--reka-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--reka-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes collapsible-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--reka-collapsible-content-height);
+  }
+}
+
+@keyframes collapsible-up {
+  from {
+    height: var(--reka-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(242 24% 21%);
+
+  --muted: hsl(210 40% 96.1%);
+  --muted-foreground: hsl(225 5% 47%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222.2 84% 4.9%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222.2 84% 4.9%);
+  --card-shadow: hsl(241, 92%, 71%, 0.16);
+  --tab-shadow: hsl(228, 51%, 11%, 0.08);
+
+  --side-bar: hsl(0 0% 100%);
+  --tabs-sidebar: hsl(210 40% 96.1%);
+  --tabs-sidebar-shadow: hsl(0, 0%, 100%, 0);
+
+  --border: hsl(241 92% 71%);
+  --input: hsl(225 11% 84%);
+
+  --primary: hsl(241 92% 71%);
+  --primary-hover: hsl(241 76% 62%);
+  --primary-active: hsl(241 54% 54%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(210 40% 96.1%);
+  --secondary-foreground: hsl(241 76% 62%);
+
+  --accent: hsl(241 92% 71%);
+  --accent-foreground: hsl(241 76% 62%);
+
+  --destructive: hsl(328, 68%, 63%, 0.16);
+  --destructive-foreground: hsl(328 68% 63%);
+
+  --success: hsl(181, 34%, 39%, 0.16);
+  --success-foreground: hsl(181 34% 39%);
+
+  --warning: hsl(48, 79%, 45%, 0.16);
+  --warning-foreground: hsl(48 79% 45%);
+
+  --info: hsl(198, 85%, 45%, 0.16);
+  --info-foreground: hsl(198 85% 45%);
+
+  --ring: hsl(241 92% 71%);
+
+  --radius: 0.5rem;
+
+  --tooltip: hsl(225 5% 47%);
+  --tooltip-link: hsl(241 100% 88%);
+}
+
+.dark {
+  --background: hsl(242 24% 21%);
+  --foreground: hsl(0 0% 100%);
+
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(0, 0%, 100%, 0.32);
+
+  --popover: hsl(222.2 84% 4.9%);
+  --popover-foreground: hsl(210 40% 98%);
+
+  --card: hsl(242 24% 21%);
+  --card-foreground: hsl(210 40% 98%);
+  --card-shadow: hsl(241, 92%, 71%, 0.4);
+  --tab-shadow: hsl(228, 51%, 11%, 0.08);
+
+  --side-bar: hsl(243.2 24.1% 15.5%);
+  --tabs-sidebar: hsl(243.2 24.1% 15.5%);
+  --tabs-sidebar-shadow: hsl(0, 0%, 0%, 0.08);
+
+  --border: hsl(241 92% 71%);
+  --input: hsl(0, 0%, 100%, 0.32);
+
+  --primary: hsl(241 92% 71%);
+  --primary-hover: hsl(241 76% 62%);
+  --primary-active: hsl(241 54% 54%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary-foreground: hsl(210 40% 98%);
+
+  --accent: hsl(241 92% 71%);
+  --accent-foreground: hsl(240 100% 77%);
+
+  --destructive: hsl(328, 68%, 63%, 0.16);
+  --destructive-foreground: hsl(328 68% 63%);
+
+  --success: hsl(154, 84%, 45%, 0.16);
+  --success-foreground: hsl(181 35% 49%);
+}

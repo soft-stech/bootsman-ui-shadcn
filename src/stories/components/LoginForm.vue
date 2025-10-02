@@ -11,15 +11,12 @@ import {
   BuiFormMessage
 } from '@/components/form'
 
-import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
-const loginFormSchema = toTypedSchema(
-  z.object({
-    email: z.string().email(),
-    password: z.string().min(8).max(64)
-  })
-)
+const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(64)
+})
 
 const initialValues = {
   email: 'test@example.com',

@@ -25,19 +25,16 @@ import BuiSelectTrigger from '@/components/select/BuiSelectTrigger.vue'
 import BuiSelectValue from '@/components/select/BuiSelectValue.vue'
 import BuiSwitch from '@/components/switch/BuiSwitch.vue'
 import BuiTextarea from '@/components/textarea/BuiTextarea.vue'
-import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
-const loginFormSchema = toTypedSchema(
-  z.object({
-    email: z.string().email(),
-    password: z.string().min(8).max(64),
-    remember: z.boolean(),
-    favoriteFruit: z.enum(['banana']),
-    description: z.string().min(2).max(10),
-    display: z.enum(['default', 'compact', 'comfortable'])
-  })
-)
+const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(64),
+  remember: z.boolean(),
+  favoriteFruit: z.enum(['banana']),
+  description: z.string().min(2).max(10),
+  display: z.enum(['default', 'compact', 'comfortable'])
+})
 
 const initialValues = {
   email: 'test@example.com',

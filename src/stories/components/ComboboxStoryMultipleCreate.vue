@@ -18,18 +18,15 @@ import {
 } from '@/components/form'
 import { BuiLabel } from '@/components/label'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
-import { toTypedSchema } from '@vee-validate/zod'
 import { CheckIcon, ChevronDown, CirclePlusIcon } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { z } from 'zod'
 
 const search = ref<string>('')
-const formSchema = toTypedSchema(
-  z.object({
-    namespace: z.string().min(2),
-    groups: z.array(z.string())
-  })
-)
+const formSchema = z.object({
+  namespace: z.string().min(2),
+  groups: z.array(z.string())
+})
 const isGroupsPopoverOpen = ref(false)
 const existingGroups = ref(['group-1', 'group-2', 'group-3'])
 </script>

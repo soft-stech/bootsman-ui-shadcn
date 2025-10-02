@@ -1,23 +1,22 @@
 import {
   BuiSelect,
   BuiSelectContent,
+  BuiSelectGroup,
   BuiSelectItem,
   BuiSelectItemText,
   BuiSelectLabel,
-  BuiSelectGroup,
   BuiSelectTrigger,
   BuiSelectValue
 } from '@/components/select'
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { toTypedSchema } from '@vee-validate/zod'
 import { BringToFrontIcon } from 'lucide-vue-next'
 import z from 'zod'
 
 import {
   BuiForm,
+  BuiFormControl,
   BuiFormField,
   BuiFormItem,
-  BuiFormControl,
   BuiFormMessage
 } from '@/components/form'
 import type { AcceptableValue, SelectRootProps } from 'reka-ui'
@@ -134,7 +133,7 @@ export const WithValidation: Story = {
       const validationRules = z.object({
         favoriteFruit: z.enum(['banana'])
       })
-      const validationSchema = toTypedSchema(validationRules)
+      const validationSchema = validationRules
       const initialValues = {
         favoriteFruit: 'apple'
       }

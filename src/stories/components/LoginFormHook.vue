@@ -11,15 +11,12 @@ import {
   useBuiForm
 } from '@/components/form'
 
-import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
-const loginFormSchema = toTypedSchema(
-  z.object({
-    email: z.string().email(),
-    password: z.string().min(8).max(64)
-  })
-)
+const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(64)
+})
 
 const initialValues = {
   email: 'test@example.com',
@@ -40,11 +37,11 @@ const onSubmit = handleSubmit((values) => {
   <div class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <div
-        class="mx-auto h-10 bg-logo bg-contain bg-center bg-no-repeat dark:bg-logo-dark"
+        class="bg-logo dark:bg-logo-dark mx-auto h-10 bg-contain bg-center bg-no-repeat"
         alt="Bootsman"
       />
       <h2
-        class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white"
+        class="mt-6 text-center text-2xl leading-9 font-bold tracking-tight text-gray-900 dark:text-white"
       >
         Sign in to your account
       </h2>

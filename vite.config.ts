@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path, { extname, relative, resolve } from 'node:path'
 import dts from 'vite-plugin-dts'
 import { glob } from 'glob'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 // https://vite.dev/config/
 import { fileURLToPath } from 'node:url'
@@ -59,6 +60,14 @@ export default defineConfig({
       copyDtsFiles: true,
       entryRoot: 'src',
       tsconfigPath: './tsconfig.app.json'
+    }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/theme.css',
+          dest: '' // или оставьте пустым для корневой директории
+        }
+      ]
     })
   ],
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },

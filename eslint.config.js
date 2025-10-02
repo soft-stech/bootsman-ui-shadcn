@@ -2,6 +2,7 @@ import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import { globalIgnores } from 'eslint/config'
 
 export default defineConfigWithVueTs(
   ...pluginVue.configs['flat/essential'],
@@ -32,5 +33,6 @@ export default defineConfigWithVueTs(
       }
     }
   },
-  skipFormatting
+  skipFormatting,
+  globalIgnores(['**/node_modules/**', '**/dist/**', '**/.git/**'])
 )

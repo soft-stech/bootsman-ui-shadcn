@@ -17,17 +17,14 @@ import {
 } from '@/components/form'
 import { BuiLabel } from '@/components/label'
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
-import { toTypedSchema } from '@vee-validate/zod'
 import { CheckIcon, ChevronDown } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { z } from 'zod'
 
-const formSchema = toTypedSchema(
-  z.object({
-    namespace: z.string().min(2),
-    groups: z.array(z.string())
-  })
-)
+const formSchema = z.object({
+  namespace: z.string().min(2),
+  groups: z.array(z.string())
+})
 const isNamespacesPopoverOpen = ref(false)
 const namespaces = ['default', 'local', 'my-namespace']
 </script>
