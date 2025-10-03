@@ -65,6 +65,26 @@
 
   --color-tooltip: var(--tooltip);
   --color-tooltip-link: var(--tooltip-link);
+
+  --color-snow: var(--snow);
+  --color-light-violet: var(--light-violet);
+  --color-dark-violet: var(--dark-violet);
+  --color-spring-green: var(--spring-green);
+  --color-code-green: var(--code-green);
+  --color-vivid-tangerine: var(--vivid-tangerine);
+  --color-sulphur: var(--sulphur);
+  --color-mustard: var(--mustard);
+  --color-homeworld: var(--homeworld);
+  --color-app-rancher: var(--primary);
+  --color-app-partner: rgb(254, 164, 36);
+  --color-app-color1: rgb(225, 45, 74);
+  --color-app-color2: rgb(212, 66, 148);
+  --color-app-color3: rgb(0, 169, 217);
+  --color-app-color4: rgb(244, 136, 68);
+  --color-app-color5: rgb(0, 147, 128);
+  --color-app-color6: rgb(136, 81, 165);
+  --color-app-color7: rgb(45, 47, 149);
+  --color-app-color8: rgb(255, 235, 0);
 }
 
 @keyframes accordion-down {
@@ -168,6 +188,16 @@
 
   --tooltip: hsl(225 5% 47%);
   --tooltip-link: hsl(241 100% 88%);
+
+  --snow: hsl(220 18% 97%);
+  --spring-green: hsl(154 85% 45%);
+  --code-green: hsl(181 34% 39%);
+  --sulphur: hsl(48 79% 45%);
+  --mustard: hsl(48 100% 33%);
+  --homeworld: hsl(198 85% 45%);
+  --light-violet: hsl(241 100% 88%);
+  --dark-violet: hsl(241 92% 71%);
+  --vivid-tangerine: hsl(14 100% 77%);
 }
 
 .dark {
@@ -208,4 +238,37 @@
 
   --success: hsl(154, 84%, 45%, 0.16);
   --success-foreground: hsl(181 35% 49%);
+
+  --snow: hsl(241 92% 71%);
+  --spring-green: hsl(154 85% 45%);
+  --code-green: hsl(181 35% 49%);
+  --sulphur: hsl(48 79% 45%);
+  --mustard: hsl(48 100% 33%);
+  --homeworld: hsl(198 85% 45%);
+  --light-violet: hsl(241 100% 88%);
+  --dark-violet: hsl(241 92% 71%);
+  --vivid-tangerine: hsl(14 100% 77%);
+}
+
+/* components styles moved here */
+@layer utilities {
+  /* BuiColorPicker */
+  [data-color-picker-background] {
+    background-image:
+      linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0) 100%),
+      linear-gradient(to right, #fff 0%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  [data-color-picker-track] {
+    background-image: linear-gradient(
+      0deg,
+      red 0,
+      #f0f 17%,
+      #00f 33%,
+      #0ff 50%,
+      #0f0 67%,
+      #ff0 83%,
+      red
+    );
+  }
 }
