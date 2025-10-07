@@ -524,7 +524,7 @@ watch(
                               {{ key }}
                             </template>
                           </div>
-                          <div v-if="enableGroupFolding" class="mt-1">
+                          <div v-if="enableGroupFolding" class="mt-[3px]">
                             <ChevronsDownUp
                               v-if="groupsOpenStateRef[key]"
                               class="text-accent h-4 w-4"
