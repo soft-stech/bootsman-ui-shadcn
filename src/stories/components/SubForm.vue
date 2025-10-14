@@ -8,7 +8,7 @@ const { value: value2, handleChange: handleChange2 } = useBuiField('example')
 </script>
 
 <template>
-  <div class="rounded px-4 py-4 shadow-sm space-y-2">
+  <div class="space-y-2 rounded-sm px-4 py-4 shadow-sm">
     <h2 class="text-lg">Sub form</h2>
     <div class="flex items-center justify-between space-y-2">
       <BuiLabel>Field 1:</BuiLabel> {{ value1 }}

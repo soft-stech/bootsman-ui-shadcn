@@ -10,7 +10,7 @@ const props = defineProps<AccordionTriggerProps & { class?: string }>()
 
 <template>
   <AccordionHeader
-    class="flex flex-col border-border bg-primary/16 p-2 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
+    class="border-border bg-primary/16 flex flex-col p-2 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
     as="div"
   >
     <div class="flex justify-between gap-2">
@@ -18,20 +18,20 @@ const props = defineProps<AccordionTriggerProps & { class?: string }>()
         v-bind="props"
         :class="
           cn(
-            'flex flex-1 items-center gap-2 rounded align-middle text-base font-semibold leading-6 ring-offset-background transition-all hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-30 [&[data-state=open]>svg]:rotate-180',
+            'ring-offset-background focus-visible:ring-ring flex flex-1 items-center gap-2 rounded-sm align-middle text-base leading-6 font-semibold transition-all hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-30 [&[data-state=open]>svg]:rotate-180',
             props.class
           )
         "
       >
         <ChevronDown
-          class="h-4 w-4 shrink-0 rounded-sm bg-primary/[0.56] text-primary-foreground transition-transform duration-200 dark:bg-primary"
+          class="bg-primary/[0.56] text-primary-foreground dark:bg-primary h-4 w-4 shrink-0 rounded-sm transition-transform duration-200"
         />
         <slot />
       </AccordionTrigger>
       <slot name="actions" />
     </div>
 
-    <p v-if="$slots.description" class="mx-6 mt-2 align-middle text-xs font-normal leading-4">
+    <p v-if="$slots.description" class="mx-6 mt-2 align-middle text-xs leading-4 font-normal">
       <slot name="description" />
     </p>
   </AccordionHeader>

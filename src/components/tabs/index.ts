@@ -11,7 +11,7 @@ export const tabsListVariants = cva('inline-flex items-center justify-center rou
       default: 'bg-foreground/4 dark:bg-white/4 text-muted-foreground p-0',
       ghost: 'bg-background bg-text-foreground',
       vertical:
-        'w-70 shrink-0 bg-tabs-sidebar text-muted-foreground p-0 flex flex-col justify-start rounded-none shadow-tab-sidebar-shadow'
+        'w-70 shrink-0 bg-tabs-sidebar text-muted-foreground p-0 flex flex-col justify-start rounded-none shadow-tab-sidebar'
     }
   },
   defaultVariants: {
@@ -29,7 +29,7 @@ export const tabsTriggerVariants = cva(
         ghost:
           'px-3 py-1 whitespace-nowrap border-transparent text-muted-foreground pb-0 [&_div]:pb-0.5 data-[state=active]:[&_div]:border-b-2 data-[state=active]:[&_div]:border-primary hover:text-foreground',
         vertical:
-          'px-3 py-1 border-transparent text-primary data-[state=active]:border-primary data-[state=active]:bg-background data-[state=active]:shadow-tab-sidebar-shadow border-l-2 border-b-0 w-full h-fit justify-start pl-6! hover:bg-primary/16'
+          'px-3 py-1 border-transparent text-primary data-[state=active]:border-primary data-[state=active]:bg-background data-[state=active]:shadow-tab-sidebar border-l-2 border-b-0 w-full h-fit justify-start pl-6! hover:bg-primary/16'
       }
     },
     defaultVariants: {

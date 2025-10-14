@@ -63,7 +63,7 @@ watch(pickedColor, () => {
           :class="cn('absolute top-1.5 left-2 flex flex-row items-center gap-1', ui?.badgeClass)"
         >
           <PaletteIcon class="h-4 w-4 shrink-0" />
-          <div class="h-4 w-4 rounded" :style="{ backgroundColor: pickedColor }"></div>
+          <div class="h-4 w-4 rounded-sm" :style="{ backgroundColor: pickedColor }"></div>
           <div class="text-foreground/[.56] font-bold">#</div>
         </div>
         <BuiInput

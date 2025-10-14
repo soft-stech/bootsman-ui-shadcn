@@ -496,7 +496,7 @@ watch(
                   <div class="mt-1 flex w-full items-center justify-between">
                     <div class="flex flex-row justify-start gap-1">
                       <div
-                        class="bg-background shadow-top-shadow relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+                        class="bg-background shadow-top relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
                       >
                         <div class="bg-background absolute bottom-0 -left-2 h-2 w-2"></div>
                         <div
