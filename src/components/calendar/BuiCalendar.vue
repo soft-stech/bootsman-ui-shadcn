@@ -301,7 +301,7 @@ const vCalendarSlots = computed(() => {
   @apply stroke-primary text-primary mr-1;
 }
 .vc-time-select-group select {
-  @apply bg-background text-foreground appearance-none p-1 text-center outline-none;
+  @apply bg-background text-foreground appearance-none p-1 text-center outline-hidden;
 }
 .vc-time-weekday {
   @apply text-muted-foreground tracking-wide;

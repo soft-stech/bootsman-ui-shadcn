@@ -34,7 +34,7 @@ const props = defineProps<
         v-bind="props"
         :class="
           cn(
-            'flex flex-1 items-center gap-2 rounded align-middle text-base font-semibold leading-6 ring-offset-background transition-all hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none  [&[data-state=open]>svg]:rotate-180',
+            'ring-offset-background focus-visible:ring-ring flex flex-1 items-center gap-2 rounded-sm align-middle text-base leading-6 font-semibold transition-all hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none [&[data-state=open]>svg]:rotate-180',
             props.class,
             props.isDisabledAsNormal ? 'disabled:opacity-100' : 'disabled:opacity-30'
           )
@@ -43,7 +43,7 @@ const props = defineProps<
         <ChevronDown
           :class="
             cn(
-              'h-4 w-4 shrink-0 rounded-sm text-primary-foreground transition-transform duration-200',
+              'text-primary-foreground h-4 w-4 shrink-0 rounded-sm transition-transform duration-200',
               props.iconBgClass
                 ? `${props.iconBgClass} dark:${props.iconBgClass}`
                 : 'bg-primary/[0.56] dark:bg-primary',
@@ -60,7 +60,7 @@ const props = defineProps<
       v-if="$slots.description"
       :class="
         cn(
-          'mx-6 mt-2 align-middle text-xs font-normal leading-4',
+          'mx-6 mt-2 align-middle text-xs leading-4 font-normal',
           props.descriptionColorClass ? props.descriptionColorClass : ''
         )
       "

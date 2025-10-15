@@ -4,7 +4,7 @@ export { default as BuiAlert } from './BuiAlert.vue'
 export { default as BuiAlertTitle } from './BuiAlertTitle.vue'
 export { default as BuiAlertDescription } from './BuiAlertDescription.vue'
 
-export const alertVariants = cva('flex w-full rounded border-l-2 p-4 [&_svg]:text-foreground', {
+export const alertVariants = cva('flex w-full rounded-sm border-l-2 p-4 [&_svg]:text-foreground', {
   variants: {
     variant: {
       default: 'bg-background text-foreground',

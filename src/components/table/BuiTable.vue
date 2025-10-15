@@ -6,7 +6,7 @@ const props = defineProps<{ class?: string }>()
 </script>
 
 <template>
-  <BuiScrollArea class="border-border/16 w-full grow overflow-auto rounded border">
+  <BuiScrollArea class="border-border/16 w-full grow overflow-auto rounded-sm border">
     <slot name="columnVisibility" />
     <table :class="cn('min-h-[90px] w-full caption-top text-sm', props.class)">
       <slot />
