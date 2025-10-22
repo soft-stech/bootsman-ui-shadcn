@@ -50,8 +50,9 @@ const indicators = computed(() => {
   <div
     :class="
       cn(
-        `relative w-full overflow-hidden bg-slate-400/20 after:absolute after:top-0 after:right-0 after:bg-slate-400/10`,
+        `relative w-full overflow-hidden after:absolute after:top-0 after:right-0`,
         healthVariants({ variant }),
+        indicators.length === 0 && 'border-input border',
         props.class
       )
     "
@@ -61,7 +62,7 @@ const indicators = computed(() => {
       <div
         :class="
           cn(
-            'absolute box-content flex-1 bg-slate-400 transition-all duration-300 after:absolute after:top-0 after:right-0 after:bg-slate-400',
+            'absolute box-content flex-1 transition-all duration-300 after:absolute after:top-0 after:right-0',
             healthVariants({ variant }),
             indicator.class
           )
