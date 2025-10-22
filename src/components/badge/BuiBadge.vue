@@ -7,7 +7,7 @@ import { XIcon } from 'lucide-vue-next'
 
 interface BadgeVariantProps extends VariantProps<typeof badgeVariants> {}
 
-interface Props {
+type Props = {
   variant?: BadgeVariantProps['variant']
   dismissable?: boolean
 }
