@@ -29,7 +29,7 @@ export const tabsTriggerVariants = cva(
         ghost:
           'whitespace-nowrap border-transparent text-muted-foreground pb-0 [&_div]:pb-0.5 data-[state=active]:[&_div]:border-b-2 data-[state=active]:[&_div]:border-primary hover:text-foreground',
         vertical:
-          'border-transparent text-primary data-[state=active]:border-primary data-[state=active]:bg-background data-[state=active]:shadow-tab-sidebar-shadow border-l-2 border-b-0 w-full h-fit justify-start pl-6! hover:bg-primary/16'
+          'border-transparent text-primary data-[state=active]:border-primary data-[state=active]:bg-background data-[state=active]:shadow-tab-sidebar border-l-2 border-b-0 w-full h-fit justify-start pl-6! hover:bg-primary/16'
       }
     },
     defaultVariants: {
