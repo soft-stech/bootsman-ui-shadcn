@@ -12,7 +12,7 @@ const props = defineProps<{
   <th
     :class="
       cn(
-        'text-foreground relative h-14 text-left align-middle [&:has([role=checkbox])]:pr-0',
+        'text-foreground relative h-10 text-left align-middle [&:has([role=checkbox])]:pr-0',
         props.class,
         props.freezeHeader
           ? 'bg-background p-0'
