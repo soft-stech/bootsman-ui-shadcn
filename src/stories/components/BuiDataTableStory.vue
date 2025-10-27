@@ -218,26 +218,22 @@ function groupName(group: string | number) {
         <template #caption="{ table }">
           <div class="flex h-fit items-center justify-between">
             <div class="flex h-full flex-row items-center gap-3">
-              <BuiButton variant="outline" class="h-10 px-5 py-2">Download YAML</BuiButton>
-              <BuiButton variant="outline" class="h-10 px-5 py-2" @click="updateRows">
-                Delete row
-              </BuiButton>
-              <BuiButton variant="outline" class="h-10 px-5 py-2" @click="deleteRow">
-                Update rows
-              </BuiButton>
+              <BuiButton variant="outline">Download YAML</BuiButton>
+              <BuiButton variant="outline" @click="updateRows"> Delete row </BuiButton>
+              <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
             </div>
 
             <div class="flex h-full flex-row items-center gap-3">
               <BuiTabs v-model="groupBy">
                 <BuiTabsList class="grid w-full grid-cols-3" variant="default">
                   <BuiTabsTrigger value="none" variant="default">
-                    <AlignJustifyIcon :size="16" />
+                    <AlignJustifyIcon :size="14" />
                   </BuiTabsTrigger>
                   <BuiTabsTrigger value="status" variant="default">
-                    <FolderIcon :size="16" />
+                    <FolderIcon :size="14" />
                   </BuiTabsTrigger>
                   <BuiTabsTrigger value="priority" variant="default">
-                    <ArrowUpNarrowWideIcon :size="16" />
+                    <ArrowUpNarrowWideIcon :size="14" />
                   </BuiTabsTrigger>
                 </BuiTabsList>
               </BuiTabs>
