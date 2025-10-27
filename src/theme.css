@@ -11,6 +11,7 @@
   --color-foreground: var(--foreground);
   --color-sidebar: var(--side-bar);
   --color-tabs-sidebar: var(--tabs-sidebar);
+  --color-tabs-background: var(--tabs-background);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -155,6 +156,7 @@
   --side-bar: hsl(0 0% 100%);
   --tabs-sidebar: hsl(210 40% 96.1%);
   --tabs-sidebar-shadow: hsl(0, 0%, 100%, 0);
+  --tabs-background: hsl(240, 6.67%, 97.06%);
 
   --border: hsl(241 92% 71%);
   --input: hsl(225 11% 84%);
@@ -218,6 +220,7 @@
   --side-bar: hsl(243.2 24.1% 15.5%);
   --tabs-sidebar: hsl(243.2 24.1% 15.5%);
   --tabs-sidebar-shadow: hsl(0, 0%, 0%, 0.08);
+  --tabs-background: hsl(242.5, 19.67%, 23.92%);
 
   --border: hsl(241 92% 71%);
   --input: hsl(0, 0%, 100%, 0.32);
