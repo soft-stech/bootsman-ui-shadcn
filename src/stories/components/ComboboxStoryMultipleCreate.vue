@@ -2,12 +2,10 @@
 import { BuiButton } from '@/components/button'
 import {
   BuiCommand,
-  BuiCommandEmpty,
   BuiCommandGroup,
   BuiCommandInput,
   BuiCommandItem,
-  BuiCommandList,
-  BuiCommandNewItem
+  BuiCommandList
 } from '@/components/command'
 import {
   BuiForm,
@@ -73,39 +71,24 @@ const existingGroups = ref(['group-1', 'group-2', 'group-3'])
                 placeholder="Search or create new"
                 @input="(event: Event) => (search = (event.target as HTMLInputElement).value)"
               />
-              <BuiCommandEmpty class="flex w-full py-1 pl-1">
-                <BuiCommandNewItem
-                  v-if="search"
-                  @create="
-                    () => {
-                      setValue([...value, search])
-                      existingGroups = [...existingGroups, search]
-                      search = ''
-                      isGroupsPopoverOpen = false
-                    }
-                  "
-                >
-                  <CirclePlusIcon class="mr-2 h-4 w-4" />
-                  <span>Create "{{ search }}"</span>
-                </BuiCommandNewItem>
-              </BuiCommandEmpty>
               <BuiFormControl>
                 <BuiCommandList>
                   <BuiCommandGroup>
-                    <BuiCommandNewItem
-                      v-if="search"
-                      @create="
+                    <BuiCommandItem
+                      v-if="search && search.trim().length > 0 && !existingGroups.includes(search)"
+                      @select="
                         () => {
                           setValue([...value, search])
                           existingGroups = [...existingGroups, search]
-                          search = ''
                           isGroupsPopoverOpen = false
                         }
                       "
+                      :value="search"
+                      :key="`search-${search}`"
                     >
                       <CirclePlusIcon class="mr-2 h-4 w-4" />
                       <span>Create "{{ search }}"</span>
-                    </BuiCommandNewItem>
+                    </BuiCommandItem>
 
                     <BuiCommandItem
                       v-for="element in existingGroups"

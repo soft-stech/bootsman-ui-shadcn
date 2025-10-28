@@ -3,7 +3,7 @@ import type { ComboboxItemEmits, ComboboxItemProps } from 'reka-ui'
 import { ComboboxItem, useEmitAsProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<ComboboxItemProps>()
+const props = defineProps<ComboboxItemProps & { key: string }>()
 const emits = defineEmits<ComboboxItemEmits>()
 
 const emitsAsProps = useEmitAsProps(emits)
@@ -14,7 +14,7 @@ const emitsAsProps = useEmitAsProps(emits)
     v-bind="{ ...props, ...emitsAsProps }"
     :class="
       cn(
-        'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden data-disabled:pointer-events-none data-highlighted:bg-accent/8 data-highlighted:text-accent-foreground data-disabled:opacity-50',
+        'data-highlighted:bg-accent/8 data-highlighted:text-accent-foreground relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50',
         $attrs.class ?? ''
       )
     "

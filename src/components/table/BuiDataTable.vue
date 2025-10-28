@@ -422,6 +422,7 @@ watch(
                 <BuiCommandSeparator class="my-1"></BuiCommandSeparator>
                 <BuiCommandItem
                   value="reset_columns_visibility"
+                  key="reset_columns_visibility"
                   class="text-muted-foreground px-2 py-1.5 font-medium"
                   @select="table.setColumnVisibility({ ...columnVisibility, ...allVisibleColumns })"
                 >
