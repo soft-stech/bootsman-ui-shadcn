@@ -38,11 +38,14 @@ export const tableColumnSortCommon = (
       variant: 'none',
       class: 'text-foreground px-0 text-sm font-semibold h-full',
       'sorting-enabled': '',
-      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+      onClick: (e: Event) => {
+        e.stopPropagation()
+        column.toggleSorting(column.getIsSorted() === 'asc')
+      }
     },
     () => [
       h('div', { class: 'whitespace-normal break-normal' }, [name]),
-      h(icon, { class: 'ml-1 h-4 w-4 text-muted-foreground shrink-0 hover:text-primary' })
+      h(icon, { class: 'ml-1 h-4 w-4 text-muted-foreground shrink-0 group-hover:text-primary' })
     ]
   )
 }
