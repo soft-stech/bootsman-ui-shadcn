@@ -294,17 +294,20 @@ watchEffect(() => {
 
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
 
+const getHeaderCellSortingButton = (header: Header<TData, unknown>) => {
+  const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
+    `th[id="${header.id}_cell"]`
+  ) as HTMLTableCellElement | undefined
+
+  return currentHeaderCell?.querySelector('button[sorting-enabled]')
+}
+
 type HeaderCellAction = 'hideColumn' | 'resetSize' | 'sortAsc' | 'sortDesc'
 const availableHeaderCellActions = (header: Header<TData, unknown>) => {
   const out: HeaderCellAction[] = []
 
   if (props.manualSorting) {
-    const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
-      `th[id="${header.id}_cell"]`
-    ) as HTMLTableCellElement | undefined
-    const buttonForSorting = currentHeaderCell?.querySelector('button[sorting-enabled]')
-
-    if (buttonForSorting) {
+    if (getHeaderCellSortingButton(header)) {
       out.push('sortAsc', 'sortDesc')
     }
   }
@@ -378,6 +381,12 @@ watch(
     }
   }
 )
+
+const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
+  if (getHeaderCellSortingButton(header)) {
+    header.column.toggleSorting(header.column.getIsSorted() === 'asc')
+  }
+}
 </script>
 
 <template>
@@ -440,10 +449,12 @@ watch(
         :key="header.id"
         :id="`${header.id}_cell`"
         :style="{
-          ...getPinningStyle(header.column)
+          ...getPinningStyle(header.column),
+          cursor: getHeaderCellSortingButton(header) ? 'pointer' : 'auto'
         }"
         :freeze-header="props.freezeHeader"
         :can-resize="header.column.getCanResize() ? true : undefined"
+        @click="handleHeaderCellSorting(header)"
       >
         <FlexRender
           v-if="!header.isPlaceholder"
