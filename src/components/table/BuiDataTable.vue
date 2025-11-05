@@ -467,6 +467,7 @@ const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
           "
           @dblclick="resetCells"
           @mousedown="() => handleResizeControlMouseDown(header.id, props.enableColumnResizing)"
+          @click.stop
           :className="
             cn(
               'absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
