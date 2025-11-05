@@ -48,7 +48,7 @@ import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-
 import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
 import { BuiScrollArea } from '@/components/scroll-area'
 import { BuiButton } from '@/components/button'
-import { Settings2Icon, ChevronsUpDown, ChevronsDownUp } from 'lucide-vue-next'
+import { Settings2Icon, ChevronDown } from 'lucide-vue-next'
 import { useElementSize, useEventListener } from '@vueuse/core'
 import { isEqual } from 'lodash-es'
 import { cn, valueUpdater } from '@/lib/utils'
@@ -294,17 +294,20 @@ watchEffect(() => {
 
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
 
+const getHeaderCellSortingButton = (header: Header<TData, unknown>) => {
+  const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
+    `th[id="${header.id}_cell"]`
+  ) as HTMLTableCellElement | undefined
+
+  return currentHeaderCell?.querySelector('button[sorting-enabled]')
+}
+
 type HeaderCellAction = 'hideColumn' | 'resetSize' | 'sortAsc' | 'sortDesc'
 const availableHeaderCellActions = (header: Header<TData, unknown>) => {
   const out: HeaderCellAction[] = []
 
   if (props.manualSorting) {
-    const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
-      `th[id="${header.id}_cell"]`
-    ) as HTMLTableCellElement | undefined
-    const buttonForSorting = currentHeaderCell?.querySelector('button[sorting-enabled]')
-
-    if (buttonForSorting) {
+    if (getHeaderCellSortingButton(header)) {
       out.push('sortAsc', 'sortDesc')
     }
   }
@@ -378,6 +381,12 @@ watch(
     }
   }
 )
+
+const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
+  if (getHeaderCellSortingButton(header)) {
+    header.column.toggleSorting(header.column.getIsSorted() === 'asc')
+  }
+}
 </script>
 
 <template>
@@ -440,10 +449,12 @@ watch(
         :key="header.id"
         :id="`${header.id}_cell`"
         :style="{
-          ...getPinningStyle(header.column)
+          ...getPinningStyle(header.column),
+          cursor: getHeaderCellSortingButton(header) ? 'pointer' : 'auto'
         }"
         :freeze-header="props.freezeHeader"
         :can-resize="header.column.getCanResize() ? true : undefined"
+        @click="handleHeaderCellSorting(header)"
       >
         <FlexRender
           v-if="!header.isPlaceholder"
@@ -456,6 +467,7 @@ watch(
           "
           @dblclick="resetCells"
           @mousedown="() => handleResizeControlMouseDown(header.id, props.enableColumnResizing)"
+          @click.stop
           :className="
             cn(
               'absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
@@ -491,13 +503,14 @@ watch(
             v-model:open="groupsOpenStateRef[key]"
             @update:open="(value) => handleGroupToggle(value, key)"
           >
-            <BuiTableRow class="bg-foreground/4">
+            <BuiTableRow class="bg-foreground/4 border-b-0">
               <BuiTableCell :colspan="columns.length" class="pb-0!">
-                <BuiCollapsibleTrigger class="w-full">
+                <BuiCollapsibleTrigger class="group w-full">
                   <div class="mt-1 flex w-full items-center justify-between">
                     <div class="flex flex-row justify-start gap-1">
                       <div
-                        class="bg-background shadow-top relative -mb-[6px] inline-block rounded-t-lg px-4 py-2 text-sm font-medium"
+                        class="bg-background shadow-top relative inline-block rounded-t-lg px-6 py-2 text-sm font-medium"
+                        :class="enableGroupFolding ? '-mb-[1px]' : '-mb-[6px]'"
                       >
                         <div class="bg-background absolute bottom-0 -left-2 h-2 w-2"></div>
                         <div
@@ -514,7 +527,7 @@ watch(
                           class="bg-foreground/4 absolute -right-4 bottom-0 h-4 w-4 rounded-lg"
                         ></div>
                         <div></div>
-                        <div class="flex flex-row items-center gap-1">
+                        <div class="flex flex-row items-center gap-2">
                           <div v-if="key === NO_GROUP_KEY">
                             {{ getGroupLabel(1) }}
                           </div>
@@ -525,12 +538,11 @@ watch(
                               {{ key }}
                             </template>
                           </div>
-                          <div v-if="enableGroupFolding" class="mt-[3px]">
-                            <ChevronsDownUp
-                              v-if="groupsOpenStateRef[key]"
-                              class="text-accent h-4 w-4"
-                            />
-                            <ChevronsUpDown v-else class="text-accent h-4 w-4" />
+                          <div
+                            v-if="enableGroupFolding"
+                            class="bg-primary/8 hover:bg-primary/16 rounded-sm p-1 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                          >
+                            <ChevronDown :stroke-width="3" class="text-primary h-4 w-4 shrink-0" />
                           </div>
                         </div>
                       </div>
