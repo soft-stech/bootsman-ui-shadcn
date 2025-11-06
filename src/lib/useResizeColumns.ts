@@ -56,7 +56,18 @@ export function useResizeColumns() {
     return undefined
   }
 
-  const handleResizeControlMouseDown = (cellId: string, enableColumnResizing: boolean) => {
+  const isMouseDownOnHandler = ref<boolean>(false)
+  const isMouseUpOnHandler = ref<boolean>(false)
+
+  const handleResizeControlMouseDown = (
+    e: Event,
+    cellId: string,
+    enableColumnResizing: boolean
+  ) => {
+    const targetHTMLElement = e.target as HTMLElement
+    isMouseDownOnHandler.value =
+      targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
+
     if (!enableColumnResizing) return
 
     isResizing.value = true
@@ -76,7 +87,11 @@ export function useResizeColumns() {
     }
   }
 
-  const handleResizeControlMouseUp = () => {
+  const handleResizeControlMouseUp = (e: Event) => {
+    const targetHTMLElement = e.target as HTMLElement
+    isMouseUpOnHandler.value =
+      targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
+
     if (!isResizing.value) return
 
     isResizing.value = false
@@ -221,6 +236,8 @@ export function useResizeColumns() {
     handleResizeControlMouseUp,
     resetCells,
     setInitialColumnWidths,
-    setProvidedCellWidths
+    setProvidedCellWidths,
+    isMouseDownOnHandler,
+    isMouseUpOnHandler
   }
 }
