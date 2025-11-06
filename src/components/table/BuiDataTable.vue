@@ -268,7 +268,9 @@ const {
   handleResizeControlMouseDown,
   handleResizeControlMouseUp,
   setInitialColumnWidths,
-  setProvidedCellWidths
+  setProvidedCellWidths,
+  isMouseDownOnHandler,
+  isMouseUpOnHandler
 } = useResizeColumns()
 
 onBeforeMount(() => {
@@ -383,6 +385,10 @@ watch(
 )
 
 const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
+  if (isMouseDownOnHandler.value && !isMouseUpOnHandler.value) {
+    return false
+  }
+
   if (getHeaderCellSortingButton(header)) {
     header.column.toggleSorting(header.column.getIsSorted() === 'asc')
   }
@@ -466,11 +472,13 @@ const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
             enableColumnResizing && index < tableHeaders.length - 1 && header.column.getCanResize()
           "
           @dblclick="resetCells"
-          @mousedown="() => handleResizeControlMouseDown(header.id, props.enableColumnResizing)"
+          @mousedown.self="
+            (e: Event) => handleResizeControlMouseDown(e, header.id, props.enableColumnResizing)
+          "
           @click.stop
           :className="
             cn(
-              'absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
+              'resize-handler absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
               isResizing && resizingCellId === header.id ? 'bg-primary opacity-50' : ''
             )
           "
