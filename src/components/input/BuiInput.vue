@@ -83,7 +83,7 @@ const handleClear = () => {
       class="hover:text-primary text-foreground invisible absolute top-2 right-2 h-fit w-fit p-[1px] group-hover:visible"
       @click="handleClear"
     >
-      <X :size="14" class="shrink-0" />
+      <X :size="14" class="pointer-events-none shrink-0" />
     </BuiButton>
   </div>
   <input
