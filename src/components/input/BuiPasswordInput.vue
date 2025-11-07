@@ -34,7 +34,7 @@ const hidePasswordText = computed(() => props.hidePasswordTranslation ?? 'Hide p
     <BuiButton
       @click="togglePasswordShow"
       variant="none"
-      class="text-muted-foreground hover:text-foreground absolute top-0 right-3 flex h-fit h-full w-fit items-center justify-center p-0"
+      class="text-muted-foreground hover:text-foreground absolute top-0 right-3 flex h-full w-fit items-center justify-center p-0"
       :aria-label="type === 'password' ? showPasswordText : hidePasswordText"
       :aria-pressed="type !== 'password'"
     >
