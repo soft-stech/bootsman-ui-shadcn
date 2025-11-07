@@ -69,3 +69,23 @@ export const ColorPicker: Story = {
     `
   })
 }
+
+export const Search: Story = {
+  render: (args) => ({
+    components: { BuiInput },
+    setup() {
+      args = {
+        ...args,
+        type: 'search',
+        placeholder: 'Filter'
+      }
+
+      return { args }
+    },
+    template: `
+      <div class="grid w-full max-w-sm items-center gap-1.5">
+        <BuiInput id="search" v-bind="args" />
+      </div>
+    `
+  })
+}
