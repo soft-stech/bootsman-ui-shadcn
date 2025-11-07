@@ -2,10 +2,13 @@
 import { BuiInput } from '@/components/input/index'
 import { cn } from '@/lib/utils'
 import { EyeIcon, EyeOffIcon } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import BuiButton from '@/components/button/BuiButton.vue'
 
 const props = defineProps<{
   defaultValue?: 'password' | 'text'
+  showPasswordTranslation?: string
+  hidePasswordTranslation?: string
 }>()
 
 defineOptions({
@@ -20,20 +23,26 @@ function togglePasswordShow() {
     type.value = 'password'
   }
 }
+
+const showPasswordText = computed(() => props.showPasswordTranslation ?? 'Show password')
+const hidePasswordText = computed(() => props.hidePasswordTranslation ?? 'Hide password')
 </script>
 
 <template>
   <div class="relative flex">
     <BuiInput v-bind="$attrs" :type="type" :class="cn($attrs.class ?? '', 'pr-8')" />
-    <span
+    <BuiButton
       @click="togglePasswordShow"
-      class="absolute top-0 right-3 flex h-full items-center justify-center"
+      variant="none"
+      class="text-muted-foreground hover:text-foreground absolute top-0 right-3 flex h-full w-fit items-center justify-center p-0"
+      :aria-label="type === 'password' ? showPasswordText : hidePasswordText"
+      :aria-pressed="type !== 'password'"
     >
       <EyeIcon
         v-if="type === 'password'"
-        class="h-4 w-4 cursor-pointer opacity-[0.56] hover:opacity-100"
+        class="pointer-events-none h-4 w-4 shrink-0 cursor-pointer"
       />
-      <EyeOffIcon v-else class="h-4 w-4 cursor-pointer opacity-[0.56] hover:opacity-100" />
-    </span>
+      <EyeOffIcon v-else class="pointer-events-none h-4 w-4 shrink-0 cursor-pointer" />
+    </BuiButton>
   </div>
 </template>
