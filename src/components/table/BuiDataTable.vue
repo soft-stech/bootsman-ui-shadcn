@@ -450,55 +450,59 @@ const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
       </BuiPopover>
     </template>
     <BuiTableHeader v-if="tableHeaders" :freeze-header="props.freezeHeader" ref="tableHeaderRef">
-      <BuiTableHead
-        v-for="(header, index) in tableHeaders"
-        :key="header.id"
-        :id="`${header.id}_cell`"
-        :style="{
-          ...getPinningStyle(header.column),
-          cursor: getHeaderCellSortingButton(header) ? 'pointer' : 'auto'
-        }"
-        :freeze-header="props.freezeHeader"
-        :can-resize="header.column.getCanResize() ? true : undefined"
-        @click="handleHeaderCellSorting(header)"
-      >
-        <FlexRender
-          v-if="!header.isPlaceholder"
-          :render="header.column.columnDef.header"
-          :props="header.getContext()"
-        />
-        <div
-          v-if="
-            enableColumnResizing && index < tableHeaders.length - 1 && header.column.getCanResize()
-          "
-          @dblclick="resetCells"
-          @mousedown.self="
-            (e: Event) => handleResizeControlMouseDown(e, header.id, props.enableColumnResizing)
-          "
-          @click.stop
-          :className="
-            cn(
-              'resize-handler absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
-              isResizing && resizingCellId === header.id ? 'bg-primary opacity-50' : ''
-            )
-          "
-        />
-        <template #actions>
-          <BuiContextMenuContent v-if="availableHeaderCellActions(header).length > 0">
-            <BuiContextMenuItem
-              v-for="(action, idx) in availableHeaderCellActions(header)"
-              @click="onHeaderCellAction(header, action)"
-              :key="idx"
-            >
-              {{
-                headerContextMenuTranslations && headerContextMenuTranslations[action]
-                  ? headerContextMenuTranslations[action]
-                  : defaultColumnContextMenuTranslations[action]
-              }}
-            </BuiContextMenuItem>
-          </BuiContextMenuContent>
-        </template>
-      </BuiTableHead>
+      <BuiTableRow class="h-10">
+        <BuiTableHead
+          v-for="(header, index) in tableHeaders"
+          :key="header.id"
+          :id="`${header.id}_cell`"
+          :style="{
+            ...getPinningStyle(header.column),
+            cursor: getHeaderCellSortingButton(header) ? 'pointer' : 'auto'
+          }"
+          :freeze-header="props.freezeHeader"
+          :can-resize="header.column.getCanResize() ? true : undefined"
+          @click="handleHeaderCellSorting(header)"
+        >
+          <FlexRender
+            v-if="!header.isPlaceholder"
+            :render="header.column.columnDef.header"
+            :props="header.getContext()"
+          />
+          <div
+            v-if="
+              enableColumnResizing &&
+              index < tableHeaders.length - 1 &&
+              header.column.getCanResize()
+            "
+            @dblclick="resetCells"
+            @mousedown.self="
+              (e: Event) => handleResizeControlMouseDown(e, header.id, props.enableColumnResizing)
+            "
+            @click.stop
+            :className="
+              cn(
+                'resize-handler absolute top-0 right-0 h-full w-1 bg-muted-foreground opacity-0 cursor-col-resize select-none touch-none hover:opacity-50',
+                isResizing && resizingCellId === header.id ? 'bg-primary opacity-50' : ''
+              )
+            "
+          />
+          <template #actions>
+            <BuiContextMenuContent v-if="availableHeaderCellActions(header).length > 0">
+              <BuiContextMenuItem
+                v-for="(action, idx) in availableHeaderCellActions(header)"
+                @click="onHeaderCellAction(header, action)"
+                :key="idx"
+              >
+                {{
+                  headerContextMenuTranslations && headerContextMenuTranslations[action]
+                    ? headerContextMenuTranslations[action]
+                    : defaultColumnContextMenuTranslations[action]
+                }}
+              </BuiContextMenuItem>
+            </BuiContextMenuContent>
+          </template>
+        </BuiTableHead>
+      </BuiTableRow>
     </BuiTableHeader>
     <BuiTableBody>
       <template v-if="table.getRowModel().rows?.length">
