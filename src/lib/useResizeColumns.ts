@@ -59,15 +59,7 @@ export function useResizeColumns() {
   const isMouseDownOnHandler = ref<boolean>(false)
   const isMouseUpOnHandler = ref<boolean>(false)
 
-  const handleResizeControlMouseDown = (
-    e: Event,
-    cellId: string,
-    enableColumnResizing: boolean
-  ) => {
-    const targetHTMLElement = e.target as HTMLElement
-    isMouseDownOnHandler.value =
-      targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
-
+  const handleResizeControlMouseDown = (cellId: string, enableColumnResizing: boolean) => {
     if (!enableColumnResizing) return
 
     isResizing.value = true

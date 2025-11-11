@@ -18,7 +18,7 @@ import {
   SignalMediumIcon,
   SignalLowIcon
 } from 'lucide-vue-next'
-import { computed, h, ref } from 'vue'
+import { computed, h, ref, withModifiers } from 'vue'
 import { z } from 'zod'
 import tasks from '@/stories/data/tasks.json'
 import { BuiCheckbox } from '@/components/checkbox'
@@ -51,7 +51,8 @@ const columns: ColumnDef<Task>[] = [
             table.getIsSomePageRowsSelected()
               ? table.toggleAllPageRowsSelected(false)
               : table.toggleAllPageRowsSelected(!!value),
-          ariaLabel: 'Select row'
+          ariaLabel: 'Select row',
+          onClick: withModifiers(() => {}, ['stop'])
         }),
         tableColumnSortCommon(column, 'ID')
       ])
