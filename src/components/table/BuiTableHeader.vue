@@ -24,8 +24,6 @@ const props = defineProps<{
       )
     "
   >
-    <tr class="h-10">
-      <slot />
-    </tr>
+    <slot />
   </thead>
 </template>
