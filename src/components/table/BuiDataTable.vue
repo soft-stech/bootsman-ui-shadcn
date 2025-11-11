@@ -393,6 +393,12 @@ const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
     header.column.toggleSorting(header.column.getIsSorted() === 'asc')
   }
 }
+
+const handleHeaderCellMouseDown = (e: Event) => {
+  const targetHTMLElement = e.target as HTMLElement
+  isMouseDownOnHandler.value =
+    targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
+}
 </script>
 
 <template>
@@ -450,7 +456,7 @@ const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
       </BuiPopover>
     </template>
     <BuiTableHeader v-if="tableHeaders" :freeze-header="props.freezeHeader" ref="tableHeaderRef">
-      <BuiTableRow class="h-10">
+      <BuiTableRow class="border-0">
         <BuiTableHead
           v-for="(header, index) in tableHeaders"
           :key="header.id"
@@ -462,6 +468,7 @@ const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
           :freeze-header="props.freezeHeader"
           :can-resize="header.column.getCanResize() ? true : undefined"
           @click="handleHeaderCellSorting(header)"
+          @mousedown="handleHeaderCellMouseDown"
         >
           <FlexRender
             v-if="!header.isPlaceholder"
@@ -475,9 +482,7 @@ const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
               header.column.getCanResize()
             "
             @dblclick="resetCells"
-            @mousedown.self="
-              (e: Event) => handleResizeControlMouseDown(e, header.id, props.enableColumnResizing)
-            "
+            @mousedown.self="handleResizeControlMouseDown(header.id, props.enableColumnResizing)"
             @click.stop
             :className="
               cn(
