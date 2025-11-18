@@ -42,7 +42,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --shadow-card: 0px 4px 8px 0px var(--card-shadow);
+  --shadow-card: 0px 4px 8px 0px var(--cards-box-shadow);
   --shadow-tab: 0px 2px 4px 0px var(--tab-shadow), 0px 4px 4px 0px var(--tab-shadow);
   --shadow-top: 0px -2px 4px 0px var(--tab-shadow);
   --shadow-level1:
@@ -150,7 +150,7 @@
 
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(222.2 84% 4.9%);
-  --card-shadow: hsl(241, 92%, 71%, 0.16);
+  --cards-box-shadow: hsl(241, 92%, 71%, 0.16);
   --tab-shadow: hsl(228, 51%, 11%, 0.08);
 
   --side-bar: hsl(0 0% 100%);
@@ -214,7 +214,7 @@
 
   --card: hsl(242 24% 21%);
   --card-foreground: hsl(210 40% 98%);
-  --card-shadow: hsl(241, 92%, 71%, 0.4);
+  --cards-box-shadow: hsl(241, 92%, 71%, 0.4);
   --tab-shadow: hsl(228, 51%, 11%, 0.08);
 
   --side-bar: hsl(243.2 24.1% 15.5%);
