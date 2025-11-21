@@ -8,7 +8,7 @@ const props = defineProps<LabelProps & { class?: string }>()
 <template>
   <Label
     v-bind="props"
-    :class="cn('block text-left text-sm font-semibold leading-6 text-foreground', props.class)"
+    :class="cn('text-foreground block text-left text-sm font-medium tracking-tight', props.class)"
   >
     <slot />
   </Label>
