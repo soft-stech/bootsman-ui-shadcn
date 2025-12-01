@@ -12,7 +12,8 @@ const forwarded = useForwardPropsEmits(props, emits)
 <template>
   <ComboboxContent
     v-bind="forwarded"
-    :class="cn('max-h-[300px] overflow-y-auto overflow-x-hidden', $attrs.class ?? '')"
+    :class="cn('max-h-[300px] overflow-x-hidden overflow-y-auto', $attrs.class ?? '')"
+    @focusOutside.prevent
   >
     <div role="presentation">
       <slot />
