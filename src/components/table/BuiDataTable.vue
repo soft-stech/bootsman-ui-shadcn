@@ -258,10 +258,12 @@ watch(columnsListIds, () => {
 })
 
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
+const tableElementRef = ref<InstanceType<typeof BuiTable> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
 
 const {
   tableHeaderElement,
+  tableElement,
   calculatedColumnSizing,
   isResizing,
   resizingCellId,
@@ -279,7 +281,8 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  if (tableHeaderRef.value) {
+  if (tableElementRef.value && tableHeaderRef.value) {
+    tableElement.value = tableElementRef.value
     tableHeaderElement.value = tableHeaderRef.value
 
     setProvidedCellWidths(columnSizing.value)
@@ -416,7 +419,7 @@ watch(isResizing, () => {
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <BuiTable>
+  <BuiTable ref="tableElementRef">
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>

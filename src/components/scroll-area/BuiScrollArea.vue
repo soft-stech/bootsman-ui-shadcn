@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
+import { type HTMLAttributes, computed, ref } from 'vue'
 import {
   ScrollAreaCorner,
   ScrollAreaRoot,
@@ -16,10 +16,17 @@ const delegatedProps = computed(() => {
 
   return delegated
 })
+
+const tableWrapperRef = ref<InstanceType<typeof ScrollAreaRoot> | null>(null)
+defineExpose({ tableWrapperRef })
 </script>
 
 <template>
-  <ScrollAreaRoot v-bind="delegatedProps" :class="cn('relative overflow-hidden', props.class)">
+  <ScrollAreaRoot
+    ref="tableWrapperRef"
+    v-bind="delegatedProps"
+    :class="cn('relative overflow-hidden', props.class)"
+  >
     <ScrollAreaViewport class="h-full w-full rounded-[inherit]">
       <slot />
     </ScrollAreaViewport>
