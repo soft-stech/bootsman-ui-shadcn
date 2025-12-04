@@ -1,17 +1,38 @@
+<script lang="ts">
+import type { PaginationState } from '@tanstack/vue-table'
+
+export type PaginationAutoState = PaginationState & {
+  pageAuto?: boolean
+}
+</script>
+
 <script setup lang="ts" generic="TData, TValue">
+import { BuiButton } from '@/components/button'
 import {
   BuiCollapsible,
   BuiCollapsibleContent,
   BuiCollapsibleTrigger
 } from '@/components/collapsible'
+import {
+  BuiCommand,
+  BuiCommandEmpty,
+  BuiCommandInput,
+  BuiCommandItem,
+  BuiCommandList,
+  BuiCommandSeparator
+} from '@/components/command'
+import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-menu'
 import { BuiPaginationCommon, type PageSize } from '@/components/pagination'
+import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
+import { BuiScrollArea } from '@/components/scroll-area'
 import BuiTableRowSubrow from '@/components/table/BuiTableRowSubrow.vue'
+import { useResizeColumns } from '@/lib/useResizeColumns'
+import { cn, valueUpdater } from '@/lib/utils'
 import type {
   Column,
   ColumnDef,
   ColumnOrderState,
   Header,
-  PaginationState,
   Row,
   RowSelectionState,
   SortingState,
@@ -24,8 +45,18 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, nextTick } from 'vue'
 import {
+  useElementSize,
+  useEventListener,
+  useSessionStorage,
+  useIntersectionObserver,
+  useElementVisibility
+} from '@vueuse/core'
+import { isEqual } from 'lodash-es'
+import { ChevronDown, Settings2Icon } from 'lucide-vue-next'
+import { computed, nextTick, onBeforeMount, onMounted, ref, watch, watchEffect } from 'vue'
+import {
+  BuiDataTableColumnList,
   BuiTable,
   BuiTableBody,
   BuiTableCell,
@@ -33,27 +64,8 @@ import {
   BuiTableHead,
   BuiTableHeader,
   BuiTableRow,
-  getPinningStyle,
-  BuiDataTableColumnList
+  getPinningStyle
 } from './'
-import {
-  BuiCommand,
-  BuiCommandEmpty,
-  BuiCommandInput,
-  BuiCommandList,
-  BuiCommandItem,
-  BuiCommandSeparator
-} from '@/components/command'
-import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-menu'
-import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
-import { BuiScrollArea } from '@/components/scroll-area'
-import { BuiButton } from '@/components/button'
-import { Settings2Icon, ChevronDown } from 'lucide-vue-next'
-import { useElementSize, useEventListener } from '@vueuse/core'
-import { isEqual } from 'lodash-es'
-import { cn, valueUpdater } from '@/lib/utils'
-import { useResizeColumns } from '@/lib/useResizeColumns'
-import { useSessionStorage } from '@vueuse/core'
 import { useGlobalCursor } from '@/lib/useGlobalCursor'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
@@ -87,6 +99,7 @@ const props = withDefaults(
     columnResetVisibility?: string
     paginationTranslations?: {
       itemsPerPage: string
+      itemsPerPageAuto: string
       page: string
       of: string
     }
@@ -113,7 +126,7 @@ const props = withDefaults(
 )
 
 const sorting = defineModel<SortingState>('sorting')
-const pagination = defineModel<PaginationState>('pagination')
+const pagination = defineModel<PaginationAutoState>('pagination')
 const rowSelection = defineModel<RowSelectionState>('selection')
 const columnVisibility = defineModel<VisibilityState>('columnVisibility')
 const columnOrder = defineModel<ColumnOrderState>('columnOrder')
@@ -182,6 +195,15 @@ const table = useVueTable({
   getRowId: props.getRowId
 })
 
+const pageAuto = computed({
+  get() {
+    return pagination.value?.pageAuto || false
+  },
+  set: (state: boolean) => {
+    if (!pagination.value) return
+    pagination.value.pageAuto = state
+  }
+})
 const tablePageSize = computed<PageSize>({
   get() {
     return table.getState().pagination.pageSize as PageSize
@@ -417,6 +439,65 @@ watch(isResizing, () => {
     resetCursor()
   }
 })
+
+const rows = computed(() => table.getRowModel().rows)
+const rowsLength = computed(() => rows.value.length)
+const sentinel = ref<HTMLElement | null>(null)
+const sentinelVisible = useElementVisibility(sentinel)
+const sentinelKey = computed(() => `sentinel-${rowsLength.value}`)
+
+const { stop } = useIntersectionObserver(
+  sentinel,
+  async ([{ isIntersecting }]) => {
+    if (isIntersecting && pageAuto.value) {
+      await nextTick()
+      loadMore()
+    }
+
+    if (tablePageSize.value >= props.totalItems) {
+      stop()
+    }
+  },
+  {
+    rootMargin: '0px 0px 50px 0px'
+  }
+)
+
+let loadingMore = false
+async function loadMore() {
+  if (loadingMore) return
+  loadingMore = true
+
+  const newSize = Math.min(tablePageSize.value + 50, props.totalItems)
+  table.setPageSize(newSize)
+
+  await nextTick()
+  loadingMore = false
+}
+
+watch(pageAuto, (newPageAuto, oldPageAuto) => {
+  if (newPageAuto && !oldPageAuto) {
+    if (tableElementRef.value && tableElementRef.value.scrollAreaElementRef?.tableWrapperRef) {
+      tableElementRef.value.scrollAreaElementRef.tableWrapperRef.scrollTop()
+    }
+  }
+})
+
+const isUpdating = ref(false)
+watch(rowsLength, async () => {
+  if (!pageAuto.value || isUpdating.value) return
+
+  isUpdating.value = true
+  await nextTick()
+
+  //Add a small delay to ensure rendering is complete
+  setTimeout(() => {
+    if (sentinelVisible.value) {
+      loadMore()
+    }
+    isUpdating.value = false
+  }, 50)
+})
 </script>
 
 <template>
@@ -635,6 +716,14 @@ watch(isResizing, () => {
           <slot name="nodata">No data</slot>
         </BuiTableEmpty>
       </template>
+
+      <tr
+        v-if="pageAuto && tablePageSize < props.totalItems"
+        ref="sentinel"
+        class="h-4 w-full"
+        :data-key="sentinelKey"
+        :key="sentinelKey"
+      />
     </BuiTableBody>
   </BuiTable>
   <div
@@ -654,6 +743,7 @@ watch(isResizing, () => {
       :total="computedItems"
       v-model:pageIndex="pageIndex"
       v-model:pageSize="tablePageSize"
+      v-model:pageAuto="pageAuto"
       :translations="paginationTranslations"
     >
     </BuiPaginationCommon>

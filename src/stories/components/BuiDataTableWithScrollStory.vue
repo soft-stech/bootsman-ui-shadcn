@@ -3,6 +3,7 @@ import { BuiDataTable } from '@/components/table'
 import RowActionsMenuContent from './ActionsMenuContent.vue'
 import type {
   ColumnDef,
+  PaginationState,
   Row,
   RowSelectionState,
   VisibilityState,
@@ -24,7 +25,6 @@ import { BuiCheckbox } from '@/components/checkbox'
 import { tableColumnSortCommon } from '@/lib/utils'
 import { BuiButton } from '@/components/button'
 import { BuiTabs, BuiTabsList, BuiTabsTrigger } from '@/components/tabs'
-import type { PaginationAutoState } from '@/components/table/BuiDataTable.vue'
 
 const taskSchema = z.object({
   id: z.string(),
@@ -102,7 +102,7 @@ function onGroupAction(group: string | number, action: string) {
 
 type TaskSortingState = { id: keyof Task; desc: boolean }
 const sorting = ref<TaskSortingState[]>([{ id: 'id', desc: false }])
-const pagination = ref<PaginationAutoState>({
+const pagination = ref<PaginationState>({
   pageIndex: 0,
   pageSize: 10
 })
@@ -115,7 +115,7 @@ function updateSelection(val?: RowSelectionState) {
 }
 
 const columnVisibility = ref<VisibilityState>({ hiddenColumn: false })
-const columnSizing = ref<Record<string, number>>({})
+const columnSizing = ref<Record<string, number>>({ title: 450 })
 const columnOrder = ref<ColumnOrderState>()
 
 type GroupBy = 'none' | 'status' | 'priority'
@@ -192,79 +192,101 @@ function groupName(group: string | number) {
 <template>
   <Story title="BuiDataTable" autoPropsDisabled :layout="{ type: 'grid', width: '95%' }">
     <Variant key="variant" title="Sorting, Pagination, Grouping, Subrow">
-      <BuiDataTable
-        :columns="columns"
-        :data="sortedData"
-        v-model:sorting="sorting"
-        v-model:pagination="pagination"
-        v-model:column-visibility="columnVisibility"
-        v-model:column-sizing="columnSizing"
-        v-model:column-order="columnOrder"
-        @update:selection="updateSelection"
-        :total-items="totalItems"
-        :manualPagination="false"
-        :getRowId="(row) => row.id"
-        :groupBy="groupBy === 'none' ? undefined : groupBy"
-        :groupLabels="groupLabels"
-        :renderSubComponent="renderSubComponent"
-        enable-column-list-control
-        :enable-group-folding="true"
-        :pagination-translations="{
-          itemsPerPage: 'Tasks per page',
-          itemsPerPageAuto: 'Auto',
-          page: 'Page',
-          of: 'of'
-        }"
-      >
-        <template #caption="{ table }">
-          <div class="flex h-fit items-center justify-between">
-            <div class="flex h-full flex-row items-center gap-3">
-              <BuiButton variant="outline">Download YAML</BuiButton>
-              <BuiButton variant="outline" @click="updateRows"> Delete row </BuiButton>
-              <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
-            </div>
+      <div class="page-wrapper">
+        <div class="table-wrapper">
+          <BuiDataTable
+            :columns="columns"
+            :data="sortedData"
+            v-model:sorting="sorting"
+            v-model:pagination="pagination"
+            v-model:column-visibility="columnVisibility"
+            v-model:column-sizing="columnSizing"
+            v-model:column-order="columnOrder"
+            @update:selection="updateSelection"
+            :total-items="totalItems"
+            class="caption-top"
+            :manualPagination="false"
+            :getRowId="(row) => row.id"
+            :groupBy="groupBy === 'none' ? undefined : groupBy"
+            :groupLabels="groupLabels"
+            :renderSubComponent="renderSubComponent"
+            :freeze-header="true"
+            enable-column-list-control
+            :enable-group-folding="true"
+            :pagination-translations="{
+              itemsPerPage: 'Tasks per page',
+              itemsPerPageAuto: 'Auto',
+              page: 'Page',
+              of: 'of'
+            }"
+          >
+            <template #caption="{ table }">
+              <div class="flex h-fit items-center justify-between">
+                <div class="flex h-full flex-row items-center gap-3">
+                  <BuiButton variant="outline">Download YAML</BuiButton>
+                  <BuiButton variant="outline" @click="updateRows"> Delete row </BuiButton>
+                  <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
+                </div>
 
-            <div class="flex h-full flex-row items-center gap-3">
-              <BuiTabs v-model="groupBy">
-                <BuiTabsList class="grid w-full grid-cols-3" variant="default">
-                  <BuiTabsTrigger value="none" variant="default">
-                    <AlignJustifyIcon :size="14" />
-                  </BuiTabsTrigger>
-                  <BuiTabsTrigger value="status" variant="default">
-                    <FolderIcon :size="14" />
-                  </BuiTabsTrigger>
-                  <BuiTabsTrigger value="priority" variant="default">
-                    <ArrowUpNarrowWideIcon :size="14" />
-                  </BuiTabsTrigger>
-                </BuiTabsList>
-              </BuiTabs>
+                <div class="flex h-full flex-row items-center gap-3">
+                  <BuiTabs v-model="groupBy">
+                    <BuiTabsList class="grid w-full grid-cols-3" variant="default">
+                      <BuiTabsTrigger value="none" variant="default">
+                        <AlignJustifyIcon :size="14" />
+                      </BuiTabsTrigger>
+                      <BuiTabsTrigger value="status" variant="default">
+                        <FolderIcon :size="14" />
+                      </BuiTabsTrigger>
+                      <BuiTabsTrigger value="priority" variant="default">
+                        <ArrowUpNarrowWideIcon :size="14" />
+                      </BuiTabsTrigger>
+                    </BuiTabsList>
+                  </BuiTabs>
 
-              <span>
-                {{ table.getFilteredSelectedRowModel().rows?.length }} of
-                {{ table.getFilteredRowModel().rows?.length }} row(s) selected
-              </span>
-            </div>
-          </div>
-        </template>
-        <template #nodata>No data</template>
-        <template #groupByRow="{ group }"> Optional slot for: `{{ group }}` </template>
-        <template #groupName="{ group }">
-          <component :is="groupName(group)"></component>
-        </template>
-        <template #groupActions="{ group }">
-          <RowActionsMenuContent
-            :actions="['Group action']"
-            @select="(action) => onGroupAction(group, action)"
-          />
-        </template>
-        <template #rowActions="{ row }">
-          <RowActionsMenuContent
-            :actions="['action 1', 'action 2']"
-            @select="(action) => onRowAction(row, action)"
-          />
-        </template>
-        <template #numberOfItems>{{ data.length }} tasks</template>
-      </BuiDataTable>
+                  <span>
+                    {{ table.getFilteredSelectedRowModel().rows?.length }} of
+                    {{ table.getFilteredRowModel().rows?.length }} row(s) selected
+                  </span>
+                </div>
+              </div>
+            </template>
+            <template #nodata>No data</template>
+            <template #groupByRow="{ group }"> Optional slot for: `{{ group }}` </template>
+            <template #groupName="{ group }">
+              <component :is="groupName(group)"></component>
+            </template>
+            <template #groupActions="{ group }">
+              <RowActionsMenuContent
+                :actions="['Group action']"
+                @select="(action) => onGroupAction(group, action)"
+              />
+            </template>
+            <template #rowActions="{ row }">
+              <RowActionsMenuContent
+                :actions="['action 1', 'action 2']"
+                @select="(action) => onRowAction(row, action)"
+              />
+            </template>
+            <template #numberOfItems>{{ data.length }} tasks</template>
+          </BuiDataTable>
+        </div>
+      </div>
     </Variant>
   </Story>
 </template>
+
+<style scoped>
+.page-wrapper {
+  height: 95vh;
+  flex-direction: column;
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden auto;
+}
+
+.table-wrapper {
+  height: 100%;
+  flex-direction: column;
+  display: flex;
+}
+</style>

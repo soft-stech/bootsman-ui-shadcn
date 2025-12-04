@@ -14,6 +14,8 @@ export { default as BuiTableFooter } from './BuiTableFooter.vue'
 export { default as BuiDataTable } from './BuiDataTable.vue'
 export { default as BuiDataTableColumnList } from './BuiDataTableColumnList.vue'
 
+export type { PaginationAutoState } from './BuiDataTable.vue'
+
 export function getPinningStyle<TData>(_column: Column<TData, unknown>): CSSProperties {
   // FYI sticky columns not possible with transparent background colors
   // const isPinned = column.getIsPinned()

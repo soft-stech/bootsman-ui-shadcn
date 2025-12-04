@@ -4,6 +4,10 @@ import { cn } from '@/lib/utils'
 
 const props = defineProps<{ class?: string }>()
 const emits = defineEmits(['mouseenter', 'mouseleave'])
+
+defineOptions({
+  inheritAttrs: false
+})
 </script>
 
 <template>
@@ -19,6 +23,7 @@ const emits = defineEmits(['mouseenter', 'mouseleave'])
         :data-row-state="$attrs['data-row-state']"
         @mouseenter="emits('mouseenter')"
         @mouseleave="emits('mouseleave')"
+        v-bind="$attrs"
       >
         <slot />
       </tr>
@@ -36,6 +41,7 @@ const emits = defineEmits(['mouseenter', 'mouseleave'])
     :data-row-state="$attrs['data-row-state']"
     @mouseenter="emits('mouseenter')"
     @mouseleave="emits('mouseleave')"
+    v-bind="$attrs"
   >
     <slot />
   </tr>
