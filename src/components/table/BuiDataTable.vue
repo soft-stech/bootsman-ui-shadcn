@@ -54,6 +54,7 @@ import { isEqual } from 'lodash-es'
 import { cn, valueUpdater } from '@/lib/utils'
 import { useResizeColumns } from '@/lib/useResizeColumns'
 import { useSessionStorage } from '@vueuse/core'
+import { useGlobalCursor } from '@/lib/useGlobalCursor'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 const defaultColumnContextMenuTranslations = {
@@ -399,6 +400,16 @@ const handleHeaderCellMouseDown = (e: Event) => {
   isMouseDownOnHandler.value =
     targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
 }
+
+const { setCursor, resetCursor } = useGlobalCursor()
+
+watch(isResizing, () => {
+  if (isResizing.value) {
+    setCursor('col-resize')
+  } else {
+    resetCursor()
+  }
+})
 </script>
 
 <template>
