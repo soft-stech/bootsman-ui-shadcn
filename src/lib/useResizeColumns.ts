@@ -1,11 +1,16 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import BuiTableHeader from '@/components/table/BuiTableHeader.vue'
 import BuiTable from '@/components/table/BuiTable.vue'
 import { useEventListener } from '@vueuse/core'
 
 export function useResizeColumns() {
   type CELL = {
-    [key: string]: { cell: HTMLTableCellElement; initialWidth: number; minWidth: number }
+    [key: string]: {
+      cell: HTMLTableCellElement
+      initialWidth: number
+      minWidth: number
+      isLast: boolean
+    }
   }
   const isResizing = ref<boolean>(false)
   const resizingCellId = ref<string>('')
@@ -39,12 +44,13 @@ export function useResizeColumns() {
   const getCells = () => {
     if (tableHeaderElement.value && tableHeaderElement.value.headRef) {
       const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
-      const headerCellsWidths: CELL = headerCells.reduce((acc, cell) => {
+      const headerCellsWidths: CELL = headerCells.reduce((acc, cell, index, array) => {
         const cellId = getCellId(cell)
         return {
           ...acc,
           [cellId]: {
             cell: cell,
+            isLast: index === array.length - 1,
             initialWidth: cell.offsetWidth,
             minWidth:
               cellId === 'actions'
@@ -125,6 +131,14 @@ export function useResizeColumns() {
     return 0
   }
 
+  const lastCell = computed(() => {
+    if (cells.value) {
+      return Object.values(cells.value).find((cell) => cell.isLast)
+    }
+
+    return undefined
+  })
+
   const getCellId = (cell: HTMLTableCellElement) => {
     return cell.id.split('_')[0]
   }
@@ -134,7 +148,7 @@ export function useResizeColumns() {
     neighborCell: HTMLTableCellElement | null,
     e: MouseEvent
   ) => {
-    if (!cell || !neighborCell || !tableElement.value?.tableRef) {
+    if (!cell || !tableElement.value?.tableRef || !lastCell.value) {
       resizingCellId.value = ''
       neighborCellId.value = ''
 
@@ -144,9 +158,10 @@ export function useResizeColumns() {
     const movementX = e.movementX
     const direction: 'left' | 'right' = movementX < 0 ? 'left' : 'right'
     const newCellWidth = Math.floor(parseInt(cell.style.width)) + movementX
-    const newNeighborCellWidth = Math.floor(parseInt(neighborCell.style.width)) - movementX
+    //const newNeighborCellWidth = Math.floor(parseInt(neighborCell.style.width)) - movementX
     const newTableWidth =
       Math.floor(parseInt(tableElement.value?.tableRef?.style.width)) + movementX
+    const newLastCellWidth = Math.floor(parseInt(lastCell.value.cell.style.width)) - movementX
 
     if (direction === 'left') {
       const min =
@@ -161,28 +176,39 @@ export function useResizeColumns() {
       // } else {
       if (newCellWidth >= min) {
         cell.style.width = newCellWidth + 'px'
-      }
 
-      //if (newTableWidth >= minTableWidth.value) {
-      tableElement.value.tableRef.style.width = newTableWidth + 'px'
-      // } else {
-      //   tableElement.value.tableRef.style.width = minTableWidth.value - 3 + 'px'
-      // }
+        if (newTableWidth >= minTableWidth.value) {
+          tableElement.value.tableRef.style.width = newTableWidth + 'px'
+        } else {
+          tableElement.value.tableRef.style.width = minTableWidth.value - 3 + 'px'
+          lastCell.value.cell.style.width = newLastCellWidth + 'px'
+        }
+      } else {
+        return
+      }
       //   neighborCell.style.width = newNeighborCellWidth + 'px'
       // }
     } else {
-      // const min =
-      //   cells.value && cells.value[getCellId(neighborCell)]
-      //     ? cells.value[getCellId(neighborCell)].minWidth +
-      //       getLastCellOnTheRightExtraSpace(neighborCell)
-      //     : MIN_CELL_WIDTH
+      const min =
+        cells.value && cells.value[getCellId(lastCell.value.cell)]
+          ? cells.value[getCellId(lastCell.value.cell)].minWidth +
+            getLastCellOnTheRightExtraSpace(lastCell.value.cell)
+          : MIN_CELL_WIDTH
 
       // if (newNeighborCellWidth <= min || !neighborCell.hasAttribute('can-resize')) {
       //   const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement | null
 
       //   resizeCells(cell, nextNeighborCell, e)
       // } else {
-      tableElement.value.tableRef.style.width = newTableWidth + 'px'
+      if (
+        newLastCellWidth >= min &&
+        tableElement.value.tableRef.offsetWidth <= minTableWidth.value
+      ) {
+        lastCell.value.cell.style.width = newLastCellWidth + 'px'
+      } else {
+        tableElement.value.tableRef.style.width = newTableWidth + 'px'
+      }
+
       cell.style.width = newCellWidth + 'px'
       //neighborCell.style.width = newNeighborCellWidth + 'px'
       //}
