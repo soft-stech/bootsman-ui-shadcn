@@ -80,7 +80,7 @@ const handleClear = () => {
     <BuiButton
       v-if="modelValue && modelValue.toString().length > 0"
       variant="none"
-      class="hover:text-primary text-foreground invisible absolute top-2 right-2 h-fit w-fit p-[1px] group-hover:visible"
+      class="hover:text-primary text-foreground absolute top-2 right-2 h-fit w-fit p-[1px]"
       @click="handleClear"
     >
       <X :size="14" class="pointer-events-none shrink-0" />
