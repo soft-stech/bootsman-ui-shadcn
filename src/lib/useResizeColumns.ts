@@ -3,6 +3,10 @@ import BuiTableHeader from '@/components/table/BuiTableHeader.vue'
 import BuiTable from '@/components/table/BuiTable.vue'
 import { useEventListener } from '@vueuse/core'
 
+const MIN_CELL_WIDTH = 90
+const LAST_CELL_EXTRA_SPACE = 56
+const ACTIONS_CELL_MIN_WIDTH = 10
+
 export function useResizeColumns() {
   type CELL = {
     [key: string]: {
@@ -16,9 +20,6 @@ export function useResizeColumns() {
   const resizingCellId = ref<string>('')
   const neighborCellId = ref<string>('')
   const cells = ref<CELL | undefined>(undefined)
-  const MIN_CELL_WIDTH = 90
-  const LAST_CELL_EXTRA_SPACE = 56
-  const ACTIONS_CELL_MIN_WIDTH = 10
   const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
   const tableElement = ref<InstanceType<typeof BuiTable> | null>(null)
@@ -34,9 +35,7 @@ export function useResizeColumns() {
       headerCells.forEach((cell) => {
         const cellId = getCellId(cell)
 
-        if (columnSizing && columnSizing[cellId]) {
-          cell.style.width = columnSizing[cellId] + 'px'
-        }
+        cell.style.width = columnSizing && columnSizing[cellId] ? columnSizing[cellId] + 'px' : ''
       })
     }
   }
@@ -180,7 +179,7 @@ export function useResizeColumns() {
         if (newTableWidth >= minTableWidth.value) {
           tableElement.value.tableRef.style.width = newTableWidth + 'px'
         } else {
-          tableElement.value.tableRef.style.width = minTableWidth.value - 3 + 'px'
+          tableElement.value.tableRef.style.width = minTableWidth.value + 'px'
           lastCell.value.cell.style.width = newLastCellWidth + 'px'
         }
       } else {
@@ -228,20 +227,25 @@ export function useResizeColumns() {
 
   const resetCells = () => {
     if (tableElement.value && tableElement.value?.tableRef) {
-      tableElement.value.tableRef.style.width = initialTableWidth.value + 'px'
+      tableElement.value.tableRef.style.width = minTableWidth.value + 'px'
     }
 
     if (cells.value) {
-      const updatedColumnSizingValue: Record<string, number> = {}
+      // const updatedColumnSizingValue: Record<string, number> = {}
 
-      for (const cell in cells.value) {
-        const inititalWidth = cells.value[cell].initialWidth
+      // for (const cell in cells.value) {
+      //   const initialWidth: number | undefined = initialColumnSizing.value?.[cell] //cells.value[cell].initialWidth
 
-        cells.value[cell].cell.style.width = inititalWidth + 'px'
-        updatedColumnSizingValue[cell] = inititalWidth
-      }
+      //   if (initialWidth) {
+      //     updatedColumnSizingValue[cell] = initialWidth
+      //   } else {
+      //     delete updatedColumnSizingValue[cell]
+      //   }
+      // }
 
-      calculatedColumnSizing.value = updatedColumnSizingValue
+      calculatedColumnSizing.value = {}
+      setProvidedCellWidths(calculatedColumnSizing.value)
+      setInitialColumnWidths()
     }
   }
 
@@ -268,7 +272,8 @@ export function useResizeColumns() {
     }
 
     if (tableElement.value && tableElement.value.scrollAreaElementRef?.tableWrapperRef) {
-      minTableWidth.value = tableElement.value.scrollAreaElementRef?.tableWrapperRef.$el.offsetWidth
+      minTableWidth.value =
+        tableElement.value.scrollAreaElementRef?.tableWrapperRef.$el.offsetWidth - 3
     }
   }
 

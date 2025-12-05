@@ -115,7 +115,7 @@ function updateSelection(val?: RowSelectionState) {
 }
 
 const columnVisibility = ref<VisibilityState>({ hiddenColumn: false })
-const columnSizing = ref<Record<string, number>>({ title: 450 })
+const columnSizing = ref<Record<string, number>>({})
 const columnOrder = ref<ColumnOrderState>()
 
 type GroupBy = 'none' | 'status' | 'priority'

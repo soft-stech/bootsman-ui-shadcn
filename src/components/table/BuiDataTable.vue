@@ -153,7 +153,6 @@ const table = useVueTable({
     await nextTick()
 
     resetCells()
-    setInitialColumnWidths()
   },
   onColumnOrderChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnOrder)
@@ -285,7 +284,7 @@ onMounted(() => {
     tableElement.value = tableElementRef.value
     tableHeaderElement.value = tableHeaderRef.value
 
-    setProvidedCellWidths(columnSizing.value)
+    setProvidedCellWidths(calculatedColumnSizing.value)
     setInitialColumnWidths()
   }
 
@@ -463,6 +462,17 @@ watch(isResizing, () => {
                 >
                   {{ columnResetVisibility }}
                 </BuiCommandItem>
+                <BuiCommandItem
+                  value="reset_columns_size"
+                  key="reset_columns_size"
+                  class="text-muted-foreground px-2 py-1.5 font-medium"
+                  @select="resetCells"
+                >
+                  {{
+                    headerContextMenuTranslations?.['resetSize'] ??
+                    defaultColumnContextMenuTranslations['resetSize']
+                  }}
+                </BuiCommandItem>
               </BuiScrollArea>
             </BuiCommandList>
           </BuiCommand>
@@ -513,9 +523,8 @@ watch(isResizing, () => {
                 :key="idx"
               >
                 {{
-                  headerContextMenuTranslations && headerContextMenuTranslations[action]
-                    ? headerContextMenuTranslations[action]
-                    : defaultColumnContextMenuTranslations[action]
+                  headerContextMenuTranslations?.[action] ??
+                  defaultColumnContextMenuTranslations[action]
                 }}
               </BuiContextMenuItem>
             </BuiContextMenuContent>
