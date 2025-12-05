@@ -50,7 +50,7 @@ export function useResizeColumns() {
           [cellId]: {
             cell: cell,
             isLast: index === array.length - 1,
-            initialWidth: cell.offsetWidth,
+            initialWidth: Math.floor(cell.offsetWidth),
             minWidth:
               cellId === 'actions'
                 ? ACTIONS_CELL_MIN_WIDTH
@@ -118,6 +118,10 @@ export function useResizeColumns() {
         updatedColumnSizingValue[cell] = newWidth
       }
 
+      if (tableElement.value && tableElement.value?.tableRef) {
+        updatedColumnSizingValue['table'] = tableElement.value.tableRef.offsetWidth
+      }
+
       calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
@@ -142,11 +146,7 @@ export function useResizeColumns() {
     return cell.id.split('_')[0]
   }
 
-  const resizeCells = (
-    cell: HTMLTableCellElement | null,
-    neighborCell: HTMLTableCellElement | null,
-    e: MouseEvent
-  ) => {
+  const resizeCells = (cell: HTMLTableCellElement | null, e: MouseEvent) => {
     if (!cell || !tableElement.value?.tableRef || !lastCell.value) {
       resizingCellId.value = ''
       neighborCellId.value = ''
@@ -157,7 +157,6 @@ export function useResizeColumns() {
     const movementX = e.movementX
     const direction: 'left' | 'right' = movementX < 0 ? 'left' : 'right'
     const newCellWidth = Math.floor(parseInt(cell.style.width)) + movementX
-    //const newNeighborCellWidth = Math.floor(parseInt(neighborCell.style.width)) - movementX
     const newTableWidth =
       Math.floor(parseInt(tableElement.value?.tableRef?.style.width)) + movementX
     const newLastCellWidth = Math.floor(parseInt(lastCell.value.cell.style.width)) - movementX
@@ -168,11 +167,6 @@ export function useResizeColumns() {
           ? cells.value[getCellId(cell)].minWidth
           : MIN_CELL_WIDTH
 
-      // if (newCellWidth <= min || !cell.hasAttribute('can-resize')) {
-      //   const nextCell = cell.previousElementSibling as HTMLTableCellElement | null
-
-      //   resizeCells(nextCell, neighborCell, e)
-      // } else {
       if (newCellWidth >= min) {
         cell.style.width = newCellWidth + 'px'
 
@@ -185,8 +179,6 @@ export function useResizeColumns() {
       } else {
         return
       }
-      //   neighborCell.style.width = newNeighborCellWidth + 'px'
-      // }
     } else {
       const min =
         cells.value && cells.value[getCellId(lastCell.value.cell)]
@@ -194,11 +186,6 @@ export function useResizeColumns() {
             getLastCellOnTheRightExtraSpace(lastCell.value.cell)
           : MIN_CELL_WIDTH
 
-      // if (newNeighborCellWidth <= min || !neighborCell.hasAttribute('can-resize')) {
-      //   const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement | null
-
-      //   resizeCells(cell, nextNeighborCell, e)
-      // } else {
       if (
         newLastCellWidth >= min &&
         tableElement.value.tableRef.offsetWidth <= minTableWidth.value
@@ -209,8 +196,6 @@ export function useResizeColumns() {
       }
 
       cell.style.width = newCellWidth + 'px'
-      //neighborCell.style.width = newNeighborCellWidth + 'px'
-      //}
     }
   }
 
@@ -219,30 +204,17 @@ export function useResizeColumns() {
 
     if (cells.value) {
       const resizingCell = cells.value[resizingCellId.value]?.cell
-      const neighborCell = cells.value[neighborCellId.value]?.cell
 
-      resizeCells(resizingCell, neighborCell, e)
+      resizeCells(resizingCell, e)
     }
   }
 
   const resetCells = () => {
     if (tableElement.value && tableElement.value?.tableRef) {
-      tableElement.value.tableRef.style.width = minTableWidth.value + 'px'
+      tableElement.value.tableRef.style.width = ''
     }
 
     if (cells.value) {
-      // const updatedColumnSizingValue: Record<string, number> = {}
-
-      // for (const cell in cells.value) {
-      //   const initialWidth: number | undefined = initialColumnSizing.value?.[cell] //cells.value[cell].initialWidth
-
-      //   if (initialWidth) {
-      //     updatedColumnSizingValue[cell] = initialWidth
-      //   } else {
-      //     delete updatedColumnSizingValue[cell]
-      //   }
-      // }
-
       calculatedColumnSizing.value = {}
       setProvidedCellWidths(calculatedColumnSizing.value)
       setInitialColumnWidths()
@@ -263,17 +235,24 @@ export function useResizeColumns() {
         updatedColumnSizingValue[cell] = cells.value[cell].cell.offsetWidth
       }
 
+      if (tableElement.value && tableElement.value?.tableRef) {
+        const tableOffsetWidth = tableElement.value.tableRef.offsetWidth
+
+        if (calculatedColumnSizing.value?.['table'] && !tableElement.value.tableRef.style.width) {
+          tableElement.value.tableRef.style.width = calculatedColumnSizing.value['table'] + 'px'
+        } else {
+          initialTableWidth.value = tableOffsetWidth
+          tableElement.value.tableRef.style.width = tableOffsetWidth + 'px'
+          updatedColumnSizingValue['table'] = tableOffsetWidth
+        }
+      }
+
+      if (tableElement.value && tableElement.value.scrollAreaElementRef?.tableWrapperRef) {
+        minTableWidth.value =
+          tableElement.value.scrollAreaElementRef?.tableWrapperRef.$el.offsetWidth - 3
+      }
+
       calculatedColumnSizing.value = updatedColumnSizingValue
-    }
-
-    if (tableElement.value && tableElement.value?.tableRef) {
-      initialTableWidth.value = tableElement.value.tableRef.offsetWidth
-      tableElement.value.tableRef.style.width = tableElement.value.tableRef.offsetWidth + 'px'
-    }
-
-    if (tableElement.value && tableElement.value.scrollAreaElementRef?.tableWrapperRef) {
-      minTableWidth.value =
-        tableElement.value.scrollAreaElementRef?.tableWrapperRef.$el.offsetWidth - 3
     }
   }
 
