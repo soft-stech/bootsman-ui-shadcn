@@ -71,7 +71,9 @@ export function useResizeColumns() {
         }
       }, {})
 
-      tableElement.value.tableRef.style.width = tableInitialWidth + 'px'
+      setProvidedCellWidths(calculatedColumnSizing.value)
+      tableElement.value.tableRef.style.width =
+        (calculatedColumnSizing.value?.['table'] || tableInitialWidth) + 'px'
 
       Object.values(headerCellsWidths).forEach((cellElement) => {
         cellElement.initialWidth = Math.floor(cellElement.cell.offsetWidth)
@@ -232,7 +234,6 @@ export function useResizeColumns() {
       tableElement.value.tableRef.style.width = ''
 
       calculatedColumnSizing.value = {}
-      setProvidedCellWidths(calculatedColumnSizing.value)
       setInitialColumnWidths()
     }
   }

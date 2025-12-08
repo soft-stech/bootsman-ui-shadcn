@@ -273,7 +273,6 @@ const {
   handleResizeControlMouseDown,
   handleResizeControlMouseUp,
   setInitialColumnWidths,
-  setProvidedCellWidths,
   isMouseDownOnHandler,
   isMouseUpOnHandler
 } = useResizeColumns()
@@ -287,7 +286,6 @@ onMounted(() => {
     tableElement.value = tableElementRef.value
     tableHeaderElement.value = tableHeaderRef.value
 
-    setProvidedCellWidths(calculatedColumnSizing.value)
     setInitialColumnWidths()
   }
 
