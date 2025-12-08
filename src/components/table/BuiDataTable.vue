@@ -59,7 +59,8 @@ import { useGlobalCursor } from '@/lib/useGlobalCursor'
 const NO_GROUP_KEY = '#UNDEFINED#'
 const defaultColumnContextMenuTranslations = {
   hideColumn: 'Hide column',
-  resetSize: 'Reset size',
+  resetThisSize: 'Reset size for this column',
+  resetSize: 'Reset size for all columns',
   sortAsc: 'Sort ascending',
   sortDesc: 'Sort descending'
 }
@@ -91,6 +92,7 @@ const props = withDefaults(
     }
     headerContextMenuTranslations?: {
       hideColumn?: string
+      resetThisSize?: string
       resetSize?: string
       sortAsc?: string
       sortDesc?: string
@@ -266,6 +268,7 @@ const {
   calculatedColumnSizing,
   isResizing,
   resizingCellId,
+  resetCell,
   resetCells,
   handleResizeControlMouseDown,
   handleResizeControlMouseUp,
@@ -307,7 +310,7 @@ const getHeaderCellSortingButton = (header: Header<TData, unknown>) => {
   return currentHeaderCell?.querySelector('button[sorting-enabled]')
 }
 
-type HeaderCellAction = 'hideColumn' | 'resetSize' | 'sortAsc' | 'sortDesc'
+type HeaderCellAction = 'hideColumn' | 'resetThisSize' | 'resetSize' | 'sortAsc' | 'sortDesc'
 const availableHeaderCellActions = (header: Header<TData, unknown>) => {
   const out: HeaderCellAction[] = []
 
@@ -322,6 +325,7 @@ const availableHeaderCellActions = (header: Header<TData, unknown>) => {
   }
 
   if (props.enableColumnResizing) {
+    out.push('resetThisSize')
     out.push('resetSize')
   }
 
@@ -331,6 +335,9 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
   switch (action) {
     case 'hideColumn':
       header.column.toggleVisibility()
+      break
+    case 'resetThisSize':
+      resetCell(header.id)
       break
     case 'resetSize':
       resetCells()
@@ -541,7 +548,7 @@ watch(isResizing, () => {
             v-for="(value, key) in groupedRows"
             :key="key"
             v-model:open="groupsOpenStateRef[key]"
-            @update:open="(value) => handleGroupToggle(value, key)"
+            @update:open="(value: boolean) => handleGroupToggle(value, key)"
           >
             <BuiTableRow class="bg-foreground/4 border-b-0">
               <BuiTableCell :colspan="columns.length" class="pb-0!">

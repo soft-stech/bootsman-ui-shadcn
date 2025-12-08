@@ -228,14 +228,42 @@ export function useResizeColumns() {
   }
 
   const resetCells = () => {
-    if (tableElement.value && tableElement.value?.tableRef) {
+    if (cells.value && tableElement.value && tableElement.value?.tableRef) {
       tableElement.value.tableRef.style.width = ''
-    }
 
-    if (cells.value) {
       calculatedColumnSizing.value = {}
       setProvidedCellWidths(calculatedColumnSizing.value)
       setInitialColumnWidths()
+    }
+  }
+
+  const resetCell = (cellId: string) => {
+    if (
+      cells.value &&
+      calculatedColumnSizing.value &&
+      lastCell.value &&
+      tableElement.value &&
+      tableElement.value?.tableRef
+    ) {
+      const thisCellinitialWidth = cells.value[cellId].initialWidth
+      const thisCellCurrentWidth = calculatedColumnSizing.value[cellId]
+      const diff = thisCellinitialWidth - thisCellCurrentWidth
+
+      let newTableWidth = calculatedColumnSizing.value['table'] + diff
+
+      if (newTableWidth < minTableWidth.value) {
+        const tableWidthDiff = minTableWidth.value - newTableWidth
+        const newLastCellWidth =
+          calculatedColumnSizing.value[getCellId(lastCell.value.cell)] + tableWidthDiff
+
+        lastCell.value.cell.style.width = newLastCellWidth + 'px'
+        newTableWidth = minTableWidth.value
+      }
+
+      cells.value[cellId].cell.style.width = thisCellinitialWidth + 'px'
+      tableElement.value.tableRef.style.width = newTableWidth + 'px'
+      calculatedColumnSizing.value[cellId] = thisCellinitialWidth
+      calculatedColumnSizing.value['table'] = newTableWidth
     }
   }
 
@@ -297,6 +325,7 @@ export function useResizeColumns() {
     resizingCellId,
     handleResizeControlMouseDown,
     handleResizeControlMouseUp,
+    resetCell,
     resetCells,
     setInitialColumnWidths,
     setProvidedCellWidths,
