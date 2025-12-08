@@ -41,10 +41,20 @@ export function useResizeColumns() {
   }
 
   const getCells = () => {
-    if (tableHeaderElement.value && tableHeaderElement.value.headRef) {
+    if (
+      tableHeaderElement.value &&
+      tableHeaderElement.value.headRef &&
+      tableElement.value &&
+      tableElement.value?.tableRef
+    ) {
       const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
+      const tableInitialWidth = getTableWidth()
+
+      tableElement.value.tableRef.style.width = 'min-content'
+
       const headerCellsWidths: CELL = headerCells.reduce((acc, cell, index, array) => {
         const cellId = getCellId(cell)
+
         return {
           ...acc,
           [cellId]: {
@@ -54,10 +64,18 @@ export function useResizeColumns() {
             minWidth:
               cellId === 'actions'
                 ? ACTIONS_CELL_MIN_WIDTH
-                : Math.min(cell.offsetWidth, MIN_CELL_WIDTH)
+                : cell.offsetWidth < MIN_CELL_WIDTH
+                  ? MIN_CELL_WIDTH
+                  : cell.offsetWidth
           }
         }
       }, {})
+
+      tableElement.value.tableRef.style.width = tableInitialWidth + 'px'
+
+      Object.values(headerCellsWidths).forEach((cellElement) => {
+        cellElement.initialWidth = Math.floor(cellElement.cell.offsetWidth)
+      })
 
       return headerCellsWidths
     }
@@ -221,6 +239,22 @@ export function useResizeColumns() {
     }
   }
 
+  const getTableWrapperWidth = () => {
+    if (tableElement.value && tableElement.value.scrollAreaElementRef?.tableWrapperRef) {
+      return tableElement.value.scrollAreaElementRef?.tableWrapperRef.$el.offsetWidth - 3
+    }
+
+    return 0
+  }
+
+  const getTableWidth = () => {
+    if (tableElement.value && tableElement.value?.tableRef) {
+      return tableElement.value.tableRef.offsetWidth
+    }
+
+    return 0
+  }
+
   const setInitialColumnWidths = () => {
     cells.value = getCells()
 
@@ -232,11 +266,13 @@ export function useResizeColumns() {
           cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
         }
 
+        cells.value[cell].cell.style.minWidth = cells.value[cell].minWidth + 'px'
+
         updatedColumnSizingValue[cell] = cells.value[cell].cell.offsetWidth
       }
 
       if (tableElement.value && tableElement.value?.tableRef) {
-        const tableOffsetWidth = tableElement.value.tableRef.offsetWidth
+        const tableOffsetWidth = getTableWidth()
 
         if (calculatedColumnSizing.value?.['table'] && !tableElement.value.tableRef.style.width) {
           tableElement.value.tableRef.style.width = calculatedColumnSizing.value['table'] + 'px'
@@ -247,11 +283,7 @@ export function useResizeColumns() {
         }
       }
 
-      if (tableElement.value && tableElement.value.scrollAreaElementRef?.tableWrapperRef) {
-        minTableWidth.value =
-          tableElement.value.scrollAreaElementRef?.tableWrapperRef.$el.offsetWidth - 3
-      }
-
+      minTableWidth.value = getTableWrapperWidth()
       calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
