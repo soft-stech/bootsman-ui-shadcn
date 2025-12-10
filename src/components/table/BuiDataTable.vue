@@ -518,7 +518,7 @@ const handleHeaderCellMouseDown = (e: Event) => {
             v-for="(value, key) in groupedRows"
             :key="key"
             v-model:open="groupsOpenStateRef[key]"
-            @update:open="(value) => handleGroupToggle(value, key)"
+            @update:open="(value: boolean) => handleGroupToggle(value, key)"
           >
             <BuiTableRow class="bg-foreground/4 border-b-0">
               <BuiTableCell :colspan="columns.length" class="pb-0!">
