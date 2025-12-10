@@ -1,20 +1,31 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import BuiTableHeader from '@/components/table/BuiTableHeader.vue'
+import BuiTable from '@/components/table/BuiTable.vue'
 import { useEventListener } from '@vueuse/core'
+
+const MIN_CELL_WIDTH = 90
+const LAST_CELL_EXTRA_SPACE = 56
+const ACTIONS_CELL_MIN_WIDTH = 10
 
 export function useResizeColumns() {
   type CELL = {
-    [key: string]: { cell: HTMLTableCellElement; initialWidth: number; minWidth: number }
+    [key: string]: {
+      cell: HTMLTableCellElement
+      initialWidth: number
+      minWidth: number
+      baseWidth: number
+      isLast: boolean
+    }
   }
   const isResizing = ref<boolean>(false)
   const resizingCellId = ref<string>('')
   const neighborCellId = ref<string>('')
   const cells = ref<CELL | undefined>(undefined)
-  const MIN_CELL_WIDTH = 90
-  const LAST_CELL_EXTRA_SPACE = 56
-  const ACTIONS_CELL_MIN_WIDTH = 10
   const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
+  const tableElement = ref<InstanceType<typeof BuiTable> | null>(null)
+  const initialTableWidth = ref<number>(0)
+  const minTableWidth = ref<number>(0)
   const unregisterMouseMove = ref<(() => void) | undefined>(undefined)
 
   const setProvidedCellWidths = (columnSizing: Record<string, number> | undefined) => {
@@ -25,30 +36,56 @@ export function useResizeColumns() {
       headerCells.forEach((cell) => {
         const cellId = getCellId(cell)
 
-        if (columnSizing && columnSizing[cellId]) {
-          cell.style.width = columnSizing[cellId] + 'px'
-        }
+        cell.style.width = columnSizing && columnSizing[cellId] ? columnSizing[cellId] + 'px' : ''
       })
     }
   }
 
   const getCells = () => {
-    if (tableHeaderElement.value && tableHeaderElement.value.headRef) {
+    if (
+      tableHeaderElement.value &&
+      tableHeaderElement.value.headRef &&
+      tableElement.value &&
+      tableElement.value?.tableRef
+    ) {
       const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
-      const headerCellsWidths: CELL = headerCells.reduce((acc, cell) => {
+      const tableInitialWidth = getTableWidth()
+
+      tableElement.value.tableRef.style.width = 'min-content'
+
+      const headerCellsWidths: CELL = headerCells.reduce((acc, cell, index, array) => {
         const cellId = getCellId(cell)
+
         return {
           ...acc,
           [cellId]: {
             cell: cell,
-            initialWidth: cell.offsetWidth,
+            isLast: index === array.length - 1,
+            initialWidth: Math.floor(cell.offsetWidth),
+            baseWidth: Math.floor(cell.offsetWidth),
             minWidth:
               cellId === 'actions'
                 ? ACTIONS_CELL_MIN_WIDTH
-                : Math.min(cell.offsetWidth, MIN_CELL_WIDTH)
+                : cell.offsetWidth < MIN_CELL_WIDTH
+                  ? MIN_CELL_WIDTH
+                  : cell.offsetWidth
           }
         }
       }, {})
+
+      tableElement.value.tableRef.style.width = ''
+
+      Object.values(headerCellsWidths).forEach((cellElement) => {
+        cellElement.baseWidth = Math.floor(cellElement.cell.offsetWidth)
+      })
+
+      setProvidedCellWidths(calculatedColumnSizing.value)
+      tableElement.value.tableRef.style.width =
+        (calculatedColumnSizing.value?.['table'] || tableInitialWidth) + 'px'
+
+      Object.values(headerCellsWidths).forEach((cellElement) => {
+        cellElement.initialWidth = Math.floor(cellElement.cell.offsetWidth)
+      })
 
       return headerCellsWidths
     }
@@ -109,6 +146,10 @@ export function useResizeColumns() {
         updatedColumnSizingValue[cell] = newWidth
       }
 
+      if (tableElement.value && tableElement.value?.tableRef) {
+        updatedColumnSizingValue['table'] = tableElement.value.tableRef.offsetWidth
+      }
+
       calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
@@ -121,16 +162,20 @@ export function useResizeColumns() {
     return 0
   }
 
+  const lastCell = computed(() => {
+    if (cells.value) {
+      return Object.values(cells.value).find((cell) => cell.isLast)
+    }
+
+    return undefined
+  })
+
   const getCellId = (cell: HTMLTableCellElement) => {
     return cell.id.split('_')[0]
   }
 
-  const resizeCells = (
-    cell: HTMLTableCellElement | null,
-    neighborCell: HTMLTableCellElement | null,
-    e: MouseEvent
-  ) => {
-    if (!cell || !neighborCell) {
+  const resizeCells = (cell: HTMLTableCellElement | null, e: MouseEvent) => {
+    if (!cell || !tableElement.value?.tableRef || !lastCell.value) {
       resizingCellId.value = ''
       neighborCellId.value = ''
 
@@ -140,7 +185,9 @@ export function useResizeColumns() {
     const movementX = e.movementX
     const direction: 'left' | 'right' = movementX < 0 ? 'left' : 'right'
     const newCellWidth = Math.floor(parseInt(cell.style.width)) + movementX
-    const newNeighborCellWidth = Math.floor(parseInt(neighborCell.style.width)) - movementX
+    const newTableWidth =
+      Math.floor(parseInt(tableElement.value?.tableRef?.style.width)) + movementX
+    const newLastCellWidth = Math.floor(parseInt(lastCell.value.cell.style.width)) - movementX
 
     if (direction === 'left') {
       const min =
@@ -148,29 +195,35 @@ export function useResizeColumns() {
           ? cells.value[getCellId(cell)].minWidth
           : MIN_CELL_WIDTH
 
-      if (newCellWidth <= min || !cell.hasAttribute('can-resize')) {
-        const nextCell = cell.previousElementSibling as HTMLTableCellElement | null
-
-        resizeCells(nextCell, neighborCell, e)
-      } else {
+      if (newCellWidth >= min) {
         cell.style.width = newCellWidth + 'px'
-        neighborCell.style.width = newNeighborCellWidth + 'px'
+
+        if (newTableWidth >= minTableWidth.value) {
+          tableElement.value.tableRef.style.width = newTableWidth + 'px'
+        } else {
+          tableElement.value.tableRef.style.width = minTableWidth.value + 'px'
+          lastCell.value.cell.style.width = newLastCellWidth + 'px'
+        }
+      } else {
+        return
       }
     } else {
       const min =
-        cells.value && cells.value[getCellId(neighborCell)]
-          ? cells.value[getCellId(neighborCell)].minWidth +
-            getLastCellOnTheRightExtraSpace(neighborCell)
+        cells.value && cells.value[getCellId(lastCell.value.cell)]
+          ? cells.value[getCellId(lastCell.value.cell)].minWidth +
+            getLastCellOnTheRightExtraSpace(lastCell.value.cell)
           : MIN_CELL_WIDTH
 
-      if (newNeighborCellWidth <= min || !neighborCell.hasAttribute('can-resize')) {
-        const nextNeighborCell = neighborCell.nextElementSibling as HTMLTableCellElement | null
-
-        resizeCells(cell, nextNeighborCell, e)
+      if (
+        newLastCellWidth >= min &&
+        tableElement.value.tableRef.offsetWidth <= minTableWidth.value
+      ) {
+        lastCell.value.cell.style.width = newLastCellWidth + 'px'
       } else {
-        cell.style.width = newCellWidth + 'px'
-        neighborCell.style.width = newNeighborCellWidth + 'px'
+        tableElement.value.tableRef.style.width = newTableWidth + 'px'
       }
+
+      cell.style.width = newCellWidth + 'px'
     }
   }
 
@@ -179,25 +232,64 @@ export function useResizeColumns() {
 
     if (cells.value) {
       const resizingCell = cells.value[resizingCellId.value]?.cell
-      const neighborCell = cells.value[neighborCellId.value]?.cell
 
-      resizeCells(resizingCell, neighborCell, e)
+      resizeCells(resizingCell, e)
     }
   }
 
   const resetCells = () => {
-    if (cells.value) {
-      const updatedColumnSizingValue: Record<string, number> = {}
+    if (cells.value && tableElement.value && tableElement.value?.tableRef) {
+      tableElement.value.tableRef.style.width = ''
 
-      for (const cell in cells.value) {
-        const inititalWidth = cells.value[cell].initialWidth
+      calculatedColumnSizing.value = {}
+      setInitialColumnWidths()
+    }
+  }
 
-        cells.value[cell].cell.style.width = inititalWidth + 'px'
-        updatedColumnSizingValue[cell] = inititalWidth
+  const resetCell = (cellId: string) => {
+    if (
+      cells.value &&
+      calculatedColumnSizing.value &&
+      lastCell.value &&
+      tableElement.value &&
+      tableElement.value?.tableRef
+    ) {
+      const thisCellBaseWidth = cells.value[cellId].baseWidth
+      const thisCellCurrentWidth = calculatedColumnSizing.value[cellId]
+      const diff = thisCellBaseWidth - thisCellCurrentWidth
+
+      let newTableWidth = calculatedColumnSizing.value['table'] + diff
+
+      if (newTableWidth < minTableWidth.value) {
+        const tableWidthDiff = minTableWidth.value - newTableWidth
+        const newLastCellWidth =
+          calculatedColumnSizing.value[getCellId(lastCell.value.cell)] + tableWidthDiff
+
+        lastCell.value.cell.style.width = newLastCellWidth + 'px'
+        newTableWidth = minTableWidth.value
       }
 
-      calculatedColumnSizing.value = updatedColumnSizingValue
+      cells.value[cellId].cell.style.width = thisCellBaseWidth + 'px'
+      tableElement.value.tableRef.style.width = newTableWidth + 'px'
+      calculatedColumnSizing.value[cellId] = thisCellBaseWidth
+      calculatedColumnSizing.value['table'] = newTableWidth
     }
+  }
+
+  const getTableWrapperWidth = () => {
+    if (tableElement.value && tableElement.value.scrollAreaElementRef?.tableWrapperRef) {
+      return tableElement.value.scrollAreaElementRef?.tableWrapperRef.$el.offsetWidth - 3
+    }
+
+    return 0
+  }
+
+  const getTableWidth = () => {
+    if (tableElement.value && tableElement.value?.tableRef) {
+      return tableElement.value.tableRef.offsetWidth
+    }
+
+    return 0
   }
 
   const setInitialColumnWidths = () => {
@@ -211,21 +303,38 @@ export function useResizeColumns() {
           cells.value[cell].cell.style.width = cells.value[cell].initialWidth + 'px'
         }
 
+        cells.value[cell].cell.style.minWidth = cells.value[cell].minWidth + 'px'
+
         updatedColumnSizingValue[cell] = cells.value[cell].cell.offsetWidth
       }
 
+      if (tableElement.value && tableElement.value?.tableRef) {
+        const tableOffsetWidth = getTableWidth()
+
+        if (calculatedColumnSizing.value?.['table'] && !tableElement.value.tableRef.style.width) {
+          tableElement.value.tableRef.style.width = calculatedColumnSizing.value['table'] + 'px'
+        } else {
+          initialTableWidth.value = tableOffsetWidth
+          tableElement.value.tableRef.style.width = tableOffsetWidth + 'px'
+          updatedColumnSizingValue['table'] = tableOffsetWidth
+        }
+      }
+
+      minTableWidth.value = getTableWrapperWidth()
       calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
 
   return {
     cells,
+    tableElement,
     tableHeaderElement,
     calculatedColumnSizing,
     isResizing,
     resizingCellId,
     handleResizeControlMouseDown,
     handleResizeControlMouseUp,
+    resetCell,
     resetCells,
     setInitialColumnWidths,
     setProvidedCellWidths,
