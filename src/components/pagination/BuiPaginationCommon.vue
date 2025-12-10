@@ -24,6 +24,7 @@ const props = defineProps<{
   total: number
   translations?: {
     itemsPerPage: string
+    itemsPerPageAuto: string
     page: string
     of: string
   }
@@ -31,19 +32,27 @@ const props = defineProps<{
 
 const pageSize = defineModel<PageSize>('pageSize', { default: 10, required: true })
 const pageIndex = defineModel<number>('pageIndex', { default: 1, required: true })
+const pageAuto = defineModel<boolean | undefined>('pageAuto', { default: false, required: true })
 const totalPages = computed(() => Math.ceil(props.total / pageSize.value))
 
 const pageSizeString = computed({
   get() {
-    return String(pageSize.value)
+    return pageAuto.value ? props.translations?.itemsPerPageAuto || 'Auto' : String(pageSize.value)
   },
   set(value: string) {
-    pageSize.value = parseInt(value) as PageSize
+    pageAuto.value = value === 'auto'
+
+    if (value === 'auto') {
+      pageIndex.value = 1
+    } else {
+      pageSize.value = parseInt(value) as PageSize
+    }
   }
 })
 </script>
 
 <template>
+  {{ pageSize }}/{{ pageAuto }}
   <BuiPagination
     v-slot="{ page }"
     :total="props.total"
@@ -56,15 +65,19 @@ const pageSizeString = computed({
       </p>
       <BuiSelect v-model="pageSizeString">
         <BuiSelectTrigger class="mr-2 w-[70px]">
-          <BuiSelectValue :placeholder="pageSize.toString()" />
+          <BuiSelectValue :placeholder="pageSizeString" />
         </BuiSelectTrigger>
         <BuiSelectContent side="top">
+          <BuiSelectItem key="auto" value="auto">
+            {{ props.translations?.itemsPerPageAuto || 'Auto' }}
+          </BuiSelectItem>
+
           <BuiSelectItem v-for="pageSize in pageSizes" :key="pageSize" :value="pageSize.toString()">
             {{ pageSize }}
           </BuiSelectItem>
         </BuiSelectContent>
       </BuiSelect>
-      <template v-if="totalPages > 1">
+      <template v-if="!pageAuto && totalPages > 1">
         <p class="text-muted-foreground text-sm">
           {{ translations?.page || 'Page' }} {{ page }} {{ translations?.of || 'of' }}
           {{ totalPages }}

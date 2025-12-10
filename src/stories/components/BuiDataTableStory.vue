@@ -3,7 +3,6 @@ import { BuiDataTable } from '@/components/table'
 import RowActionsMenuContent from './ActionsMenuContent.vue'
 import type {
   ColumnDef,
-  PaginationState,
   Row,
   RowSelectionState,
   VisibilityState,
@@ -25,6 +24,7 @@ import { BuiCheckbox } from '@/components/checkbox'
 import { tableColumnSortCommon } from '@/lib/utils'
 import { BuiButton } from '@/components/button'
 import { BuiTabs, BuiTabsList, BuiTabsTrigger } from '@/components/tabs'
+import type { PaginationAutoState } from '@/components/table/BuiDataTable.vue'
 
 const taskSchema = z.object({
   id: z.string(),
@@ -102,7 +102,7 @@ function onGroupAction(group: string | number, action: string) {
 
 type TaskSortingState = { id: keyof Task; desc: boolean }
 const sorting = ref<TaskSortingState[]>([{ id: 'id', desc: false }])
-const pagination = ref<PaginationState>({
+const pagination = ref<PaginationAutoState>({
   pageIndex: 0,
   pageSize: 10
 })
@@ -202,7 +202,6 @@ function groupName(group: string | number) {
         v-model:column-order="columnOrder"
         @update:selection="updateSelection"
         :total-items="totalItems"
-        class="caption-top"
         :manualPagination="false"
         :getRowId="(row) => row.id"
         :groupBy="groupBy === 'none' ? undefined : groupBy"
@@ -212,6 +211,7 @@ function groupName(group: string | number) {
         :enable-group-folding="true"
         :pagination-translations="{
           itemsPerPage: 'Tasks per page',
+          itemsPerPageAuto: 'Auto',
           page: 'Page',
           of: 'of'
         }"

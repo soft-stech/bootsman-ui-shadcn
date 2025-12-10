@@ -1,17 +1,38 @@
+<script lang="ts">
+import type { PaginationState } from '@tanstack/vue-table'
+
+export type PaginationAutoState = PaginationState & {
+  pageAuto?: boolean
+}
+</script>
+
 <script setup lang="ts" generic="TData, TValue">
+import { BuiButton } from '@/components/button'
 import {
   BuiCollapsible,
   BuiCollapsibleContent,
   BuiCollapsibleTrigger
 } from '@/components/collapsible'
+import {
+  BuiCommand,
+  BuiCommandEmpty,
+  BuiCommandInput,
+  BuiCommandItem,
+  BuiCommandList,
+  BuiCommandSeparator
+} from '@/components/command'
+import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-menu'
 import { BuiPaginationCommon, type PageSize } from '@/components/pagination'
+import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
+import { BuiScrollArea } from '@/components/scroll-area'
 import BuiTableRowSubrow from '@/components/table/BuiTableRowSubrow.vue'
+import { useResizeColumns } from '@/lib/useResizeColumns'
+import { cn, valueUpdater } from '@/lib/utils'
 import type {
   Column,
   ColumnDef,
   ColumnOrderState,
   Header,
-  PaginationState,
   Row,
   RowSelectionState,
   SortingState,
@@ -24,8 +45,17 @@ import {
   getSortedRowModel,
   useVueTable
 } from '@tanstack/vue-table'
-import { computed, watchEffect, ref, watch, onMounted, onBeforeMount, nextTick } from 'vue'
 import {
+  useElementSize,
+  useElementVisibility,
+  useEventListener,
+  useSessionStorage
+} from '@vueuse/core'
+import { isEqual } from 'lodash-es'
+import { ChevronDown, Settings2Icon } from 'lucide-vue-next'
+import { computed, nextTick, onBeforeMount, onMounted, ref, watch, watchEffect } from 'vue'
+import {
+  BuiDataTableColumnList,
   BuiTable,
   BuiTableBody,
   BuiTableCell,
@@ -33,27 +63,8 @@ import {
   BuiTableHead,
   BuiTableHeader,
   BuiTableRow,
-  getPinningStyle,
-  BuiDataTableColumnList
+  getPinningStyle
 } from './'
-import {
-  BuiCommand,
-  BuiCommandEmpty,
-  BuiCommandInput,
-  BuiCommandList,
-  BuiCommandItem,
-  BuiCommandSeparator
-} from '@/components/command'
-import { BuiContextMenuContent, BuiContextMenuItem } from '@/components/context-menu'
-import { BuiPopover, BuiPopoverContent, BuiPopoverTrigger } from '@/components/popover'
-import { BuiScrollArea } from '@/components/scroll-area'
-import { BuiButton } from '@/components/button'
-import { Settings2Icon, ChevronDown } from 'lucide-vue-next'
-import { useElementSize, useEventListener } from '@vueuse/core'
-import { isEqual } from 'lodash-es'
-import { cn, valueUpdater } from '@/lib/utils'
-import { useResizeColumns } from '@/lib/useResizeColumns'
-import { useSessionStorage } from '@vueuse/core'
 
 const NO_GROUP_KEY = '#UNDEFINED#'
 const defaultColumnContextMenuTranslations = {
@@ -85,6 +96,7 @@ const props = withDefaults(
     columnResetVisibility?: string
     paginationTranslations?: {
       itemsPerPage: string
+      itemsPerPageAuto: string
       page: string
       of: string
     }
@@ -110,7 +122,7 @@ const props = withDefaults(
 )
 
 const sorting = defineModel<SortingState>('sorting')
-const pagination = defineModel<PaginationState>('pagination')
+const pagination = defineModel<PaginationAutoState>('pagination')
 const rowSelection = defineModel<RowSelectionState>('selection')
 const columnVisibility = defineModel<VisibilityState>('columnVisibility')
 const columnOrder = defineModel<ColumnOrderState>('columnOrder')
@@ -180,6 +192,15 @@ const table = useVueTable({
   getRowId: props.getRowId
 })
 
+const pageAuto = computed({
+  get() {
+    return pagination.value?.pageAuto || false
+  },
+  set: (state: boolean) => {
+    if (!pagination.value) return
+    pagination.value.pageAuto = state
+  }
+})
 const tablePageSize = computed<PageSize>({
   get() {
     return table.getState().pagination.pageSize as PageSize
@@ -399,13 +420,56 @@ const handleHeaderCellMouseDown = (e: Event) => {
   isMouseDownOnHandler.value =
     targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
 }
+
+const rows = computed(() => table.getRowModel().rows)
+const rowsLength = computed(() => rows.value.length)
+const sentinel = ref<HTMLElement | null>(null)
+const sentinelVisible = useElementVisibility(sentinel)
+const sentinelKey = computed(() => `sentinel-${rowsLength.value}`)
+
+let loadingMore = false
+async function loadMore() {
+  if (loadingMore) return
+  loadingMore = true
+
+  const newSize = Math.min(tablePageSize.value + 50, props.totalItems)
+  console.debug({ newSize })
+  table.setPageSize(newSize)
+
+  await nextTick()
+  loadingMore = false
+}
+
+watch([pageAuto, sentinelVisible], ([auto, visible]) => {
+  if (auto && visible) {
+    console.debug('sentinelVisible loadMore')
+    loadMore()
+  }
+})
+
+const isUpdating = ref(false)
+watch(rowsLength, async () => {
+  if (!pageAuto.value || isUpdating.value) return
+
+  isUpdating.value = true
+  await nextTick() // Wait for DOM to update
+
+  // Add a small delay to ensure rendering is complete
+  setTimeout(() => {
+    if (sentinelVisible.value) {
+      console.debug('sentinelVisible is STILL visible loadMore')
+      loadMore()
+    }
+    isUpdating.value = false
+  }, 50)
+})
 </script>
 
 <template>
   <div v-if="$slots.caption" class="w-full py-3">
     <slot name="caption" :table="table" />
   </div>
-  <BuiTable>
+  <BuiTable :key="`table-${pageAuto}`">
     <template v-if="enableColumnListControl" #columnVisibility>
       <BuiPopover v-model:open="open">
         <BuiPopoverTrigger as-child>
@@ -607,6 +671,8 @@ const handleHeaderCellMouseDown = (e: Event) => {
           <slot name="nodata">No data</slot>
         </BuiTableEmpty>
       </template>
+
+      <tr ref="sentinel" class="h-1 w-full" :data-key="sentinelKey" :key="sentinelKey" />
     </BuiTableBody>
   </BuiTable>
   <div
@@ -626,6 +692,7 @@ const handleHeaderCellMouseDown = (e: Event) => {
       :total="computedItems"
       v-model:pageIndex="pageIndex"
       v-model:pageSize="tablePageSize"
+      v-model:pageAuto="pageAuto"
       :translations="paginationTranslations"
     >
     </BuiPaginationCommon>
