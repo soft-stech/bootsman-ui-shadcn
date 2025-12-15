@@ -299,16 +299,35 @@ const {
   isMouseUpOnHandler
 } = useResizeColumns()
 
+const isColumnSizingEnabled = computed(() => props.enableColumnResizing && columnSizing.value)
+
 onBeforeMount(() => {
   calculatedColumnSizing.value = columnSizing.value
 })
 
 onMounted(() => {
-  if (tableElementRef.value && tableHeaderRef.value) {
+  if (isColumnSizingEnabled.value && tableElementRef.value && tableHeaderRef.value) {
     tableElement.value = tableElementRef.value
     tableHeaderElement.value = tableHeaderRef.value
 
-    setInitialColumnWidths()
+    //проставляем изначальные значения ширины колонок, только если на маунте таблицу видно
+    if (tableElementRef.value.tableRef?.offsetWidth !== 0) {
+      setInitialColumnWidths()
+    }
+
+    //дополнительно проставляем значения ширины колонок, когда таблица появляется на экране
+    const { stop } = useIntersectionObserver(
+      tableElementRef.value.tableRef,
+      ([{ isIntersecting }]) => {
+        if (isIntersecting) {
+          if (!tableElementRef.value?.tableRef?.getAttribute('initialResize')) {
+            setInitialColumnWidths()
+          }
+
+          stop()
+        }
+      }
+    )
   }
 
   groupsOpenStateInStorage.value = {}
@@ -587,7 +606,7 @@ watch(rowsLength, async () => {
           />
           <div
             v-if="
-              enableColumnResizing &&
+              isColumnSizingEnabled &&
               index < tableHeaders.length - 1 &&
               header.column.getCanResize()
             "
