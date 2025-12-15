@@ -36,7 +36,10 @@ export function useResizeColumns() {
       headerCells.forEach((cell) => {
         const cellId = getCellId(cell)
 
-        cell.style.width = columnSizing && columnSizing[cellId] ? columnSizing[cellId] + 'px' : ''
+        cell.style.width =
+          columnSizing && columnSizing[cellId] && columnSizing[cellId] !== 0
+            ? columnSizing[cellId] + 'px'
+            : ''
       })
     }
   }
@@ -49,6 +52,12 @@ export function useResizeColumns() {
       tableElement.value?.tableRef
     ) {
       const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
+
+      if (calculatedColumnSizing.value && calculatedColumnSizing.value['table'] === 0) {
+        calculatedColumnSizing.value = {}
+        tableElement.value.tableRef.style.width = ''
+      }
+
       const tableInitialWidth = getTableWidth()
 
       tableElement.value.tableRef.style.width = 'min-content'
@@ -316,11 +325,14 @@ export function useResizeColumns() {
         } else {
           initialTableWidth.value = tableOffsetWidth
           tableElement.value.tableRef.style.width = tableOffsetWidth + 'px'
+
+          tableElement.value.tableRef.setAttribute('initialResize', 'set')
           updatedColumnSizingValue['table'] = tableOffsetWidth
         }
       }
 
       minTableWidth.value = getTableWrapperWidth()
+
       calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
