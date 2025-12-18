@@ -344,8 +344,8 @@ watch(
       model = calculated
     }
 
-    console.log('calculated column sizing')
-    console.log(model)
+    // console.log('calculated column sizing')
+    // console.log(model)
   },
   { deep: true }
 )

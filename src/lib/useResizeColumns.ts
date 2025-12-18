@@ -19,7 +19,6 @@ export function useResizeColumns() {
   }
   const isResizing = ref<boolean>(false)
   const resizingCellId = ref<string>('')
-  const neighborCellId = ref<string>('')
   const cells = ref<CELL | undefined>(undefined)
   const calculatedColumnSizing = ref<Record<string, number> | undefined>(undefined)
   const tableHeaderElement = ref<InstanceType<typeof BuiTableHeader> | null>(null)
@@ -109,19 +108,7 @@ export function useResizeColumns() {
 
     isResizing.value = true
     resizingCellId.value = cellId
-
-    if (cells.value) {
-      const resizingCell = cells.value[cellId].cell
-      let neighborCell = resizingCell.nextElementSibling as HTMLTableCellElement
-
-      if (!neighborCell) {
-        neighborCell = resizingCell.previousElementSibling as HTMLTableCellElement
-      }
-
-      neighborCellId.value = neighborCell ? neighborCell.id.split('_')[0] : ''
-
-      unregisterMouseMove.value = useEventListener(document, 'mousemove', handleCellResize)
-    }
+    unregisterMouseMove.value = useEventListener(document, 'mousemove', handleCellResize)
   }
 
   const handleResizeControlMouseUp = (e: Event) => {
@@ -133,7 +120,6 @@ export function useResizeColumns() {
 
     isResizing.value = false
     resizingCellId.value = ''
-    neighborCellId.value = ''
 
     if (unregisterMouseMove.value) {
       unregisterMouseMove.value()
@@ -197,7 +183,6 @@ export function useResizeColumns() {
   const resizeCells = (cell: HTMLTableCellElement | null, e: MouseEvent) => {
     if (!cell || !tableElement.value?.tableRef || !lastCell.value) {
       resizingCellId.value = ''
-      neighborCellId.value = ''
 
       return
     }
@@ -205,6 +190,7 @@ export function useResizeColumns() {
     const movementX = e.movementX
     const direction: 'left' | 'right' = movementX < 0 ? 'left' : 'right'
     const newCellWidth = Math.floor(parseInt(cell.style.width)) + movementX
+
     const newTableWidth =
       Math.floor(parseInt(tableElement.value?.tableRef?.style.width)) + movementX
     const newLastCellWidth = Math.floor(parseInt(lastCell.value.cell.style.width)) - movementX
@@ -365,26 +351,62 @@ export function useResizeColumns() {
   }
 
   const setColumnWidthsOnColumnVisibilityChange = () => {
-    //cells.value = getCells()
+    if (tableHeaderElement.value && tableHeaderElement.value.headRef && cells.value) {
+      const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
+      const updatedColumnSizingValue: Record<string, number> = {}
 
-    console.log('cells.value')
-    console.log(cells.value)
+      headerCells.forEach((cell, index, array) => {
+        const cellId = getCellId(cell)
 
-    if (
-      lastCell.value &&
-      calculatedColumnSizing.value
-      //tableElement.value &&
-      //tableElement.value.tableRef
-    ) {
-      const lastCellId = getCellId(lastCell.value.cell)
+        if (cells.value) {
+          cells.value[cellId].cell = cell
+        }
 
-      //tableElement.value.tableRef.style.width = ''
-      //delete calculatedColumnSizing.value[TABLE_ID]
-      //delete calculatedColumnSizing.value[lastCellId]
+        if (index < array.length - 1) {
+          if (calculatedColumnSizing.value && calculatedColumnSizing.value[cellId]) {
+            cell.style.width = calculatedColumnSizing.value[cellId] + 'px'
+            updatedColumnSizingValue[cellId] = calculatedColumnSizing.value[cellId]
+          } else {
+            cell.style.width = ''
 
-      //console.log('setColumnWidthsOnColumnVisibilityChange')
+            const newCellWidth =
+              cells.value && cells.value[cellId] ? cells.value[cellId].baseWidth : cell.offsetWidth
+            const newCellMinWidth =
+              cells.value && cells.value[cellId] ? cells.value[cellId].minWidth : MIN_CELL_WIDTH
+            cell.style.width = newCellWidth + 'px'
+            cell.style.minWidth = newCellMinWidth + 'px'
+            updatedColumnSizingValue[cellId] = newCellWidth
+          }
+        } else {
+          const newLastCellWidth =
+            calculatedColumnSizing.value && calculatedColumnSizing.value[cellId]
+              ? calculatedColumnSizing.value[cellId]
+              : cell.offsetWidth
+          updatedColumnSizingValue[cellId] = newLastCellWidth
+        }
+      })
 
-      //setInitialColumnWidths()
+      const wouldBeTableWidth = Object.values(updatedColumnSizingValue).reduce(
+        (acc, value) => (acc += value),
+        0
+      )
+
+      if (tableElement.value && tableElement.value.tableRef) {
+        minTableWidth.value = getTableWrapperWidth()
+        const newTableWidth =
+          wouldBeTableWidth < minTableWidth.value ? minTableWidth.value : wouldBeTableWidth
+        tableElement.value.tableRef.style.width = newTableWidth + 'px'
+        updatedColumnSizingValue[TABLE_ID] = newTableWidth
+      }
+
+      if (lastCell.value) {
+        lastCell.value.cell.style.width = ''
+        const newLastCellWidth = Math.floor(lastCell.value.cell.offsetWidth)
+        updatedColumnSizingValue[getCellId(lastCell.value.cell)] = newLastCellWidth
+        lastCell.value.cell.style.width = newLastCellWidth + 'px'
+      }
+
+      calculatedColumnSizing.value = updatedColumnSizingValue
     }
   }
 
