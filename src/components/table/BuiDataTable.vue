@@ -167,6 +167,8 @@ const table = useVueTable({
 
     await nextTick()
 
+    //console.log('columnVisibility changed')
+
     setColumnWidthsOnColumnVisibilityChange()
   },
   onColumnOrderChange: (updaterOrValue) => {

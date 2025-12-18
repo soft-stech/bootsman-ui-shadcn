@@ -6,6 +6,7 @@ import { useEventListener } from '@vueuse/core'
 const MIN_CELL_WIDTH = 90
 const LAST_CELL_EXTRA_SPACE = 56
 const ACTIONS_CELL_MIN_WIDTH = 10
+const TABLE_ID = 'table'
 
 export function useResizeColumns() {
   type CELL = {
@@ -52,7 +53,7 @@ export function useResizeColumns() {
     ) {
       const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
 
-      if (calculatedColumnSizing.value && calculatedColumnSizing.value['table'] === 0) {
+      if (calculatedColumnSizing.value && calculatedColumnSizing.value[TABLE_ID] === 0) {
         calculatedColumnSizing.value = {}
         tableElement.value.tableRef.style.width = ''
       }
@@ -88,7 +89,7 @@ export function useResizeColumns() {
 
       setProvidedCellWidths(calculatedColumnSizing.value)
       tableElement.value.tableRef.style.width =
-        (calculatedColumnSizing.value?.['table'] || tableInitialWidth) + 'px'
+        (calculatedColumnSizing.value?.[TABLE_ID] || tableInitialWidth) + 'px'
 
       Object.values(headerCellsWidths).forEach((cellElement) => {
         cellElement.initialWidth = Math.floor(cellElement.cell.offsetWidth)
@@ -154,7 +155,7 @@ export function useResizeColumns() {
       }
 
       if (tableElement.value && tableElement.value?.tableRef) {
-        updatedColumnSizingValue['table'] = tableElement.value.tableRef.offsetWidth
+        updatedColumnSizingValue[TABLE_ID] = tableElement.value.tableRef.offsetWidth
       }
 
       calculatedColumnSizing.value = updatedColumnSizingValue
@@ -277,7 +278,7 @@ export function useResizeColumns() {
       const thisCellCurrentWidth = calculatedColumnSizing.value[cellId]
       const diff = thisCellBaseWidth - thisCellCurrentWidth
 
-      let newTableWidth = calculatedColumnSizing.value['table'] + diff
+      let newTableWidth = calculatedColumnSizing.value[TABLE_ID] + diff
       let lastCellId = getCellId(lastCell.value.cell)
 
       if (newTableWidth < minTableWidth.value) {
@@ -307,7 +308,7 @@ export function useResizeColumns() {
       cells.value[cellId].cell.style.width = thisCellBaseWidth + 'px'
       tableElement.value.tableRef.style.width = newTableWidth + 'px'
       calculatedColumnSizing.value[cellId] = thisCellBaseWidth
-      calculatedColumnSizing.value['table'] = newTableWidth
+      calculatedColumnSizing.value[TABLE_ID] = newTableWidth
     }
   }
 
@@ -346,14 +347,14 @@ export function useResizeColumns() {
       if (tableElement.value && tableElement.value?.tableRef) {
         const tableOffsetWidth = getTableWidth()
 
-        if (calculatedColumnSizing.value?.['table'] && !tableElement.value.tableRef.style.width) {
-          tableElement.value.tableRef.style.width = calculatedColumnSizing.value['table'] + 'px'
+        if (calculatedColumnSizing.value?.[TABLE_ID] && !tableElement.value.tableRef.style.width) {
+          tableElement.value.tableRef.style.width = calculatedColumnSizing.value[TABLE_ID] + 'px'
         } else {
           initialTableWidth.value = tableOffsetWidth
           tableElement.value.tableRef.style.width = tableOffsetWidth + 'px'
 
           tableElement.value.tableRef.setAttribute('initialResize', 'set')
-          updatedColumnSizingValue['table'] = tableOffsetWidth
+          updatedColumnSizingValue[TABLE_ID] = tableOffsetWidth
         }
       }
 
@@ -364,27 +365,50 @@ export function useResizeColumns() {
   }
 
   const setColumnWidthsOnColumnVisibilityChange = () => {
-    if (lastCell.value && calculatedColumnSizing.value) {
+    //cells.value = getCells()
+
+    console.log('cells.value')
+    console.log(cells.value)
+
+    if (
+      lastCell.value &&
+      calculatedColumnSizing.value
+      //tableElement.value &&
+      //tableElement.value.tableRef
+    ) {
       const lastCellId = getCellId(lastCell.value.cell)
 
-      delete calculatedColumnSizing.value[lastCellId]
+      //tableElement.value.tableRef.style.width = ''
+      //delete calculatedColumnSizing.value[TABLE_ID]
+      //delete calculatedColumnSizing.value[lastCellId]
 
-      setInitialColumnWidths()
+      //console.log('setColumnWidthsOnColumnVisibilityChange')
+
+      //setInitialColumnWidths()
     }
   }
 
   const setColumnWidthsOnWindowResize = () => {
     const tableWidth = getTableWidth()
     const tableWrapperWidth = getTableWrapperWidth()
+    minTableWidth.value = tableWrapperWidth
 
     if (tableWidth < tableWrapperWidth) {
-      if (lastCell.value && calculatedColumnSizing.value) {
+      if (
+        lastCell.value &&
+        calculatedColumnSizing.value &&
+        tableElement.value &&
+        tableElement.value?.tableRef
+      ) {
         const lastCellId = getCellId(lastCell.value.cell)
 
-        calculatedColumnSizing.value['table'] = tableWrapperWidth
-        delete calculatedColumnSizing.value[lastCellId]
+        calculatedColumnSizing.value[TABLE_ID] = tableWrapperWidth
+        tableElement.value.tableRef.style.width = tableWrapperWidth + 'px'
+        lastCell.value.cell.style.width = ''
 
-        setInitialColumnWidths()
+        const newLastCellWidth = Math.floor(lastCell.value.cell.offsetWidth)
+        calculatedColumnSizing.value[lastCellId] = newLastCellWidth
+        lastCell.value.cell.style.width = newLastCellWidth + 'px'
       }
     }
   }
