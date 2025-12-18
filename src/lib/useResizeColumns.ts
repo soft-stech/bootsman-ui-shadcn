@@ -170,13 +170,20 @@ export function useResizeColumns() {
   }
 
   const lastCell = computed(() => {
-    // if (cells.value) {
-    //   return Object.values(cells.value).find((cell) => cell.isLast)
-    // }
     if (cells.value && tableHeaderElement.value && tableHeaderElement.value.headRef) {
       const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
 
       return cells.value[getCellId(headerCells[headerCells.length - 1])]
+    }
+
+    return undefined
+  })
+
+  const secondToLastCell = computed(() => {
+    if (cells.value && tableHeaderElement.value && tableHeaderElement.value.headRef) {
+      const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
+
+      return cells.value[getCellId(headerCells[headerCells.length - 2])]
     }
 
     return undefined
@@ -271,14 +278,30 @@ export function useResizeColumns() {
       const diff = thisCellBaseWidth - thisCellCurrentWidth
 
       let newTableWidth = calculatedColumnSizing.value['table'] + diff
+      let lastCellId = getCellId(lastCell.value.cell)
 
       if (newTableWidth < minTableWidth.value) {
         const tableWidthDiff = minTableWidth.value - newTableWidth
-        const newLastCellWidth =
-          calculatedColumnSizing.value[getCellId(lastCell.value.cell)] + tableWidthDiff
+        let newLastCellWidth: number
 
-        lastCell.value.cell.style.width = newLastCellWidth + 'px'
+        if (cellId === lastCellId) {
+          //если ресетим последнюю колонку, то восстанавливаем ее ширину за счет соседней слева
+          if (secondToLastCell.value) {
+            lastCellId = getCellId(secondToLastCell.value.cell)
+            newLastCellWidth = calculatedColumnSizing.value[lastCellId] + tableWidthDiff
+            secondToLastCell.value.cell.style.width = newLastCellWidth + 'px'
+          } else {
+            resetCells()
+            return
+          }
+        } else {
+          newLastCellWidth =
+            calculatedColumnSizing.value[getCellId(lastCell.value.cell)] + tableWidthDiff
+          lastCell.value.cell.style.width = newLastCellWidth + 'px'
+        }
+
         newTableWidth = minTableWidth.value
+        calculatedColumnSizing.value[lastCellId] = newLastCellWidth
       }
 
       cells.value[cellId].cell.style.width = thisCellBaseWidth + 'px'

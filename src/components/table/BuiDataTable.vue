@@ -339,6 +339,9 @@ watch(
     if (!isEqual(calculated, model)) {
       model = calculated
     }
+
+    console.log('calculated column sizing')
+    console.log(model)
   },
   { deep: true }
 )
