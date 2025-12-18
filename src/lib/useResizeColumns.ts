@@ -61,7 +61,7 @@ export function useResizeColumns() {
 
       tableElement.value.tableRef.style.width = 'min-content'
 
-      const headerCellsWidths: CELL = headerCells.reduce((acc, cell, index, array) => {
+      const headerCellsWidths: CELL = headerCells.reduce((acc, cell) => {
         const cellId = getCellId(cell)
 
         return {
@@ -363,6 +363,14 @@ export function useResizeColumns() {
     }
   }
 
+  const setColumnWidthsOnColumnVisibilityChange = () => {
+    if (lastCell.value && calculatedColumnSizing.value) {
+      const lastCellId = getCellId(lastCell.value.cell)
+      delete calculatedColumnSizing.value[lastCellId]
+      setInitialColumnWidths()
+    }
+  }
+
   return {
     cells,
     tableElement,
@@ -376,6 +384,7 @@ export function useResizeColumns() {
     resetCells,
     setInitialColumnWidths,
     setProvidedCellWidths,
+    setColumnWidthsOnColumnVisibilityChange,
     isMouseDownOnHandler,
     isMouseUpOnHandler
   }

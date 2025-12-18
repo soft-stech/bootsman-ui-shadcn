@@ -167,7 +167,7 @@ const table = useVueTable({
 
     await nextTick()
 
-    setInitialColumnWidths()
+    setColumnWidthsOnColumnVisibilityChange()
   },
   onColumnOrderChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnOrder)
@@ -295,6 +295,7 @@ const {
   handleResizeControlMouseDown,
   handleResizeControlMouseUp,
   setInitialColumnWidths,
+  setColumnWidthsOnColumnVisibilityChange,
   isMouseDownOnHandler,
   isMouseUpOnHandler
 } = useResizeColumns()
