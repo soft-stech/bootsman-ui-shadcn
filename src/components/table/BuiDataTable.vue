@@ -167,7 +167,7 @@ const table = useVueTable({
 
     await nextTick()
 
-    resetCells()
+    setInitialColumnWidths()
   },
   onColumnOrderChange: (updaterOrValue) => {
     valueUpdater(updaterOrValue, columnOrder)
@@ -299,7 +299,7 @@ const {
   isMouseUpOnHandler
 } = useResizeColumns()
 
-const isColumnSizingEnabled = computed(() => props.enableColumnResizing && columnSizing.value)
+const isColumnSizingEnabled = computed(() => props.enableColumnResizing)
 
 onBeforeMount(() => {
   calculatedColumnSizing.value = columnSizing.value
@@ -363,8 +363,11 @@ const availableHeaderCellActions = (header: Header<TData, unknown>) => {
     out.push('hideColumn')
   }
 
-  if (props.enableColumnResizing) {
-    out.push('resetThisSize')
+  if (isColumnSizingEnabled.value) {
+    if (header.id !== 'actions') {
+      out.push('resetThisSize')
+    }
+
     out.push('resetSize')
   }
 

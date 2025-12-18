@@ -14,7 +14,6 @@ export function useResizeColumns() {
       initialWidth: number
       minWidth: number
       baseWidth: number
-      isLast: boolean
     }
   }
   const isResizing = ref<boolean>(false)
@@ -69,7 +68,6 @@ export function useResizeColumns() {
           ...acc,
           [cellId]: {
             cell: cell,
-            isLast: index === array.length - 1,
             initialWidth: Math.floor(cell.offsetWidth),
             baseWidth: Math.floor(cell.offsetWidth),
             minWidth:
@@ -172,8 +170,13 @@ export function useResizeColumns() {
   }
 
   const lastCell = computed(() => {
-    if (cells.value) {
-      return Object.values(cells.value).find((cell) => cell.isLast)
+    // if (cells.value) {
+    //   return Object.values(cells.value).find((cell) => cell.isLast)
+    // }
+    if (cells.value && tableHeaderElement.value && tableHeaderElement.value.headRef) {
+      const headerCells = [...tableHeaderElement.value.headRef.querySelectorAll('th')]
+
+      return cells.value[getCellId(headerCells[headerCells.length - 1])]
     }
 
     return undefined
