@@ -366,8 +366,26 @@ export function useResizeColumns() {
   const setColumnWidthsOnColumnVisibilityChange = () => {
     if (lastCell.value && calculatedColumnSizing.value) {
       const lastCellId = getCellId(lastCell.value.cell)
+
       delete calculatedColumnSizing.value[lastCellId]
+
       setInitialColumnWidths()
+    }
+  }
+
+  const setColumnWidthsOnWindowResize = () => {
+    const tableWidth = getTableWidth()
+    const tableWrapperWidth = getTableWrapperWidth()
+
+    if (tableWidth < tableWrapperWidth) {
+      if (lastCell.value && calculatedColumnSizing.value) {
+        const lastCellId = getCellId(lastCell.value.cell)
+
+        calculatedColumnSizing.value['table'] = tableWrapperWidth
+        delete calculatedColumnSizing.value[lastCellId]
+
+        setInitialColumnWidths()
+      }
     }
   }
 
@@ -385,6 +403,7 @@ export function useResizeColumns() {
     setInitialColumnWidths,
     setProvidedCellWidths,
     setColumnWidthsOnColumnVisibilityChange,
+    setColumnWidthsOnWindowResize,
     isMouseDownOnHandler,
     isMouseUpOnHandler
   }

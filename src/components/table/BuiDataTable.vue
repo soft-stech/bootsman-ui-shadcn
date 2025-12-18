@@ -296,6 +296,7 @@ const {
   handleResizeControlMouseUp,
   setInitialColumnWidths,
   setColumnWidthsOnColumnVisibilityChange,
+  setColumnWidthsOnWindowResize,
   isMouseDownOnHandler,
   isMouseUpOnHandler
 } = useResizeColumns()
@@ -348,6 +349,7 @@ watch(
 )
 
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
+useEventListener(window, 'resize', setColumnWidthsOnWindowResize)
 
 const getHeaderCellSortingButton = (header: Header<TData, unknown>) => {
   const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
