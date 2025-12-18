@@ -333,11 +333,15 @@ onMounted(() => {
   groupsOpenStateInStorage.value = {}
 })
 
-watchEffect(() => {
-  if (!isEqual(calculatedColumnSizing.value, columnSizing.value)) {
-    columnSizing.value = calculatedColumnSizing.value
-  }
-})
+watch(
+  [calculatedColumnSizing, columnSizing],
+  ([calculated, model]) => {
+    if (!isEqual(calculated, model)) {
+      model = calculated
+    }
+  },
+  { deep: true }
+)
 
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
 
