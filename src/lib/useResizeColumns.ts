@@ -330,21 +330,51 @@ export function useResizeColumns() {
         updatedColumnSizingValue[cell] = cells.value[cell].cell.offsetWidth
       }
 
-      if (tableElement.value && tableElement.value?.tableRef) {
+      if (
+        tableElement.value &&
+        tableElement.value?.tableRef &&
+        lastCell.value &&
+        calculatedColumnSizing.value
+      ) {
         const tableOffsetWidth = getTableWidth()
+        const tableWrapperWidth = getTableWrapperWidth()
+        minTableWidth.value = tableWrapperWidth
+        tableElement.value.tableRef.setAttribute('initialResize', 'set')
+
+        if (tableOffsetWidth < minTableWidth.value) {
+          const lastCellId = getCellId(lastCell.value.cell)
+
+          calculatedColumnSizing.value[TABLE_ID] = tableWrapperWidth
+          tableElement.value.tableRef.style.width = tableWrapperWidth + 'px'
+          lastCell.value.cell.style.width = ''
+
+          const newLastCellWidth = Math.floor(lastCell.value.cell.offsetWidth)
+          calculatedColumnSizing.value[lastCellId] = newLastCellWidth
+          lastCell.value.cell.style.width = newLastCellWidth + 'px'
+        } else {
+          initialTableWidth.value = tableOffsetWidth
+        }
 
         if (calculatedColumnSizing.value?.[TABLE_ID] && !tableElement.value.tableRef.style.width) {
           tableElement.value.tableRef.style.width = calculatedColumnSizing.value[TABLE_ID] + 'px'
         } else {
-          initialTableWidth.value = tableOffsetWidth
-          tableElement.value.tableRef.style.width = tableOffsetWidth + 'px'
+          if (tableOffsetWidth < minTableWidth.value) {
+            const lastCellId = getCellId(lastCell.value.cell)
 
-          tableElement.value.tableRef.setAttribute('initialResize', 'set')
-          updatedColumnSizingValue[TABLE_ID] = tableOffsetWidth
+            calculatedColumnSizing.value[TABLE_ID] = tableWrapperWidth
+            tableElement.value.tableRef.style.width = tableWrapperWidth + 'px'
+            lastCell.value.cell.style.width = ''
+
+            const newLastCellWidth = Math.floor(lastCell.value.cell.offsetWidth)
+            calculatedColumnSizing.value[lastCellId] = newLastCellWidth
+            lastCell.value.cell.style.width = newLastCellWidth + 'px'
+          } else {
+            initialTableWidth.value = tableOffsetWidth
+            tableElement.value.tableRef.style.width = tableOffsetWidth + 'px'
+            updatedColumnSizingValue[TABLE_ID] = tableOffsetWidth
+          }
         }
       }
-
-      minTableWidth.value = getTableWrapperWidth()
 
       calculatedColumnSizing.value = updatedColumnSizingValue
     }
@@ -378,10 +408,7 @@ export function useResizeColumns() {
             updatedColumnSizingValue[cellId] = newCellWidth
           }
         } else {
-          const newLastCellWidth =
-            calculatedColumnSizing.value && calculatedColumnSizing.value[cellId]
-              ? calculatedColumnSizing.value[cellId]
-              : cell.offsetWidth
+          const newLastCellWidth = cells.value ? cells.value[cellId].baseWidth : cell.offsetWidth
           updatedColumnSizingValue[cellId] = newLastCellWidth
         }
       })

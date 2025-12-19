@@ -338,14 +338,11 @@ onMounted(() => {
 })
 
 watch(
-  [calculatedColumnSizing, columnSizing],
-  ([calculated, model]) => {
-    if (!isEqual(calculated, model)) {
-      model = calculated
+  () => calculatedColumnSizing.value,
+  () => {
+    if (!isEqual(calculatedColumnSizing.value, columnSizing.value)) {
+      columnSizing.value = calculatedColumnSizing.value
     }
-
-    // console.log('calculated column sizing')
-    // console.log(model)
   },
   { deep: true }
 )
