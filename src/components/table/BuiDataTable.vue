@@ -167,8 +167,6 @@ const table = useVueTable({
 
     await nextTick()
 
-    //console.log('columnVisibility changed')
-
     setColumnWidthsOnColumnVisibilityChange()
   },
   onColumnOrderChange: (updaterOrValue) => {
@@ -282,6 +280,7 @@ watch(columnsListIds, () => {
   table.setColumnOrder(columnsListIds.value)
 })
 
+/** COLUMN SIZING */
 const tableHeaderRef = ref<InstanceType<typeof BuiTableHeader> | null>(null)
 const tableElementRef = ref<InstanceType<typeof BuiTable> | null>(null)
 const { height } = useElementSize(tableHeaderRef)
@@ -347,9 +346,20 @@ watch(
   { deep: true }
 )
 
+const { setCursor, resetCursor } = useGlobalCursor()
+
+watch(isResizing, () => {
+  if (isResizing.value) {
+    setCursor('col-resize')
+  } else {
+    resetCursor()
+  }
+})
+
 useEventListener(document, 'mouseup', handleResizeControlMouseUp)
 useEventListener(window, 'resize', setColumnWidthsOnWindowResize)
 
+/** HEADER CELL ACTIONS */
 const getHeaderCellSortingButton = (header: Header<TData, unknown>) => {
   const currentHeaderCell = tableHeaderElement.value?.headRef?.querySelector(
     `th[id="${header.id}_cell"]`
@@ -359,6 +369,7 @@ const getHeaderCellSortingButton = (header: Header<TData, unknown>) => {
 }
 
 type HeaderCellAction = 'hideColumn' | 'resetThisSize' | 'resetSize' | 'sortAsc' | 'sortDesc'
+
 const availableHeaderCellActions = (header: Header<TData, unknown>) => {
   const out: HeaderCellAction[] = []
 
@@ -382,6 +393,7 @@ const availableHeaderCellActions = (header: Header<TData, unknown>) => {
 
   return out
 }
+
 const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAction) => {
   switch (action) {
     case 'hideColumn':
@@ -404,6 +416,23 @@ const onHeaderCellAction = (header: Header<TData, unknown>, action: HeaderCellAc
   }
 }
 
+const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
+  if (isMouseDownOnHandler.value && !isMouseUpOnHandler.value) {
+    return false
+  }
+
+  if (getHeaderCellSortingButton(header)) {
+    header.column.toggleSorting(header.column.getIsSorted() === 'asc')
+  }
+}
+
+const handleHeaderCellMouseDown = (e: Event) => {
+  const targetHTMLElement = e.target as HTMLElement
+  isMouseDownOnHandler.value =
+    targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
+}
+
+/** ROW GROUPS */
 const groupsOpenStateInStorage = useSessionStorage('tableGroups', {})
 const groupsOpenStateRef = ref<Record<string, boolean>>(
   props.enableGroupFolding
@@ -445,32 +474,7 @@ watch(
   }
 )
 
-const handleHeaderCellSorting = (header: Header<TData, unknown>) => {
-  if (isMouseDownOnHandler.value && !isMouseUpOnHandler.value) {
-    return false
-  }
-
-  if (getHeaderCellSortingButton(header)) {
-    header.column.toggleSorting(header.column.getIsSorted() === 'asc')
-  }
-}
-
-const handleHeaderCellMouseDown = (e: Event) => {
-  const targetHTMLElement = e.target as HTMLElement
-  isMouseDownOnHandler.value =
-    targetHTMLElement.className.includes && targetHTMLElement.className.includes('resize-handler')
-}
-
-const { setCursor, resetCursor } = useGlobalCursor()
-
-watch(isResizing, () => {
-  if (isResizing.value) {
-    setCursor('col-resize')
-  } else {
-    resetCursor()
-  }
-})
-
+/** AUTO SCROLLING */
 const rows = computed(() => table.getRowModel().rows)
 const rowsLength = computed(() => rows.value.length)
 const sentinel = ref<HTMLElement | null>(null)
