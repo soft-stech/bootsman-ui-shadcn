@@ -15,6 +15,7 @@ defineExpose({ tableRef, scrollAreaElementRef })
     ref="scrollAreaElementRef"
     class="border-border/16 w-full grow overflow-auto rounded-sm border"
     :scroll-hide-delay="100"
+    type="auto"
   >
     <slot name="columnVisibility" />
     <div class="flex min-h-[90px] w-full grow flex-col">
