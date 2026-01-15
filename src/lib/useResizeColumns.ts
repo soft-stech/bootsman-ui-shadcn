@@ -61,6 +61,8 @@ export function useResizeColumns() {
     tableRef.style.width = 'min-content'
 
     const headerCellsWidths: CELL = headerCells.reduce((acc, cell) => {
+      cell.style.width = ''
+
       const cellId = getCellId(cell)
       const offsetWidth = Math.floor(cell.offsetWidth)
       const minWidth =
