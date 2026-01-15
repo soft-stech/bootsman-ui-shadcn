@@ -350,7 +350,23 @@ export function useResizeColumns() {
       const cellId = getCellId(cell)
 
       if (cells.value) {
-        cells.value[cellId].cell = cell
+        if (cells.value[cellId]) {
+          cells.value[cellId].cell = cell
+        } else {
+          const minWidth =
+            cellId === 'actions'
+              ? ACTIONS_CELL_MIN_WIDTH
+              : cell.offsetWidth < MIN_CELL_WIDTH
+                ? MIN_CELL_WIDTH
+                : cell.offsetWidth
+
+          cells.value[cellId] = {
+            cell: cell,
+            baseWidth: cell.offsetWidth,
+            minWidth: minWidth,
+            initialWidth: cell.offsetWidth
+          }
+        }
       }
 
       if (index < array.length - 1) {
