@@ -61,6 +61,8 @@ export function useResizeColumns() {
     tableRef.style.width = 'min-content'
 
     const headerCellsWidths: CELL = headerCells.reduce((acc, cell) => {
+      cell.style.width = ''
+
       const cellId = getCellId(cell)
       const offsetWidth = Math.floor(cell.offsetWidth)
       const minWidth =
@@ -350,7 +352,23 @@ export function useResizeColumns() {
       const cellId = getCellId(cell)
 
       if (cells.value) {
-        cells.value[cellId].cell = cell
+        if (cells.value[cellId]) {
+          cells.value[cellId].cell = cell
+        } else {
+          const minWidth =
+            cellId === 'actions'
+              ? ACTIONS_CELL_MIN_WIDTH
+              : cell.offsetWidth < MIN_CELL_WIDTH
+                ? MIN_CELL_WIDTH
+                : cell.offsetWidth
+
+          cells.value[cellId] = {
+            cell: cell,
+            baseWidth: cell.offsetWidth,
+            minWidth: minWidth,
+            initialWidth: cell.offsetWidth
+          }
+        }
       }
 
       if (index < array.length - 1) {
