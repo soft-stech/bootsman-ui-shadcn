@@ -8,6 +8,7 @@ export interface ToastProps extends ToastRootProps {
   class?: string
   variant?: ToastVariantProps['variant']
   onOpenChange?: ((value: boolean) => void) | undefined
+  onClose?: () => void
 }
 </script>
 
@@ -26,6 +27,7 @@ const emits = defineEmits<ToastRootEmits>()
     v-bind="{ ...props, ...useEmitAsProps(emits) }"
     :class="cn(toastVariants({ variant: props.variant }), props.class)"
     @update:open="onOpenChange"
+    @close="onClose"
   >
     <slot />
   </ToastRoot>
