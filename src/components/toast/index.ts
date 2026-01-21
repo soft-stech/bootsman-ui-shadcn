@@ -6,7 +6,7 @@ export { default as BuiToastClose } from './BuiToastClose.vue'
 export { default as BuiToastTitle } from './BuiToastTitle.vue'
 export { default as BuiToastDescription } from './BuiToastDescription.vue'
 export { default as BuiToastProvider } from './BuiToastProvider.vue'
-export { toast, useToast } from './use-toast'
+export { toast, useToast, type ToastResult } from './use-toast'
 
 import { cva } from 'class-variance-authority'
 
@@ -18,7 +18,8 @@ export const toastVariants = cva(
         default: 'border-muted bg-background text-foreground',
         destructive:
           'group border-destructive bg-[rgb(250,230,241)] dark:bg-[rgb(42,41,66)] text-destructive-foreground',
-        warning: 'group bg-warning border-warning-foreground text-warning-foreground'
+        warning:
+          'group bg-[rgb(247,241,218)] dark:bg-[rgb(42,41,66)] border-warning-foreground text-warning-foreground'
       }
     },
     defaultVariants: {

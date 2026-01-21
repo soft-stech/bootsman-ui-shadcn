@@ -161,4 +161,4 @@ function toast(props: Toast): ToastResult {
   }
 }
 
-export { toast, useToast }
+export { toast, useToast, type ToastResult }
