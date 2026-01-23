@@ -84,3 +84,45 @@ export const Destructive: Story = {
     `
   })
 }
+
+export const Warning: Story = {
+  render: (args) => ({
+    components: { BuiToaster, BuiToastAction, BuiButton },
+    setup() {
+      const { toast } = useToast()
+
+      const handleToast = () => {
+        toast({
+          title: 'Warning',
+          description: 'This is your first warning.',
+          variant: 'warning',
+          onClose: () => console.log('warning toast has been closed'),
+          action: h(
+            BuiButton,
+            {
+              altText: 'Try again',
+              variant: 'outline',
+              onClick: () => {
+                console.log('toast button has been clicked')
+              }
+            },
+            {
+              default: () => 'Try again'
+            }
+          )
+        })
+      }
+      return { args, handleToast }
+    },
+    template: `
+      <BuiToaster />
+
+      <BuiButton
+        variant="outline"
+        @click="handleToast"
+      >
+        Add to calendar
+      </BuiButton>
+    `
+  })
+}
