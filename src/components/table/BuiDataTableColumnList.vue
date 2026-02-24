@@ -1,10 +1,9 @@
 <script setup lang="ts" generic="TData, _TValue">
-import type { Column } from '@tanstack/vue-table'
-import { useTemplateRef } from 'vue'
-
-import { BuiCommandItem } from '@/components/command'
 import { BuiCheckbox } from '@/components/checkbox'
+import { BuiCommandItem } from '@/components/command'
+import type { Column } from '@tanstack/vue-table'
 import { useSortable } from '@vueuse/integrations/useSortable'
+import { useTemplateRef } from 'vue'
 
 const columnsListRef = useTemplateRef<HTMLElement>('columnsListRef')
 const columnsList = defineModel<Column<TData, unknown>[]>('columnsList', {

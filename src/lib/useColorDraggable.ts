@@ -1,5 +1,5 @@
-import { type MaybeRefOrGetter, ref } from 'vue'
-import { useElementBounding, useEventListener, isClient, toValue } from '@vueuse/core'
+import { isClient, useElementBounding, useEventListener } from '@vueuse/core'
+import { type MaybeRefOrGetter, ref, toValue } from 'vue'
 
 export function useColorDraggable(
   targetElement: MaybeRefOrGetter<HTMLElement | null>,

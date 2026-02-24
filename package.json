@@ -26,7 +26,7 @@
   },
   "peerDependencies": {
     "@tanstack/vue-table": "8.20.5",
-    "@vueuse/core": "11.1.0",
+    "@vueuse/core": "14.2.1",
     "vee-validate": "5.0.0-beta.0",
     "vue": "^3.5.18",
     "zod": "4.1.11"
@@ -34,13 +34,13 @@
   "dependencies": {
     "@internationalized/date": "^3.9.0",
     "@tailwindcss/vite": "4.1.18",
-    "@vueuse/integrations": "^13.9.0",
+    "@vueuse/integrations": "14.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "colortranslator": "^5.0.0",
     "lodash-es": "^4.17.21",
     "lucide-vue-next": "^0.544.0",
-    "reka-ui": "^2.5.0",
+    "reka-ui": "^2.8.2",
     "sortablejs": "^1.15.6",
     "tailwind-merge": "^3.3.1",
     "tailwind-scrollbar": "^4.0.2",
@@ -57,6 +57,7 @@
     "@storybook/vue3-vite": "^9.1.6",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.5.0",
+    "@types/sortablejs": "^1.15.9",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitest/browser": "^3.2.4",
     "@vitest/coverage-v8": "^3.2.4",
