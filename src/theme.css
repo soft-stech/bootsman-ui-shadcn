@@ -12,6 +12,8 @@
   --color-sidebar: var(--side-bar);
   --color-tabs-sidebar: var(--tabs-sidebar);
   --color-tabs-background: var(--tabs-background);
+  --color-terminal-background: var(--terminal-background);
+  --color-terminal-foreground: ver(---terminal-foreground);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -153,10 +155,13 @@
   --cards-box-shadow: hsl(241, 92%, 71%, 0.16);
   --tab-shadow: hsl(228, 51%, 11%, 0.08);
 
-  --side-bar: hsl(0 0% 100%);
+  --side-bar: hsl(220, 17.65%, 96.67%);
   --tabs-sidebar: hsl(210 40% 96.1%);
   --tabs-sidebar-shadow: hsl(0, 0%, 100%, 0);
   --tabs-background: hsl(240, 6.67%, 97.06%);
+
+  --terminal-background: hsl(0, 0%, 100%);
+  --terminal-foreground: hsl(242.4, 23.81%, 20.59%);
 
   --border: hsl(241 92% 71%);
   --input: hsl(225 11% 84%);
@@ -221,6 +226,9 @@
   --tabs-sidebar: hsl(243.2 24.1% 15.5%);
   --tabs-sidebar-shadow: hsl(0, 0%, 0%, 0.08);
   --tabs-background: hsl(242.5, 19.67%, 23.92%);
+
+  --terminal-background: hsl(242.4, 23.81%, 20.59%);
+  --terminal-foreground: hsl(220, 17.65%, 96.67%);
 
   --border: hsl(241 92% 71%);
   --input: hsl(0, 0%, 100%, 0.32);
