@@ -9,6 +9,7 @@ const props = defineProps<{
   defaultValue?: 'password' | 'text'
   showPasswordTranslation?: string
   hidePasswordTranslation?: string
+  disableAutocomplete?: boolean
 }>()
 
 defineOptions({
@@ -30,7 +31,12 @@ const hidePasswordText = computed(() => props.hidePasswordTranslation ?? 'Hide p
 
 <template>
   <div class="relative flex">
-    <BuiInput v-bind="$attrs" :type="type" :class="cn($attrs.class ?? '', 'pr-8')" />
+    <BuiInput
+      v-bind="$attrs"
+      :type="type"
+      :class="cn($attrs.class ?? '', 'pr-8')"
+      :disable-autocomplete="props.disableAutocomplete"
+    />
     <BuiButton
       @click="togglePasswordShow"
       variant="none"

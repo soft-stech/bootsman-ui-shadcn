@@ -16,6 +16,7 @@ const props = defineProps<{
   disabled?: boolean
   placeholder?: string
   type?: string
+  disableAutocomplete?: boolean
 }>()
 
 const emits = defineEmits<{
@@ -94,6 +95,11 @@ const handleClear = () => {
     :disabled="props.disabled"
     :placeholder="props.placeholder"
     :type="props.type || 'text'"
+    :autocomplete="props.disableAutocomplete ? 'off' : undefined"
+    :data-1p-ignore="props.disableAutocomplete ? true : undefined"
+    :data-lpignore="props.disableAutocomplete ? 'true' : undefined"
+    :data-protonpass-ignore="props.disableAutocomplete ? 'true' : undefined"
+    :data-bwignore="props.disableAutocomplete ? '1' : undefined"
     @focus="handleFocus"
     @blur="handleBlur"
     @keydown="handleKeyDown"
