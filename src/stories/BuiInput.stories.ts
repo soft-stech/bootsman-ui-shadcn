@@ -46,7 +46,22 @@ export const Password: Story = {
     template: `
       <div class="grid w-full max-w-sm items-center gap-1.5">
           <BuiLabel for="password">Password</BuiLabel>
-          <BuiPasswordInput v-bind="args" id="password" placeholder="Password"/>
+          <BuiPasswordInput v-bind="args" id="password" placeholder="Password" />
+        </div>
+    `
+  })
+}
+
+export const PasswordDisableAutofill: Story = {
+  render: (args) => ({
+    components: { BuiPasswordInput, BuiLabel },
+    setup() {
+      return { args }
+    },
+    template: `
+      <div class="grid w-full max-w-sm items-center gap-1.5">
+          <BuiLabel for="password">Password</BuiLabel>
+          <BuiPasswordInput v-bind="args" id="password" placeholder="Password" disable-autocomplete />
         </div>
     `
   })
