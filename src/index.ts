@@ -39,5 +39,6 @@ export * from './components/scroll-area/index'
 export * from './components/collapsible/index'
 export * from './components/sheet/index'
 export * from './components/color-picker/index'
+export * from './components/action-bar/index'
 
 export * from './lib/utils'

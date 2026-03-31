@@ -12,7 +12,8 @@ export const buttonVariants = cva(
           /* border */ 'border border-primary hover:border-primary-hover active:border-primary-active disabled:border-foreground/16',
           /* text */ 'text-primary-foreground disabled:text-foreground/16'
         ],
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        destructive:
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:bg-destructive/32 disabled:text-destructive-foreground/32',
         outline: [
           /* background*/ 'hover:bg-accent/8 active:bg-accent/16 disabled:bg-accent/4',
           /* border */ 'border border-primary disabled:border-accent/32',
