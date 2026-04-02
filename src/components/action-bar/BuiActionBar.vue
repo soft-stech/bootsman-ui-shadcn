@@ -19,6 +19,12 @@ import { type ActionBarItem } from '.'
 
 const props = defineProps<{
   actions: ActionBarItem[]
+  selectedCount?: number
+  translations?: {
+    more?: string
+    affects?: string
+    of?: string
+  }
 }>()
 
 const containerRef = useTemplateRef('containerRef')
@@ -114,7 +120,7 @@ watch(
   <div ref="containerRef" class="flex h-full grow flex-row items-center gap-3">
     <BuiTooltipProvider>
       <template v-for="action in visibleActions" :key="action.label">
-        <BuiTooltip>
+        <BuiTooltip :disabled="!(props.selectedCount && action.affectsCount)">
           <BuiTooltipTrigger as-child>
             <BuiButton
               class="relative flex gap-2 whitespace-nowrap"
@@ -129,7 +135,8 @@ watch(
             </BuiButton>
           </BuiTooltipTrigger>
           <BuiTooltipContent>
-            Affect {{ action.affectsCount }} of <slot name="selectedCount"></slot>
+            {{ props.translations?.affects || 'Affects' }} {{ action.affectsCount }}
+            {{ props.translations?.of || 'of' }} {{ props.selectedCount }}
           </BuiTooltipContent>
         </BuiTooltip>
       </template>
@@ -137,7 +144,7 @@ watch(
       <BuiDropdownMenu v-if="overflowActions.length">
         <BuiDropdownMenuTrigger as-child>
           <BuiButton variant="ghost" class="items-cente flex gap-1">
-            <span><slot name="moreTranslation"></slot></span>
+            <span>{{ props.translations?.more || 'More' }}</span>
             <span>{{ ` (${overflowActions.length})` }}</span>
           </BuiButton>
         </BuiDropdownMenuTrigger>
@@ -150,26 +157,28 @@ watch(
                 overflowActions[index - 1]?.variant !== 'destructive'
               "
             />
-            <BuiDropdownMenuItem
-              :disabled="action.disabled"
-              class="flex gap-2"
-              :class="
-                action.variant === 'destructive'
-                  ? 'text-destructive-foreground focus:text-destructive-foreground'
-                  : ''
-              "
-              @click="action.handler"
-            >
-              <BuiTooltip>
-                <BuiTooltipTrigger as-child>
+
+            <BuiTooltip :disabled="!(props.selectedCount && action.affectsCount)">
+              <BuiTooltipTrigger as-child>
+                <BuiDropdownMenuItem
+                  :disabled="action.disabled"
+                  class="flex gap-2"
+                  :class="
+                    action.variant === 'destructive'
+                      ? 'text-destructive-foreground focus:text-destructive-foreground'
+                      : ''
+                  "
+                  @click="action.handler"
+                >
                   <component v-if="action.icon" :is="action.icon" class="h-4 w-4" />
                   <span>{{ action.label }}</span>
-                </BuiTooltipTrigger>
-                <BuiTooltipContent>
-                  Affect {{ action.affectsCount }} of <slot name="selectedCount"></slot>
-                </BuiTooltipContent>
-              </BuiTooltip>
-            </BuiDropdownMenuItem>
+                </BuiDropdownMenuItem>
+              </BuiTooltipTrigger>
+              <BuiTooltipContent>
+                {{ props.translations?.affects || 'Affects' }} {{ action.affectsCount }}
+                {{ props.translations?.of || 'of' }} {{ props.selectedCount }}
+              </BuiTooltipContent>
+            </BuiTooltip>
           </template>
         </BuiDropdownMenuContent>
       </BuiDropdownMenu>

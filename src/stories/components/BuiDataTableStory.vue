@@ -194,6 +194,7 @@ const bulkActions: ActionBarItem[] = [
   {
     label: 'Download YAML',
     variant: 'default',
+    affectsCount: 5,
     handler: () => {
       console.log('Download YAML')
     }
@@ -202,10 +203,12 @@ const bulkActions: ActionBarItem[] = [
     label: 'Delete row',
     variant: 'destructive',
     icon: Trash2Icon,
+    affectsCount: 5,
     handler: deleteRow
   },
   {
     label: 'Update rows',
+    affectsCount: 5,
     handler: updateRows
   },
   {
@@ -234,6 +237,7 @@ const bulkActions: ActionBarItem[] = [
   },
   {
     label: 'Bulk Action 5',
+    affectsCount: 5,
     handler: () => {
       console.log('Bulk Action 5')
     }
@@ -270,8 +274,10 @@ const bulkActions: ActionBarItem[] = [
       >
         <template #caption="{ table }">
           <div class="flex h-fit items-center justify-between">
-            <BuiActionBar :actions="bulkActions">
-              <template #moreTranslation>More</template>
+            <BuiActionBar
+              :actions="bulkActions"
+              :selected-count="table.getFilteredSelectedRowModel().rows?.length"
+            >
             </BuiActionBar>
 
             <div class="flex h-full flex-row items-center gap-3">
