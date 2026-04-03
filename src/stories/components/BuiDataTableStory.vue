@@ -15,16 +15,17 @@ import {
   FolderIcon,
   SignalHighIcon,
   SignalMediumIcon,
-  SignalLowIcon
+  SignalLowIcon,
+  Trash2Icon
 } from 'lucide-vue-next'
 import { computed, h, ref, withModifiers } from 'vue'
 import { z } from 'zod'
 import tasks from '@/stories/data/tasks.json'
 import { BuiCheckbox } from '@/components/checkbox'
 import { tableColumnSortCommon } from '@/lib/utils'
-import { BuiButton } from '@/components/button'
 import { BuiTabs, BuiTabsList, BuiTabsTrigger } from '@/components/tabs'
 import type { PaginationAutoState } from '@/components/table/BuiDataTable.vue'
+import { BuiActionBar, type ActionBarItem } from '@/components/action-bar'
 
 const taskSchema = z.object({
   id: z.string(),
@@ -161,10 +162,11 @@ function renderSubComponent(row: Row<Task>) {
   }
 }
 
-function deleteRow() {
+function updateRows() {
   data.value = data.value.map((a) => a)
 }
-function updateRows() {
+
+function deleteRow() {
   data.value.shift()
 }
 
@@ -187,6 +189,64 @@ function groupName(group: string | number) {
 
   return () => group
 }
+
+const selectedIds = computed(() => Object.keys(selection.value || {}))
+
+const bulkActions = computed<ActionBarItem[]>(() => {
+  return [
+    {
+      label: 'Download YAML',
+      variant: 'default',
+      affectsCount: selectedIds.value.length,
+      handler: () => {
+        console.log('Download YAML')
+      }
+    },
+    {
+      label: 'Delete row',
+      variant: 'destructive',
+      icon: Trash2Icon,
+      affectsCount: selectedIds.value.length,
+      handler: deleteRow
+    },
+    {
+      label: 'Update rows',
+      affectsCount: selectedIds.value.length,
+      handler: updateRows
+    },
+    {
+      label: 'Bulk Action 1',
+      handler: () => {
+        console.log('Bulk Action 1')
+      }
+    },
+    {
+      label: 'Bulk Action 2',
+      handler: () => {
+        console.log('Bulk Action 2')
+      }
+    },
+    {
+      label: 'Bulk Action 3',
+      handler: () => {
+        console.log('Bulk Action 3')
+      }
+    },
+    {
+      label: 'Bulk Action 4',
+      handler: () => {
+        console.log('Bulk Action 4')
+      }
+    },
+    {
+      label: 'Bulk Action 5',
+      affectsCount: selectedIds.value.length,
+      handler: () => {
+        console.log('Bulk Action 5')
+      }
+    }
+  ]
+})
 </script>
 
 <template>
@@ -218,11 +278,11 @@ function groupName(group: string | number) {
       >
         <template #caption="{ table }">
           <div class="flex h-fit items-center justify-between">
-            <div class="flex h-full flex-row items-center gap-3">
-              <BuiButton variant="outline">Download YAML</BuiButton>
-              <BuiButton variant="outline" @click="updateRows"> Delete row </BuiButton>
-              <BuiButton variant="outline" @click="deleteRow"> Update rows </BuiButton>
-            </div>
+            <BuiActionBar
+              :actions="bulkActions"
+              :selected-count="table.getFilteredSelectedRowModel().rows?.length"
+            >
+            </BuiActionBar>
 
             <div class="flex h-full flex-row items-center gap-3">
               <BuiTabs v-model="groupBy">
