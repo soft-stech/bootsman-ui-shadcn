@@ -190,59 +190,63 @@ function groupName(group: string | number) {
   return () => group
 }
 
-const bulkActions: ActionBarItem[] = [
-  {
-    label: 'Download YAML',
-    variant: 'default',
-    affectsCount: 5,
-    handler: () => {
-      console.log('Download YAML')
+const selectedIds = computed(() => Object.keys(selection.value || {}))
+
+const bulkActions = computed<ActionBarItem[]>(() => {
+  return [
+    {
+      label: 'Download YAML',
+      variant: 'default',
+      affectsCount: selectedIds.value.length,
+      handler: () => {
+        console.log('Download YAML')
+      }
+    },
+    {
+      label: 'Delete row',
+      variant: 'destructive',
+      icon: Trash2Icon,
+      affectsCount: selectedIds.value.length,
+      handler: deleteRow
+    },
+    {
+      label: 'Update rows',
+      affectsCount: selectedIds.value.length,
+      handler: updateRows
+    },
+    {
+      label: 'Bulk Action 1',
+      handler: () => {
+        console.log('Bulk Action 1')
+      }
+    },
+    {
+      label: 'Bulk Action 2',
+      handler: () => {
+        console.log('Bulk Action 2')
+      }
+    },
+    {
+      label: 'Bulk Action 3',
+      handler: () => {
+        console.log('Bulk Action 3')
+      }
+    },
+    {
+      label: 'Bulk Action 4',
+      handler: () => {
+        console.log('Bulk Action 4')
+      }
+    },
+    {
+      label: 'Bulk Action 5',
+      affectsCount: selectedIds.value.length,
+      handler: () => {
+        console.log('Bulk Action 5')
+      }
     }
-  },
-  {
-    label: 'Delete row',
-    variant: 'destructive',
-    icon: Trash2Icon,
-    affectsCount: 5,
-    handler: deleteRow
-  },
-  {
-    label: 'Update rows',
-    affectsCount: 5,
-    handler: updateRows
-  },
-  {
-    label: 'Bulk Action 1',
-    handler: () => {
-      console.log('Bulk Action 1')
-    }
-  },
-  {
-    label: 'Bulk Action 2',
-    handler: () => {
-      console.log('Bulk Action 2')
-    }
-  },
-  {
-    label: 'Bulk Action 3',
-    handler: () => {
-      console.log('Bulk Action 3')
-    }
-  },
-  {
-    label: 'Bulk Action 4',
-    handler: () => {
-      console.log('Bulk Action 4')
-    }
-  },
-  {
-    label: 'Bulk Action 5',
-    affectsCount: 5,
-    handler: () => {
-      console.log('Bulk Action 5')
-    }
-  }
-]
+  ]
+})
 </script>
 
 <template>
