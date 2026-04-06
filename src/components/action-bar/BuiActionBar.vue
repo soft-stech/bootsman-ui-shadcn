@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, useTemplateRef, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import BuiButton from '@/components/button/BuiButton.vue'
 import {
@@ -27,7 +27,7 @@ const props = defineProps<{
   }
 }>()
 
-const containerRef = useTemplateRef('containerRef')
+const containerRef = ref<HTMLDivElement | null>(null)
 const visibleCount = ref(props.actions.length)
 
 const BUTTON_GAP = 12

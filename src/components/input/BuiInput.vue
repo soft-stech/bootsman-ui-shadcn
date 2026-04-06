@@ -2,7 +2,7 @@
 import { FORM_READONLY_INJECTION_KEY } from '@/components/form'
 import { cn } from '@/lib/utils'
 import { useVModel } from '@vueuse/core'
-import { inject, ref, toRef, useTemplateRef, type HTMLAttributes } from 'vue'
+import { inject, ref, toRef, type HTMLAttributes } from 'vue'
 import { inputVariants } from '.'
 import BuiButton from '@/components/button/BuiButton.vue'
 import { X } from 'lucide-vue-next'
@@ -32,7 +32,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 const readonlyContext = inject(FORM_READONLY_INJECTION_KEY, toRef(false))
 
 const isFocused = ref<boolean>(false)
-const searchInput = useTemplateRef<HTMLElement>('searchInput')
+const searchInput = ref<HTMLInputElement | null>(null)
 
 const handleFocus = () => {
   isFocused.value = true
