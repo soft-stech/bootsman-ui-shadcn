@@ -1,7 +1,7 @@
 import { computed, ref, type Component, type VNode, type ComputedRef } from 'vue'
 import { type ToastProps } from './BuiToast.vue'
 
-const TOAST_LIMIT = 1
+const TOAST_LIMIT = 3
 const TOAST_REMOVE_DELAY = 1000000
 
 export type StringOrVNode = string | VNode | (() => VNode)
