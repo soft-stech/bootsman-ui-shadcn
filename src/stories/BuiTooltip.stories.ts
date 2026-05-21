@@ -67,3 +67,25 @@ export const WithScroll: Story = {
     `
   })
 }
+
+export const WithWarning: Story = {
+  render: (args) => ({
+    components: { BuiTooltip, BuiTooltipContent, BuiTooltipProvider, BuiTooltipTrigger, BuiButton },
+    setup() {
+      return { args }
+    },
+    template: `
+      <BuiTooltipProvider v-bind="args">
+        <BuiTooltip>
+          <BuiTooltipTrigger as-child>
+            <BuiButton variant="outline"> Hover </BuiButton>
+          </BuiTooltipTrigger>
+          <BuiTooltipContent variant="warning">
+            <h3 class="mb-1 font-medium">Warning</h3>
+            <p>Hello there</p>
+          </BuiTooltipContent>
+        </BuiTooltip>
+      </BuiTooltipProvider>
+    `
+  })
+}
