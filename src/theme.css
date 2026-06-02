@@ -47,6 +47,7 @@
   --shadow-card: 0px 4px 8px 0px var(--cards-box-shadow);
   --shadow-tab: 0px 2px 4px 0px var(--tab-shadow), 0px 4px 4px 0px var(--tab-shadow);
   --shadow-top: 0px -2px 4px 0px var(--tab-shadow);
+  --shadow-level0: 0px 2px 4px 0px var(--tab-shadow), 0px 3px 20px 0px var(--tab-shadow);
   --shadow-level1:
     0px 16px 16px 0px var(--tab-shadow), 0px 8px 16px 0px var(--tab-shadow),
     0px 8px 8px 0px var(--tab-shadow);
