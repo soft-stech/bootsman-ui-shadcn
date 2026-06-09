@@ -22,6 +22,7 @@ const props = defineProps<{
       <BuiAdvancedAccordionTrigger
         border-color-class="border-orange-400"
         bg-color-class="bg-orange-400/16"
+        hover-color-class="hover:[&:not([data-disabled])]:bg-orange-400/24"
         description-color-class="text-orange-400"
         icon-bg-class="bg-orange-400"
       >
@@ -29,6 +30,20 @@ const props = defineProps<{
 
         <template #description>
           Control who has access to the cluster and what permission they have to change it
+          <div>Count 1/3</div>
+        </template>
+        <template #actions>
+          <BuiButton
+            variant="outline"
+            class="border-orange-400 text-orange-400"
+            @click="
+              () => {
+                console.log('click')
+              }
+            "
+          >
+            LOG: click
+          </BuiButton>
         </template>
       </BuiAdvancedAccordionTrigger>
 

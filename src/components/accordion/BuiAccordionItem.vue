@@ -13,7 +13,7 @@ const attrs = computed(() => {
 <template>
   <AccordionItem
     v-bind="attrs"
-    :class="cn('border-border/16 shadow-level0 rounded-sm border', props.class ?? '')"
+    :class="cn('border-border/16 shadow-level0 bg-background rounded-sm border', props.class ?? '')"
   >
     <slot />
   </AccordionItem>

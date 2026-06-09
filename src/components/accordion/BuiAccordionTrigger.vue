@@ -15,7 +15,7 @@ const attrs = computed(() => {
 
 <template>
   <AccordionHeader
-    class="border-border/16 bg-foreground/4 hover:bg-foreground/8 dark:hover:bg-accent/16 flex min-h-12 items-center px-2 py-1 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
+    class="border-border/16 bg-foreground/4 hover:[&:not([data-disabled])]:bg-foreground/8 dark:hover:[&:not([data-disabled])]:bg-accent/16 flex min-h-12 items-center px-2 py-1 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
     as="div"
   >
     <div class="flex w-full items-center justify-between gap-2">
@@ -23,7 +23,7 @@ const attrs = computed(() => {
         v-bind="attrs"
         :class="
           cn(
-            'text-foreground ring-offset-background focus-visible:ring-ring flex flex-1 items-center gap-2 rounded-sm align-middle text-base leading-6 font-semibold transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-30 [&[data-state=open]>svg]:rotate-180',
+            'text-foreground ring-offset-background focus-visible:ring-ring relative flex flex-1 items-center gap-2 rounded-sm align-middle text-base leading-6 font-semibold transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-30 [&[data-state=open]>svg]:rotate-180',
             props.class
           )
         "

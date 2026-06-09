@@ -33,7 +33,7 @@ const props = defineProps<{
         error! Perferendis nostrum eius eligendi dolorum reprehenderit?
       </BuiAccordionContent>
     </BuiAccordionItem>
-    <BuiAccordionItem value="item-2">
+    <BuiAccordionItem value="item-2" disabled>
       <BuiAccordionTrigger> Container Default Resource Limit </BuiAccordionTrigger>
 
       <BuiAccordionContent>
