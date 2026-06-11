@@ -23,7 +23,7 @@ const props = defineProps<
   <AccordionHeader
     :class="
       cn(
-        'border-border/16 bg-foreground/4 flex min-h-12 items-center px-2 py-1 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b',
+        'border-border/16 bg-foreground/4 relative flex min-h-12 items-center px-2 py-1 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b',
         props.borderColorClass ?? '',
         props.bgColorClass ?? '',
         props.hoverColorClass ?? ''
@@ -33,7 +33,6 @@ const props = defineProps<
   >
     <div class="flex w-full items-center justify-between gap-2">
       <AccordionTrigger
-        v-bind="props"
         :class="
           cn(
             'text-foreground ring-offset-background focus-visible:ring-ring relative flex flex-1 items-center gap-2 rounded-sm align-middle text-base leading-6 font-semibold transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-30 [&[data-state=open]>svg]:rotate-180',

@@ -15,7 +15,7 @@ const attrs = computed(() => {
 
 <template>
   <AccordionHeader
-    class="border-border/16 bg-foreground/4 hover:[&:not([data-disabled])]:bg-foreground/8 dark:hover:[&:not([data-disabled])]:bg-accent/16 flex min-h-12 items-center px-2 py-1 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
+    class="border-border/16 bg-foreground/4 hover:[&:not([data-disabled])]:bg-foreground/8 dark:hover:[&:not([data-disabled])]:bg-accent/16 relative flex min-h-12 items-center px-2 py-1 data-[state=closed]:rounded-sm data-[state=open]:rounded-t-sm data-[state=open]:border-b"
     as="div"
   >
     <div class="flex w-full items-center justify-between gap-2">
